@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin" >
+    
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/bonusPack1"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_bonuspack_chef" />
+
+        <CheckBox
+            android:id="@+id/bonusPack2"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack1"
+            android:text="@string/lbl_bonuspack_vegetariano" />
+
+        <CheckBox
+            android:id="@+id/bonusPack3"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack2"
+            android:text="@string/lbl_bonuspack_sixpack" />
+
+        <CheckBox
+            android:id="@+id/bonusPack4"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack3"
+            android:text="@string/lbl_bonuspack_fumador" />
+
+        <CheckBox
+            android:id="@+id/bonusPack5"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack4"
+            android:text="@string/lbl_bonuspack_nofumador" />
+
+        <CheckBox
+            android:id="@+id/bonusPack6"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack5"
+            android:text="@string/lbl_bonuspack_romantico" />
+
+        <CheckBox
+            android:id="@+id/bonusPack7"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack6"
+            android:text="@string/lbl_bonuspack_musico" />
+
+        <CheckBox
+            android:id="@+id/bonusPack8"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack7"
+            android:text="@string/lbl_bonuspack_musculoso" />
+
+        <CheckBox
+            android:id="@+id/bonusPack9"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack8"
+            android:text="@string/lbl_bonuspack_millonario" />
+
+        <CheckBox
+            android:id="@+id/bonusPack10"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack9"
+            android:text="@string/lbl_bonuspack_cantante" />
+
+        <CheckBox
+            android:id="@+id/bonusPack11"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack10"
+            android:text="@string/lbl_bonuspack_maestro" />
+        
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bonusPack11"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp" >
+
+	        <Button
+	            android:id="@+id/bonusPackFormSaveBtn"
+	            style="@style/button_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/light_blue_button"
+	            android:text="@string/btn_account_save" />
+	
+	        <Button
+	            android:id="@+id/bonusPackFormBackBtn"
+	            style="@style/button_text"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1.71"
+	            android:background="@drawable/gray_button"
+	            android:text="@string/btn_account_back" />
+	
+	    </LinearLayout>
+            
+    </RelativeLayout>
+
+</ScrollView>

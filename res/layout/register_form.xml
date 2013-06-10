@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <EditText
+        android:id="@+id/registerFormUsernameField"
+        style="@style/PinkEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/lbl_username_register" >
+
+        <requestFocus android:layout_width="match_parent" />
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/registerFormEmailField"
+        style="@style/PinkEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerFormUsernameField"
+        android:ems="10"
+        android:hint="@string/lbl_email_register"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/registerFormChangeBirthdayBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerFormEmailField"
+        android:layout_centerInParent="true"
+        android:background="@color/white"
+        android:hint="@string/lbl_birthday_register" />
+
+    <EditText
+        android:id="@+id/registerFormPasswordField"
+        style="@style/PinkEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerFormChangeBirthdayBtn"
+        android:ems="10"
+        android:hint="@string/lbl_password"
+        android:inputType="textPassword" />
+	
+     <EditText
+         android:id="@+id/registerFormConfirmPasswordField"
+         style="@style/PinkEditText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/registerFormPasswordField"
+         android:ems="10"
+         android:hint="@string/lbl_confirm_password"
+         android:inputType="textPassword" />
+
+    <RadioGroup
+        android:id="@+id/registerFormGenreGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerFormConfirmPasswordField"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/registerFormGenreFemale"
+            style="@style/PinkRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/lbl_female_register" />
+
+        <RadioButton
+            android:id="@+id/registerFormGenreMale"
+            style="@style/PinkRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_male_register" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerFormGenreGroup"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/registerFormRegisterBtn"
+            style="@style/button_text"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1.71"
+            android:background="@drawable/light_blue_button"
+            android:text="@string/btn_register" />
+
+        <Button
+            android:id="@+id/registerFormCancelBtn"
+            style="@style/button_text"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/gray_button"
+            android:text="@string/btn_cancel" />
+    </LinearLayout>
+
+</RelativeLayout>

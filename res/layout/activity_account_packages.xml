@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin" >
+    
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/packages1"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_packages_rockero" />
+
+        <CheckBox
+            android:id="@+id/packages2"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages1"
+            android:text="@string/lbl_package_metalero" />
+
+        <CheckBox
+            android:id="@+id/packages3"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages2"
+            android:text="@string/lbl_package_casual" />
+
+        <CheckBox
+            android:id="@+id/packages4"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages3"
+            android:text="@string/lbl_package_uniformado" />
+
+        <CheckBox
+            android:id="@+id/packages5"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages4"
+            android:text="@string/lbl_package_skater" />
+
+        <CheckBox
+            android:id="@+id/packages6"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages5"
+            android:text="@string/lbl_package_hiphop" />
+
+        <CheckBox
+            android:id="@+id/packages7"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages6"
+            android:text="@string/lbl_package_otaku" />
+
+        <CheckBox
+            android:id="@+id/packages8"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages7"
+            android:text="@string/lbl_package_surfista" />
+
+        <CheckBox
+            android:id="@+id/packages9"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages8"
+            android:text="@string/lbl_package_verde" />
+
+        <CheckBox
+            android:id="@+id/packages10"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages9"
+            android:text="@string/lbl_package_gotico" />
+
+        <CheckBox
+            android:id="@+id/packages11"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages10"
+            android:text="@string/lbl_package_motoquero" />
+
+        <CheckBox
+            android:id="@+id/packages12"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages11"
+            android:text="@string/lbl_package_reggaetonero" />
+
+        <CheckBox
+            android:id="@+id/packages13"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages12"
+            android:text="@string/lbl_package_zorron" />
+
+        <CheckBox
+            android:id="@+id/packages14"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages13"
+            android:text="@string/lbl_package_parrillero" />
+
+        <CheckBox
+            android:id="@+id/packages15"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages14"
+            android:text="@string/lbl_package_lana" />
+
+        <CheckBox
+            android:id="@+id/packages16"
+            style="@style/PinkCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages15"
+            android:text="@string/lbl_package_pokemon" />
+        
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/packages16"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp" >
+
+	        <Button
+	            android:id="@+id/packagesFormSaveBtn"
+	            style="@style/button_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/light_blue_button"
+	            android:text="@string/btn_account_save" />
+	
+	        <Button
+	            android:id="@+id/packagesFormBackBtn"
+	            style="@style/button_text"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1.71"
+	            android:background="@drawable/gray_button"
+	            android:text="@string/btn_account_back" />
+	
+	    </LinearLayout>
+            
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <LinearLayout
+		        android:id="@+id/linearLayout1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/nutritionalZodiacSignSpinner"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginTop="24dp" >
+		
+		        <Button
+		            android:id="@+id/nutritionalFormSaveBtn"
+		            style="@style/button_text"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/light_blue_button"
+		            android:text="@string/btn_account_save" />
+		
+		        <Button
+		            android:id="@+id/nutritionalFormBackBtn"
+		            style="@style/button_text"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1.71"
+		            android:background="@drawable/gray_button"
+		            android:text="@string/btn_account_back" />
+		
+		    </LinearLayout>
+
+            <TextView
+                android:id="@+id/nutritionalReligionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_nutritional_religion" />
+
+            <Spinner
+                android:id="@+id/nutritionalReligionSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalReligionLabel" />
+
+            <TextView
+                android:id="@+id/nutritionalLanguagesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalReligionSpinner"
+                android:text="@string/lbl_nutritional_languages" />
+
+            <EditText
+                android:id="@+id/nutritionalLanguagesText"
+                style="@style/PinkEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalLanguagesLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_languages" />
+
+            <TextView
+                android:id="@+id/nutritionalOccupationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalLanguagesText"
+                android:text="@string/lbl_nutritional_occupation" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteAlbumText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteAlbumLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_album" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteAlbumLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nutritionalOccupationSpinner"
+                android:text="@string/lbl_nutritional_album" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteBookText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteBookLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_book" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteBookLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteAlbumText"
+                android:text="@string/lbl_nutritional_book" />
+
+            <Spinner
+                android:id="@+id/nutritionalOccupationSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalOccupationLabel" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteArtistLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteBookText"
+                android:text="@string/lbl_nutritional_artist" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteArtistText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteArtistLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_artist" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteArtistText"
+                android:text="@string/lbl_nutritional_movie" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteMovieText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteMovie"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_movie" />
+
+            <TextView
+                android:id="@+id/nutritionalJokeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteMovieText"
+                android:text="@string/lbl_nutritional_joke" />
+
+            <EditText
+                android:id="@+id/nutritionalJokeText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalJokeLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_joke"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:id="@+id/nutritionalDrinkLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalJokeText"
+                android:text="@string/lbl_nutritional_drink" />
+
+            <EditText
+                android:id="@+id/nutritionalDrinkText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalDrinkLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_drink" >
+
+            </EditText>
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteCountryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalDrinkText"
+                android:text="@string/lbl_nutritional_country" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteCountryText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteCountryLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_country" />
+
+            <TextView
+                android:id="@+id/nutritionalQuoteLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteCountryText"
+                android:text="@string/lbl_nutritional_quote" />
+
+            <EditText
+                android:id="@+id/nutritionalQuoteText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalQuoteLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_quote" />
+
+            <TextView
+                android:id="@+id/nutritionalHobbyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalQuoteText"
+                android:text="@string/lbl_nutritional_hobby" />
+
+            <EditText
+                android:id="@+id/nutritionalHobbyText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalHobbyLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_hobby" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalHobbyText"
+                android:text="@string/lbl_nutritional_date" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteDateText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteDateLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_date"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:id="@+id/nutritionalPoliticsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteDateText"
+                android:text="@string/lbl_nutritional_politics" />
+
+            <Spinner
+                android:id="@+id/nutritionalPoliticsSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalPoliticsLabel" />
+
+            <TextView
+                android:id="@+id/nutritionalSportsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalPoliticsSpinner"
+                android:text="@string/lbl_nutritional_sport" />
+
+            <EditText
+                android:id="@+id/nutritionalSportsText"
+                style="@style/PinkEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalSportsLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_sport" />
+
+            <TextView
+                android:id="@+id/nutritionalFavoriteFoodLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalSportsText"
+                android:text="@string/lbl_nutritional_food" />
+
+            <EditText
+                android:id="@+id/nutritionalFavoriteFoodText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalFavoriteFoodLabel"
+                android:ems="10"
+                android:hint="@string/lbl_nutritional_food" />
+
+            <TextView
+                android:id="@+id/nutritionalZodiazSignLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutritionalFavoriteFoodText"
+                android:text="@string/lbl_nutritional_zodiac" />
+
+            <Spinner
+                android:id="@+id/nutritionalZodiacSignSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/nutritionalZodiazSignLabel" />
+
+        </RelativeLayout>
+    </ScrollView>

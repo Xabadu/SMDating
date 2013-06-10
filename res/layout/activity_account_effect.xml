@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/effectsDefectLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_effects_defects" />
+
+            <EditText
+                android:id="@+id/effectsDefectText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsDefectLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_defects" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/effectsHatesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsDefectText"
+                android:text="@string/lbl_effects_hates" />
+
+            <EditText
+                android:id="@+id/effectsHatesText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsHatesLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_hates" />
+
+            <TextView
+                android:id="@+id/effectsDrinksLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsHatesText"
+                android:text="@string/lbl_effects_drink" />
+
+            <Spinner
+                android:id="@+id/effectsDrinksSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsDrinksLabel" />
+
+            <TextView
+                android:id="@+id/effectsSmokesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsDrinksSpinner"
+                android:text="@string/lbl_effects_smokes" />
+
+            <Spinner
+                android:id="@+id/effectsSmokesSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSmokesLabel" />
+
+            <TextView
+                android:id="@+id/effectsFavoriteDrugLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSmokesSpinner"
+                android:text="@string/lbl_effects_drugs" />
+
+            <Spinner
+                android:id="@+id/effectsFavoriteDrugSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsFavoriteDrugLabel" />
+
+            <TextView
+                android:id="@+id/effectsSexPosesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsFavoriteDrugSpinner"
+                android:text="@string/lbl_effects_sexposes" />
+
+            <EditText
+                android:id="@+id/effectsSexPosesText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexPosesLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_sexposes" />
+
+            <TextView
+                android:id="@+id/effectsSexToysLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexPosesText"
+                android:text="@string/lbl_effects_sextoys" />
+
+            <EditText
+                android:id="@+id/effectsSexToysText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexToysLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_sextoys" />
+
+            <TextView
+                android:id="@+id/effectsGuiltyPleasureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexToysText"
+                android:text="@string/lbl_effects_guilty" />
+
+            <EditText
+                android:id="@+id/effectsGuiltyPleasureText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsGuiltyPleasureLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_guilty" />
+
+            <TextView
+                android:id="@+id/effectsSexualFantasyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsGuiltyPleasureText"
+                android:text="@string/lbl_effects_sexualfantasy" />
+
+            <EditText
+                android:id="@+id/effectsSexualFantasyText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexualFantasyLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_sexualfantasy" />
+
+            <TextView
+                android:id="@+id/effectsFetishesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsSexualFantasyText"
+                android:text="@string/lbl_effects_fetishes" />
+
+            <EditText
+                android:id="@+id/effectsFetishesText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/effectsFetishesLabel"
+                android:ems="10"
+                android:hint="@string/lbl_effects_fetishes" />
+            
+             <LinearLayout
+		        android:id="@+id/linearLayout1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/effectsFetishesText"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginTop="24dp" >
+		
+		        <Button
+		            android:id="@+id/effectsFormSaveBtn"
+		            style="@style/button_text"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/light_blue_button"
+		            android:text="@string/btn_account_save" />
+		
+		        <Button
+		            android:id="@+id/effectsFormBackBtn"
+		            style="@style/button_text"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1.71"
+		            android:background="@drawable/gray_button"
+		            android:text="@string/btn_account_back" />
+		
+		    </LinearLayout>
+            
+        </RelativeLayout>
+        
+    </ScrollView>

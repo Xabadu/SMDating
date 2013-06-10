@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <LinearLayout
+		        android:id="@+id/linearLayout1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/accessoriesPetSpinner"
+		        android:layout_centerHorizontal="true"
+		        android:layout_marginTop="24dp" >
+		
+		        <Button
+		            android:id="@+id/accessoriesFormSaveBtn"
+		            style="@style/button_text"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/light_blue_button"
+		            android:text="@string/btn_account_save" />
+		
+		        <Button
+		            android:id="@+id/accessoriesFormBackBtn"
+		            style="@style/button_text"
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1.71"
+		            android:background="@drawable/gray_button"
+		            android:text="@string/btn_account_back" />
+		
+		    </LinearLayout>
+
+            <TextView
+                android:id="@+id/accessoriesMaleChildrenLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_accesories_malechildren" />
+
+            <EditText
+                android:id="@+id/accesoriesMaleChildrenText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesMaleChildrenLabel"
+                android:ems="10"
+                android:hint="@string/lbl_accesories_malechildren"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/effectsDefectLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accesoriesMaleChildrenText"
+                android:text="@string/lbl_accesories_femalechildren" />
+
+            <EditText
+                android:id="@+id/accesoriesFemaleChildrenText"
+                style="@style/PinkEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/effectsDefectLabel"
+                android:ems="10"
+                android:hint="@string/lbl_accesories_femalechildren"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/accessoriesLivesWithLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accesoriesFemaleChildrenText"
+                android:text="@string/lbl_accessories_liveswith" />
+
+            <Spinner
+                android:id="@+id/accessoriesLivesWithSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesLivesWithLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesSalaryLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesLivesWithSpinner"
+                android:text="@string/lbl_accessories_label" />
+
+            <Spinner
+                android:id="@+id/accessoriesSalarySpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesSalaryLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesHouseTypeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesSalarySpinner"
+                android:text="@string/lbl_accessories_housetype" />
+
+            <Spinner
+                android:id="@+id/accessoriesHouseTypeSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesHouseTypeLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesBeachLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesHouseTypeSpinner"
+                android:text="@string/lbl_accessories_beach" />
+
+            <Spinner
+                android:id="@+id/accessoriesBeachHouseType"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesBeachLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesPoolLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesBeachHouseType"
+                android:text="@string/lbl_accessories_pool" />
+
+            <Spinner
+                android:id="@+id/accessoriesPoolSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesPoolLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesJacuzziLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesPoolSpinner"
+                android:text="@string/lbl_accessories_jacuzzi" />
+
+            <Spinner
+                android:id="@+id/accessoriesJacuzziSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesJacuzziLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesMotorcycleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesJacuzziSpinner"
+                android:text="@string/lbl_accessories_motorcycle" />
+
+            <Spinner
+                android:id="@+id/accessoriesMotorcycleSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesMotorcycleLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesBikeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesMotorcycleSpinner"
+                android:text="@string/lbl_accessories_bike" />
+
+            <Spinner
+                android:id="@+id/accessoriesBikeSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesBikeLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesCarLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesBikeSpinner"
+                android:text="@string/lbl_accessories_car" />
+
+            <Spinner
+                android:id="@+id/accessoriesCarSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesCarLabel" />
+
+            <TextView
+                android:id="@+id/accessoriesPetLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accessoriesCarSpinner"
+                android:text="@string/lbl_accessories_pet" />
+
+            <Spinner
+                android:id="@+id/accessoriesPetSpinner"
+                style="@style/PinkSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/accessoriesPetLabel" />
+        
+        </RelativeLayout>
+    </ScrollView>

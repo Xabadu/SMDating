@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/scrollView1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin" >
+	<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/personalFormCountyText"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="24dp" >
+	
+	        <Button
+	            android:id="@+id/personalFormSaveBtn"
+	            style="@style/button_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/light_blue_button"
+	            android:text="@string/btn_account_save" />
+	
+	        <Button
+	            android:id="@+id/personalFormBackBtn"
+	            style="@style/button_text"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1.71"
+	            android:background="@drawable/gray_button"
+	            android:text="@string/btn_account_back" />
+	
+	    </LinearLayout>
+	
+	    <TextView
+	        android:id="@+id/personalFormNameLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:text="@string/lbl_account_name" />
+	
+	    <EditText
+	        android:id="@+id/personalFormNameText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormNameLabel"
+	        android:layout_below="@+id/personalFormNameLabel"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_name"
+	        android:inputType="textPersonName" />
+	
+	    <TextView
+	        android:id="@+id/personalFormWeightLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormNameText"
+	        android:text="@string/lbl_account_weight" />
+	
+	    <EditText
+	        android:id="@+id/personalFormWeightText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormWeightLabel"
+	        android:layout_below="@+id/personalFormWeightLabel"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_weight"
+	        android:inputType="number" />
+	
+	    <TextView
+	        android:id="@+id/personalFormHeightLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormWeightText"
+	        android:text="@string/lbl_account_height" />
+	
+	    <EditText
+	        android:id="@+id/personalFormHeightText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormBirthdayBtn"
+	        android:layout_below="@+id/personalFormHeightLabel"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_height"
+	        android:inputType="numberDecimal" >
+	
+	    </EditText>
+	
+	    <TextView
+	        android:id="@+id/personalFormBirthdayLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormHeightText"
+	        android:text="@string/lbl_birthday_register" />
+	
+	    <Button
+	        android:id="@+id/personalFormBirthdayBtn"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormBirthdayLabel"
+	        android:layout_below="@+id/personalFormBirthdayLabel"
+	        android:background="@color/white"
+	        android:hint="@string/lbl_birthday_register" />
+	
+	    <TextView
+	        android:id="@+id/personalFormCountryLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormBirthdayBtn"
+	        android:text="@string/lbl_account_country" />
+	
+	    <AutoCompleteTextView
+	        android:id="@+id/personalFormCountryText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormCountryLabel"
+	        android:layout_below="@+id/personalFormCountryLabel"
+	        android:completionThreshold="1"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_country" />
+	
+	    <TextView
+	        android:id="@+id/personalFormRegionLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormCountryText"
+	        android:text="@string/lbl_account_region" />
+	
+	    <AutoCompleteTextView
+	        android:id="@+id/personalFormRegionText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormRegionLabel"
+	        android:layout_below="@+id/personalFormRegionLabel"
+	        android:completionThreshold="3"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_region" />
+	
+	    <TextView
+	        android:id="@+id/personalFormCountyLabel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/personalFormRegionText"
+	        android:text="@string/lbl_account_county" />
+	
+	    <AutoCompleteTextView
+	        android:id="@+id/personalFormCountyText"
+	        style="@style/PinkEditText"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/personalFormCountyLabel"
+	        android:layout_below="@+id/personalFormCountyLabel"
+	        android:completionThreshold="3"
+	        android:ems="10"
+	        android:hint="@string/lbl_account_county" />
+	    
+	</RelativeLayout>
+
+</ScrollView>

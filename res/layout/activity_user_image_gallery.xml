@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+     
+          <android.support.v4.view.ViewPager
+              android:id="@+id/userGalleryViewPager"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" />
+
+          <LinearLayout
+              android:id="@+id/userGalleryActions"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true" >
+
+              <Button
+                  android:id="@+id/userGalleryAddBtn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="+" />
+
+              <Button
+                  android:id="@+id/userGalleryMainBtn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="Principal" />
+
+              <Button
+                  android:id="@+id/userGalleryDeleteBtn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="x" />
+          </LinearLayout>
+ 
+</RelativeLayout>

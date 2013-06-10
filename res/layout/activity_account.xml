@@ -1,0 +1,224 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Account" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountAvatarImage" >
+
+        <TableLayout
+            android:id="@+id/accountDataTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/table_account_background"
+            android:padding="5dp" >
+
+            <TableRow
+                android:id="@+id/accountPersonalInfoRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/personalFormNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_personal"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountAboutMeRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/personalFormCountyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_aboutme"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountNutritionalInfoRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_information"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountFlavorsRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_flavors"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </TableRow>
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountPackagesRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_package"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </TableRow>
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountBonusPackRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_bonuspack"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </TableRow>
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountAccessoriesRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_accessories"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountSideEffectsRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_effects"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+            
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#aaaaaa" />
+
+            <TableRow
+                android:id="@+id/accountInfoRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tablerow_selector"
+                android:clickable="true"
+                android:padding="10dp" >
+
+                <TextView
+                    android:id="@+id/accountInfoUsernameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_account_info"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/accountAvatarImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/cd_account_avatar"  />
+    
+</RelativeLayout>
