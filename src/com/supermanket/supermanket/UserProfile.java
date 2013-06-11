@@ -1,11 +1,6 @@
 package com.supermanket.supermanket;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -32,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.jess.ui.TwoWayAdapterView;
@@ -40,7 +36,9 @@ import com.jess.ui.TwoWayGridView;
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.ImageLoader;
 import com.supermanket.utilities.PictureAdapter;
+import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.UtilityBelt;
+import com.supermanket.utilities.SideNavigationView.Mode;
 
 public class UserProfile extends Activity {
 
@@ -51,15 +49,27 @@ public class UserProfile extends Activity {
 	private ImageLoader imageLoader;
 	private JSONArray resultImages = null;
 	private UtilityBelt utilityBelt = new UtilityBelt();
+	String[] flavorsList = {"Intelectual", "Ejecutivo", "Carretero", "Deportista", "Aventurero", "Artista",
+			"Tímido", "Geek", "Gamer", "Tuerca", "Tallero", "Hipster", "Fixero"};
+	String[] packagesList = {"Rockero", "Metalero", "Casual", "Uniformado", "Skater", "Hip-Hop", "Otaku", 
+			"Surfista", "Verde", "Gótico", "Motoquero", "Reggaetonero", "Zorrón", "Parrillero", "Lana", "Pokemón"};
+	String[] bonusPackList = {"Chef", "Vegetariano", "Six Pack", "Fumador", "No fumador", "Romántico", "Músico", 
+			"Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};
 	
 	// UI Elements
 	
 	ImageView userProfileUserImage;
+	TableRow flavorsRow;
+	TableRow packagesRow;
+	TableRow bonusPackRow;
 	TextView userProfileNameText;
 	TextView userProfileAgeText;
 	TextView userProfileHeightText;
 	TextView userProfileWeightText;
 	TextView userProfileCountryText;
+	TextView userProfileFlavorsText;
+	TextView userProfilePackagesText;
+	TextView userProfileBonusPackText;
 	TextView userProfileAboutMeText;
 	TextView userProfileCrazyText;
 	TextView userProfileReligionText;
@@ -105,6 +115,9 @@ public class UserProfile extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
@@ -177,6 +190,10 @@ public class UserProfile extends Activity {
 		userProfileSexualFantasyText = (TextView) findViewById(R.id.userProfileSexualFantasyText);
 		userProfileFetishesText = (TextView) findViewById(R.id.userProfileFetishesText);
 		
+		flavorsRow = (TableRow) findViewById(R.id.flavorsRow);
+		packagesRow = (TableRow) findViewById(R.id.packagesRow);
+		bonusPackRow = (TableRow) findViewById(R.id.bonusPackRow);
+		
 		Intent intent = getIntent();
 		
 		try {
@@ -211,6 +228,42 @@ public class UserProfile extends Activity {
 			
 			/* About me */
 			
+			if(!resultObject.getString("sex").equalsIgnoreCase("male")) {
+				flavorsRow.setVisibility(View.GONE);
+				packagesRow.setVisibility(View.GONE);
+				bonusPackRow.setVisibility(View.GONE);
+			} else {
+				userProfileFlavorsText = (TextView) findViewById(R.id.userProfileFlavorsText);
+				userProfilePackagesText = (TextView) findViewById(R.id.userProfilePackagesText);
+				userProfileBonusPackText = (TextView) findViewById(R.id.userProfileBonusPackText);
+				
+				JSONArray elements;
+				if(!resultObject.isNull("flavor_ids")) {
+					elements = resultObject.getJSONArray("flavor_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						userProfileFlavorsText.setText(userProfileFlavorsText.getText().toString() 
+								+ flavorsList[elements.getInt(i)] + "  ");
+					}
+				}
+				
+				if(!resultObject.isNull("packaging_ids")) {
+					elements = resultObject.getJSONArray("packaging_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						userProfilePackagesText.setText(userProfilePackagesText.getText().toString() 
+								+ packagesList[elements.getInt(i)] + "  ");
+					}
+				}
+				
+				if(!resultObject.isNull("bonus_pack_ids")) {
+					elements = resultObject.getJSONArray("bonus_pack_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						userProfileBonusPackText.setText(userProfileBonusPackText.getText().toString()
+								+ bonusPackList[elements.getInt(i)] + "  ");
+					}
+				}
+				
+			}
+			
 			if(!resultObject.getString("short_description").equals("") && !resultObject.isNull("short_description")) {
 				userProfileAboutMeText.setText(resultObject.getString("short_description") + "\n");
 			}
@@ -223,6 +276,7 @@ public class UserProfile extends Activity {
 			Spannable str = new SpannableString(userProfileCrazyText.getText().toString());
 			str.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 28, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			userProfileCrazyText.setText(str);
+			
 			/* Info */
 			
 			if(!resultObject.getString("religion").equals("") && !resultObject.isNull("religion")) {

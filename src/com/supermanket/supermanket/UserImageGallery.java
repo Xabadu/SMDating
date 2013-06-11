@@ -14,12 +14,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -42,7 +41,6 @@ public class UserImageGallery extends Activity {
 	private static final int PICK_IMAGE = 1;
 	private static final int PICK_CAMERA_IMAGE = 2;
 	private Bitmap bitmap;
-	private ImageView imgView;
 	Uri imageUri;
 	MediaPlayer mp = new MediaPlayer();
 	
@@ -128,6 +126,8 @@ public class UserImageGallery extends Activity {
 	    		});
 	    		AlertDialog alert = builder.create();
 	    		alert.show();
+	    		ImageUpload imageUpload = new ImageUpload();
+	    		imageUpload.execute();
 	    	}
 	    });
 	    
@@ -234,10 +234,29 @@ public class UserImageGallery extends Activity {
 		o2.inSampleSize = scale;
 		bitmap = BitmapFactory.decodeFile(filePath, o2);
 		
-		imgView.setImageBitmap(bitmap);
 		
 	}
 	
-	
+	class ImageUpload extends AsyncTask<Void, Void, String> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+		}
+		
+		@Override
+		protected String doInBackground(Void... arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result); 
+			
+		}
+		
+	}
 
 }

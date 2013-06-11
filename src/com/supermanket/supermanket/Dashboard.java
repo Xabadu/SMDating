@@ -95,7 +95,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
             String title = getIntent().getStringExtra(EXTRA_TITLE);
             int resId = getIntent().getIntExtra(EXTRA_RESOURCE_ID, 0);
             setTitle(title);
-            icon.setImageResource(resId);
+            //icon.setImageResource(resId);
             sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
         }
 

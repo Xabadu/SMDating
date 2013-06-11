@@ -815,4 +815,8 @@
 	    <string name="btn_gallery_camera">Tomar foto</string>
 	    <string name="btn_gallery_select">Seleccionar desde galería</string>
 	    <string name="btn_gallery_close">Cerrar</string>
+	    <string name="lbl_messages_send">Enviar</string>
+	    <string name="lbl_profile_flavors">Sabores:</string>
+	    <string name="lbl_profile_bonuspack">Bonus Pack:</string>
+	    <string name="lbl_profile_packages">Envases:</string>
 </resources>

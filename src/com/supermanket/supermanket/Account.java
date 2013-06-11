@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -23,7 +22,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -36,16 +34,29 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ISideNavigationCallback;
+import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.UtilityBelt;
+import com.supermanket.utilities.SideNavigationView.Mode;
 
-public class Account extends Activity {
+public class Account extends SherlockActivity implements ISideNavigationCallback {
 	
+	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
+    public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
+    public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
+	
+    
+    private ImageView icon;
+    private SideNavigationView sideNavigationView;
 	AutoCompleteTextView personalFormCountryText;
 	AutoCompleteTextView personalFormRegionText;
 	AutoCompleteTextView personalFormCountyText;
@@ -121,6 +132,9 @@ public class Account extends Activity {
 	TableRow accountFlavorsRow;
 	TableRow accountPackagesRow;
 	TableRow accountBonusPackRow;
+	View flavorsSeparator;
+	View packagesSeparator;
+	View bonusPackSeparator;
 	
 	ImageLoader imageLoader = ImageLoader.getInstance();
 	
@@ -136,7 +150,21 @@ public class Account extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);    
+		setContentView(R.layout.activity_account);
+		icon = (ImageView) findViewById(android.R.id.icon);
+		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
+	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+	    sideNavigationView.setMenuClickCallback(this);
+	    
+	    if (getIntent().hasExtra(EXTRA_TITLE)) {
+	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
+	        int resId = getIntent().getIntExtra(EXTRA_RESOURCE_ID, 0);
+	        setTitle(title);
+	    //icon.setImageResource(resId);
+	        sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
+	    }
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
 		ImageLoader.getInstance().init(config);
 		userData = new UserData(this);
@@ -144,8 +172,8 @@ public class Account extends Activity {
 	}
 	
 	public void loadProfile(final String result) {
-		setContentView(R.layout.activity_account);
 		
+	    
 		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
 		
 		accountUserAvatar = (ImageView) findViewById(R.id.accountAvatarImage);
@@ -165,9 +193,15 @@ public class Account extends Activity {
 			resultObj = new JSONObject(result);
 			JSONArray photos = resultObj.getJSONArray("photos"); 
 			if(!resultObj.getString("sex").equalsIgnoreCase("male")) {
-				accountFlavorsRow.setVisibility(View.INVISIBLE);
-				accountPackagesRow.setVisibility(View.INVISIBLE);
-				accountBonusPackRow.setVisibility(View.INVISIBLE);
+				accountFlavorsRow.setVisibility(View.GONE);
+				accountPackagesRow.setVisibility(View.GONE);
+				accountBonusPackRow.setVisibility(View.GONE);
+				flavorsSeparator = (View) findViewById(R.id.flavorsSeparator);
+				packagesSeparator = (View) findViewById(R.id.packagesSeparator);
+				bonusPackSeparator = (View) findViewById(R.id.bonusPackSeparator);
+				flavorsSeparator.setVisibility(View.GONE);
+				packagesSeparator.setVisibility(View.GONE);
+				bonusPackSeparator.setVisibility(View.GONE);
 			}
 			for(int i = 0; i < photos.length(); i++) {
 				JSONObject picInfo = photos.getJSONObject(i);
@@ -760,13 +794,109 @@ public class Account extends Activity {
 	};
 	
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        return true;
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
-	
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+        if (sideNavigationView.getMode() == Mode.RIGHT) {
+            menu.findItem(R.id.mode_right).setChecked(true);
+        } else {
+            menu.findItem(R.id.mode_left).setChecked(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                sideNavigationView.toggleMenu();
+                break;
+            case R.id.mode_left:
+                item.setChecked(true);
+                sideNavigationView.setMode(Mode.LEFT);
+                break;
+            case R.id.mode_right:
+                item.setChecked(true);
+                sideNavigationView.setMode(Mode.RIGHT);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void onSideNavigationItemClick(int itemId) {
+        switch (itemId) {
+            case R.id.side_navigation_menu_item1:
+                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_android1);
+                break;
+
+            case R.id.side_navigation_menu_item2:
+                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_android2);
+                break;
+
+            case R.id.side_navigation_menu_item3:
+                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_android3);
+                break;
+
+            case R.id.side_navigation_menu_item4:
+                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
+                break;
+
+            case R.id.side_navigation_menu_item5:
+                invokeActivity(getString(R.string.menu_title5), R.drawable.ic_android5);
+                break;
+
+            default:
+                return;
+        }
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // hide menu if it shown
+        if (sideNavigationView.isShown()) {
+            sideNavigationView.hideMenu();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void invokeActivity(String title, int resId) {
+        Intent intent = null;
+        boolean action = true;
+        if(title.equalsIgnoreCase("gente")) {
+        	intent = new Intent(this, Dashboard.class);
+        }
+        if(title.equalsIgnoreCase("cercanos")) {
+        	intent = new Intent(this, UsersMap.class);
+        }
+        if(title.equalsIgnoreCase("mensajes")) {
+        	intent = new Intent(this, MessagesList.class);
+        }
+        if(title.equalsIgnoreCase("perfil")) {
+        	action = false;
+        	Account.this.finish();
+        	startActivity(getIntent());
+        	
+        }
+        if(title.equalsIgnoreCase("cerrar sesion")) {
+        	
+        }
+        
+        if(action) {
+        	intent.putExtra(EXTRA_TITLE, title);
+            intent.putExtra(EXTRA_RESOURCE_ID, resId);
+            intent.putExtra(EXTRA_MODE, sideNavigationView.getMode() == Mode.LEFT ? 0 : 1);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        }
+        
+    }
 	
 	private class UserData extends AsyncTask<Integer, Integer, String> {
 		
