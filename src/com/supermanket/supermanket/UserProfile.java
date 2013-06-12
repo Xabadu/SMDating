@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -57,7 +58,8 @@ public class UserProfile extends Activity {
 			"Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};
 	
 	// UI Elements
-	
+	Button userProfileOfferBtn;
+	Button userProfileSendMessageBtn;
 	ImageView userProfileUserImage;
 	TableRow flavorsRow;
 	TableRow packagesRow;
@@ -115,10 +117,7 @@ public class UserProfile extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
 
-		
 		// Show the Up button in the action bar.
 		setupActionBar();
 		

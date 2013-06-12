@@ -2,6 +2,7 @@ package com.supermanket.supermanket;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -74,29 +75,27 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	private LocationClient mLocationClient;
 	private Location mCurrentLocation;
 	private UserData userData;
-	private UtilityBelt utilityBelt = new UtilityBelt();
 	SaveLocation saveLocation;
 	GetNearUsers getNearUsers;
 	ImageLoader imageLoader = ImageLoader.getInstance();
-	
-	private static SharedPreferences mSharedPreferences;
-
+	JSONArray otherUsersArray = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
 		ImageLoader.getInstance().init(config);
-		mLocationClient = new LocationClient(this, this, this);		
+		mLocationClient = new LocationClient(this, this, this);
 	}
 	
 	public void loadMap(String result) {
 		setContentView(R.layout.activity_users_map);
 		mCurrentLocation = mLocationClient.getLastLocation();
 		if(mCurrentLocation != null) {
-			Double[] coordenadas = new Double[2];
+			Double[] coordenadas = new Double[3];
 			coordenadas[0] = mCurrentLocation.getLatitude();
 			coordenadas[1] = mCurrentLocation.getLongitude();
+			coordenadas[2] = 9.0;
 			saveLocation = new SaveLocation();
 			saveLocation.execute(coordenadas);
 			CURRENT_POSITION = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -107,18 +106,15 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				mapSettings.setCompassEnabled(false);
 				mapSettings.setZoomControlsEnabled(false);
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(CURRENT_POSITION, 16));
-				map.addMarker(new MarkerOptions()
-				.position(CURRENT_POSITION));
+				map.addMarker(new MarkerOptions().position(CURRENT_POSITION).title("Tú"));
 				
 				getNearUsers = new GetNearUsers();
 				getNearUsers.execute(coordenadas);
-				
-				
 			}
 			
 			radiusBar = (SeekBar) findViewById(R.id.usersMapSeekBar);
-			radiusBar.setMax(5);
-			radiusBar.setProgress(3);
+			radiusBar.setMax(4);
+			radiusBar.setProgress(2);
 			radiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 				@Override
@@ -134,7 +130,14 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 
 				@Override
 				public void onStopTrackingTouch(SeekBar arg0) {
-					map.animateCamera(CameraUpdateFactory.zoomTo(radiusBar.getProgress() + 15));
+					Double[] coordenadas = new Double[3];
+					coordenadas[0] = mCurrentLocation.getLatitude();
+					coordenadas[1] = mCurrentLocation.getLongitude();
+					coordenadas[2] = (double) (radiusBar.getProgress() + 1) * 3;
+					map.clear();
+					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
+					getNearUsers = new GetNearUsers();
+					getNearUsers.execute(coordenadas);
 				}
 				
 			});
@@ -174,12 +177,13 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
         mLocationClient.disconnect();
         super.onStop();
     }
-
+	
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-		//Nada
+		if(marker.getTitle().equalsIgnoreCase("Tú")) {
+			Toast.makeText(this, "Aquí estás ahora :)", Toast.LENGTH_SHORT).show();
+		}
 	}
-	
 	
 	@Override
 	public void onDisconnected() {
@@ -214,7 +218,6 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	
 	private class UserData extends AsyncTask<Integer, Integer, String> {
 		
-		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
@@ -222,6 +225,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		private SharedPreferences mSharedPreferences;
 		private UsersMap activityRef;
 		private UtilityBelt utilityBelt = new UtilityBelt();
+		private ProgressDialog dialog;
 		
 		public UserData(UsersMap activityRef) {
 			this.activityRef = activityRef;
@@ -274,7 +278,6 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				Log.d("Resultado", result);
 				activityRef.loadMap(result);
 				dialog.dismiss();
-
 			}
 			
 		}
@@ -283,14 +286,13 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	
 	private class SaveLocation extends AsyncTask<Double, Integer, String> {
 		
-		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
 		private String signature;
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
-
+		private ProgressDialog dialog;
 		
 		@Override
 		protected void onPreExecute() {
@@ -363,53 +365,44 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado 2do", result);
+				dialog.dismiss();
 			} 
 			
-			dialog.dismiss();
+			
 			
 		}
 		
 	}
 	
-	private class GetNearUsers extends AsyncTask<Double, Integer, String> implements OnInfoWindowClickListener {
+	private class GetNearUsers extends AsyncTask<Double, Integer, String> implements OnInfoWindowClickListener{
 		
-		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
 		private String signature;
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
-		private GoogleMap map;
-		private LatLng NEW_POSITION;
-		JSONArray otherUsersArray = null;
-		
+		private ProgressDialog dialog;
+		private int radius;
 
 		@Override
 		protected void onPreExecute() {
-		
 			super.onPreExecute();
-			
 			dialog = ProgressDialog.show(UsersMap.this, "", "Buscando usuarios cercanos...", true);
-			
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
-			
-			
 		}
 		
 		@Override
 		protected String doInBackground(Double... params) {
-			
 			signature = utilityBelt.md5("app_key" + api_key + "page1" + api_secret);
-			
+			radius = params[2].intValue();
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/near_people/"
 									+ Double.toString(params[0]) + "/" + Double.toString(params[1]) + 
-									"/" + Integer.toString(20) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
+									"/" + Integer.toString(radius) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
             try {
             	HttpResponse resp = client.execute(get);
 				return EntityUtils.toString(resp.getEntity());
@@ -420,14 +413,12 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
 			return null;
 		}
 		
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
 			if(result == null) {
 				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
@@ -437,13 +428,14 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					otherUsersArray = otherUsersObj.getJSONArray("users");
 					for(int i = 0; i < otherUsersArray.length(); i++) {
 						JSONObject singleUserData = otherUsersArray.getJSONObject(i);
-						NEW_POSITION = new LatLng(singleUserData.getDouble("latitude"), singleUserData.getDouble("longitude"));
+						final LatLng NEW_POSITION = new LatLng(singleUserData.getDouble("latitude"), singleUserData.getDouble("longitude"));
 						map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.usersMapMap)).getMap();
 						final View marker = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.map_marker_view, null);
 						ImageView userImage = (ImageView) marker.findViewById(R.id.mapMarkerUserImage);
 					    DisplayImageOptions options = new DisplayImageOptions.Builder().build();
 					    final String username = singleUserData.getString("username");
 					    String avatar = singleUserData.getString("avatar_medium");
+					   
 					    imageLoader.displayImage(avatar, 
 					    			userImage, options, new ImageLoadingListener() {
 					        @Override
@@ -476,38 +468,35 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					    
 						map.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
 					    map.setOnInfoWindowClickListener(this);
+					    dialog.dismiss();
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					dialog.dismiss();
 				}
-				dialog.dismiss();
-
 			}
-			
 		}
-
+		
 		@Override
 		public void onInfoWindowClick(Marker marker) {
-			if(marker.getId().equalsIgnoreCase("m0")) {
-				Intent intent = new Intent(UsersMap.this, Account.class);
-				startActivity(intent);
-			} else {
-				String[] number = new String[2];
-				number = marker.getId().split("m");
-				int index = Integer.valueOf(number[1]) - 1;
+			String user = marker.getTitle();
+			if(!user.equalsIgnoreCase("Tú")) {
 				try {
-					JSONObject single = otherUsersArray.getJSONObject(index);
-					Intent intent = new Intent(UsersMap.this, UserProfile.class);
-					intent.putExtra("id", single.getInt("id"));
-					intent.putExtra("pic", single.getString("avatar_medium"));
-					intent.putExtra("username", single.getString("username"));
-					startActivity(intent);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					for(int i = 0; i < otherUsersArray.length(); i++) {
+						JSONObject single = otherUsersArray.getJSONObject(i);
+						if(user.equalsIgnoreCase(single.getString("username"))) {
+							Intent intent = new Intent(UsersMap.this, UserProfile.class);
+							intent.putExtra("id", single.getInt("id"));
+							intent.putExtra("pic", single.getString("avatar_medium"));
+							intent.putExtra("username", single.getString("username"));
+							startActivity(intent);
+						}
+					}
+				} catch(JSONException e) {
 					e.printStackTrace();
 				}
-			}
+			}			
 		}
 		
 	}

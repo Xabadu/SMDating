@@ -25,5 +25,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="10dp" />
+    
+    <com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/usersMapMap" />
 
 </RelativeLayout>

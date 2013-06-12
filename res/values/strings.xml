@@ -819,4 +819,5 @@
 	    <string name="lbl_profile_flavors">Sabores:</string>
 	    <string name="lbl_profile_bonuspack">Bonus Pack:</string>
 	    <string name="lbl_profile_packages">Envases:</string>
+	    <string name="lbl_map_changeradius">Ajustar radio de búsqueda:</string>
 </resources>

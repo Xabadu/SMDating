@@ -978,7 +978,7 @@
         android:layout_below="@+id/userProfileImageGalleryGrid" >
 
         <Button
-            android:id="@+id/mapPopupProfileBtn"
+            android:id="@+id/userProfileOfferBtn"
             style="@style/button_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

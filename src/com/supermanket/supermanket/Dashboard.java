@@ -31,6 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -64,6 +65,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     Integer currentPage[] = new Integer[1];
 
     Button dashboardNearByUsersBtn;
+    RelativeLayout dashboardBottomLayout;
     
     getUsers users;
 
@@ -78,6 +80,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     	setContentView(R.layout.activity_dashboard);
 		
 		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
+		dashboardBottomLayout = (RelativeLayout) findViewById(R.id.dashboardBottomLayout);
 		
 		dashboardNearByUsersBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -93,10 +96,9 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 
         if (getIntent().hasExtra(EXTRA_TITLE)) {
             String title = getIntent().getStringExtra(EXTRA_TITLE);
-            int resId = getIntent().getIntExtra(EXTRA_RESOURCE_ID, 0);
             setTitle(title);
-            //icon.setImageResource(resId);
             sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
+            sideNavigationView.setMode(Mode.LEFT);
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -215,7 +217,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         }
         return super.onCreateOptionsMenu(menu);
     }
-
+	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

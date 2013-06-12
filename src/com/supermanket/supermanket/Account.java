@@ -31,7 +31,9 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -106,6 +108,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	EditText accountInfoPasswordText;
 	EditText accountInfoConfirmPasswordText;
 	ImageView accountUserAvatar;
+	RelativeLayout accountLayout;
 	Spinner nutritionalFormReligionSpinner;
 	Spinner nutritionalFormOccupationSpinner;
 	Spinner nutritionalFormPoliticsSpinner;
@@ -157,11 +160,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
 	    sideNavigationView.setMenuClickCallback(this);
 	    
+	    accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);
+	    accountLayout.setVisibility(View.INVISIBLE);
+	    
 	    if (getIntent().hasExtra(EXTRA_TITLE)) {
 	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
-	        int resId = getIntent().getIntExtra(EXTRA_RESOURCE_ID, 0);
 	        setTitle(title);
-	    //icon.setImageResource(resId);
 	        sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
 	    }
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -172,8 +176,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	}
 	
 	public void loadProfile(final String result) {
-		
-	    
+			    
 		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
 		
 		accountUserAvatar = (ImageView) findViewById(R.id.accountAvatarImage);
@@ -203,6 +206,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				packagesSeparator.setVisibility(View.GONE);
 				bonusPackSeparator.setVisibility(View.GONE);
 			}
+			accountLayout.setVisibility(View.VISIBLE);
 			for(int i = 0; i < photos.length(); i++) {
 				JSONObject picInfo = photos.getJSONObject(i);
 				if(picInfo.getBoolean("avatar?")) {
@@ -966,5 +970,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		}
 		
 	}
-
+	
+	
 }
