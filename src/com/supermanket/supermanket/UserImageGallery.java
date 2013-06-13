@@ -1,14 +1,32 @@
 package com.supermanket.supermanket;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,11 +40,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.supermanket.utilities.GalleryAdapter;
+import com.supermanket.utilities.UtilityBelt;
 
 public class UserImageGallery extends Activity {
 
@@ -126,8 +144,7 @@ public class UserImageGallery extends Activity {
 	    		});
 	    		AlertDialog alert = builder.create();
 	    		alert.show();
-	    		ImageUpload imageUpload = new ImageUpload();
-	    		imageUpload.execute();
+	    		
 	    	}
 	    });
 	    
@@ -233,27 +250,90 @@ public class UserImageGallery extends Activity {
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
 		o2.inSampleSize = scale;
 		bitmap = BitmapFactory.decodeFile(filePath, o2);
-		
+		ImageUpload imageUpload = new ImageUpload();
+		imageUpload.execute();
 		
 	}
 	
 	class ImageUpload extends AsyncTask<Void, Void, String> {
 		
+		private ProgressDialog dialog;
+		InputStream is;
+		BitmapFactory.Options bfo;
+		ByteArrayOutputStream bao;
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(UserImageGallery.this, "", "Subiendo imagen", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
 			
 		}
 		
 		@Override
 		protected String doInBackground(Void... arg0) {
-			// TODO Auto-generated method stub
+			
+			bfo = new BitmapFactory.Options();
+			bfo.inSampleSize = 2;
+			
+			bao = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+			byte[] ba = bao.toByteArray();
+
+			JSONObject photo = new JSONObject();
+			JSONObject pic = new JSONObject();
+			ArrayList nameValuePairs = new ArrayList();
+			nameValuePairs.add(new BasicNameValuePair("image", ba.toString()));
+			try {
+				photo.put("image", ba.toString());
+				pic.put("photo", photo);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
+									+ api_key + "&signature=" + signature);
+            post.setHeader("content-type", "application/json");
+            
+            try {
+				//StringEntity entity = new StringEntity(pic.toString(), HTTP.UTF_8);
+				//post.setEntity(entity);
+            	post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+            
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return null;
 		}
 		
 		@Override
 		protected void onPostExecute(String result) {
-			super.onPostExecute(result); 
+			super.onPostExecute(result);
+			dialog.dismiss();
+			Log.d("Resultado", result);
 			
 		}
 		

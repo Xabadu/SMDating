@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -572,7 +573,7 @@ public class Login extends Activity {
 			}
             
             try {
-				StringEntity entity = new StringEntity(usuario.toString());
+				StringEntity entity = new StringEntity(usuario.toString(), HTTP.UTF_8);
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();

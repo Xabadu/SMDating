@@ -7,7 +7,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -176,6 +179,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	}
 	
 	public void loadProfile(final String result) {
+		
+		setContentView(R.layout.activity_account);
 			    
 		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
 		
@@ -383,6 +388,13 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				}
 			});
 			
+			accountSaveBtn.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					UpdateAccount account = new UpdateAccount("personal");
+					account.execute();
+				}
+			});
+			
 		}
 		
 		if(type.equalsIgnoreCase("about")) {
@@ -405,7 +417,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("about");
+					account.execute();
 				}
 			});
 
@@ -483,7 +496,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("nutritional");
+					account.execute();
 				}
 			});
 			
@@ -517,7 +531,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("flavors");
+					account.execute();
 				}
 			});
 		}
@@ -547,7 +562,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("packages");
+					account.execute();
 				}
 			});
 			
@@ -577,7 +593,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("bonuspack");
+					account.execute();
 				}
 			});
 			
@@ -674,7 +691,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("accessories");
+					account.execute();
 				}
 			});
 
@@ -731,7 +749,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("effects");
+					account.execute();
 				}
 			});
 			
@@ -758,7 +777,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					
+					UpdateAccount account = new UpdateAccount("info");
+					account.execute();
 				}
 			});
 			
@@ -971,5 +991,182 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		
 	}
 	
-	
+	private class UpdateAccount extends AsyncTask<Integer, Integer, String> {
+		
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		private String reference;
+		private String[] birthdayText;
+		JSONObject user = new JSONObject();
+		JSONObject usuario = new JSONObject();
+		
+		public UpdateAccount(String ref) {
+			reference = ref;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+		
+			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(Account.this, "", "Actualizando datos...", true);
+						
+			if(reference.equalsIgnoreCase("personal")) {
+								
+				birthdayText = personalFormBirthdayBtn.getText().toString().split("/");
+				
+				try {
+					user.put("name", personalFormNameText.getText().toString());
+					user.put("weight", personalFormWeightText.getText().toString());
+					user.put("height", personalFormHeightText.getText().toString());
+					user.put("birthday(3i)", birthdayText[0]);
+					user.put("birthday(2i)", birthdayText[1]);
+					user.put("birthday(1i)", birthdayText[2]);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			} else if(reference.equalsIgnoreCase("about")) {
+				
+				try {
+					user.put("short_description", aboutFormDescriptionText.getText().toString());
+					user.put("crazy_experience", aboutFormCrazyText.getText().toString());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+			} else if(reference.equalsIgnoreCase("nutritional")) {
+				
+				try {
+					user.put("languages", nutritionalFormLanguagesText.getText().toString());
+					user.put("favorite_album", nutritionalFormFavoriteAlbumText.getText().toString());
+					user.put("favorite_book", nutritionalFormFavoriteBookText.getText().toString());
+					user.put("favorite_artist", nutritionalFormFavoriteArtistText.getText().toString());
+					user.put("favorite_movie", nutritionalFormFavoriteMovieText.getText().toString());
+					user.put("a_joke", nutritionalFormJokeText.getText().toString());
+					user.put("a_drink", nutritionalFormDrinkText.getText().toString());
+					user.put("favorite_country", nutritionalFormFavoriteCountryText.getText().toString());
+					user.put("a_quote", nutritionalFormQuoteText.getText().toString());
+					user.put("a_hobby", nutritionalFormHobbyText.getText().toString());
+					user.put("favorite_date", nutritionalFormFavoriteDateText.getText().toString());
+					user.put("sport", nutritionalFormSportsText.getText().toString());
+					user.put("favorite_food", nutritionalFormFavoriteFoodText.getText().toString());
+					user.put("religion", nutritionalFormReligionSpinner.getSelectedItem().toString());
+					user.put("occupation", nutritionalFormOccupationSpinner.getSelectedItem().toString());
+					user.put("political_belief", nutritionalFormPoliticsSpinner.getSelectedItem().toString());
+					user.put("zodiac_sign", nutritionalFormZodiacSignSpinner.getSelectedItem().toString());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+			} else if(reference.equalsIgnoreCase("flavors")) {
+				
+			} else if(reference.equalsIgnoreCase("packaging")) {
+				
+			} else if(reference.equalsIgnoreCase("bonuspack")) {
+				
+			} else if(reference.equalsIgnoreCase("accessories")) {
+				try {
+					user.put("male_childs", accessoriesMaleChildrenText.getText().toString());
+					user.put("female_childs", accessoriesFemaleChildrenText.getText().toString());
+					user.put("live_with", accessoriesLivesWithSpinner.getSelectedItem().toString());
+					user.put("salary", accessoriesSalarySpinner.getSelectedItem().toString());
+					user.put("home_type", accessoriesHomeTypeSpinner.getSelectedItem().toString());
+					user.put("has_beach_house", accessoriesBeachHouseSpinner.getSelectedItem().toString());
+					user.put("has_pool", accessoriesPoolSpinner.getSelectedItem().toString());
+					user.put("has_jacuzzi", accessoriesJacuzziSpinner.getSelectedItem().toString());
+					user.put("has_motorcycle", accessoriesMotorcycleSpinner.getSelectedItem().toString());
+					user.put("has_bike", accessoriesBikeSpinner.getSelectedItem().toString());
+					user.put("has_car", accessoriesCarSpinner.getSelectedItem().toString());
+					user.put("has_pet", accessoriesPetSpinner.getSelectedItem().toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			} else if(reference.equalsIgnoreCase("effects")) {
+				try {
+					user.put("defect", effectsDefectsText.getText().toString());
+					user.put("hates", effectsHatesText.getText().toString());
+					user.put("sex_poses", effectsSexPosesText.getText().toString());
+					user.put("sex_toys", effectsSexToysText.getText().toString());
+					user.put("guilty_pleasure", effectsGuiltyPleasureText.getText().toString());
+					user.put("sexual_fantasy", effectsSexualFantasyText.getText().toString());
+					user.put("fetishes", effectsFetishesText.getText().toString());
+					user.put("drinks", effectsDrinksSpinner.getSelectedItem().toString());
+					user.put("smokes", effectsSmokesSpinner.getSelectedItem().toString());
+					user.put("favourite_drug", effectsFavoriteDrugSpinner.getSelectedItem().toString());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if(reference.equalsIgnoreCase("account")) {
+				try {
+					user.put("username", accountInfoUsernameText.getText().toString());
+					user.put("email", accountInfoEmailText.getText().toString());
+					if(!accountInfoPasswordText.getText().toString().equals("")) {
+						user.put("password", accountInfoPasswordText.getText().toString());
+						user.put("password_confirmation", accountInfoConfirmPasswordText.getText().toString());
+					}
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			try {
+				usuario.put("user", user);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpPut put = new HttpPut("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
+									+ api_key + "&signature=" + signature);
+            put.setHeader("content-type", "application/json");
+            
+            try {
+            	StringEntity entity = new StringEntity(usuario.toString(), HTTP.UTF_8);
+            	Log.d("Cadena enviada", usuario.toString());
+            	put.setEntity(entity);
+            	HttpResponse resp = client.execute(put);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				Log.d("Resultado", result);
+				dialog.dismiss();
+			}
+			
+		}
+		
+	}
 }
