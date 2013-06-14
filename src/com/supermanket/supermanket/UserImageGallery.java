@@ -1,20 +1,20 @@
 package com.supermanket.supermanket;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -65,10 +66,10 @@ public class UserImageGallery extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
 		setContentView(R.layout.activity_user_image_gallery);
 		
 		ViewPager viewPager = (ViewPager) findViewById(R.id.userGalleryViewPager);
-	    Intent intent = getIntent();
 	    referral = intent.getStringExtra("from");
 	    if(referral.equalsIgnoreCase("account")) {
 	    	try {
@@ -246,12 +247,18 @@ public class UserImageGallery extends Activity {
 			height_tmp /= 2;
 			scale *= 2;
 		}
-		
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
 		o2.inSampleSize = scale;
 		bitmap = BitmapFactory.decodeFile(filePath, o2);
-		ImageUpload imageUpload = new ImageUpload();
-		imageUpload.execute();
+		if(bitmap != null) {
+			ImageUpload imageUpload = new ImageUpload();
+			imageUpload.execute();
+		} else {
+			if(filePath.contains("http://") || filePath.contains("https://")) {
+				Toast.makeText(this, "Solo puedes subir imágenes almacenadas en tu teléfono", Toast.LENGTH_LONG).show();
+			}
+		}
+		
 		
 	}
 	
@@ -276,47 +283,27 @@ public class UserImageGallery extends Activity {
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
 		}
 		
 		@Override
 		protected String doInBackground(Void... arg0) {
 			
-			bfo = new BitmapFactory.Options();
-			bfo.inSampleSize = 2;
-			
-			bao = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bao);
-			byte[] ba = bao.toByteArray();
-
-			JSONObject photo = new JSONObject();
-			JSONObject pic = new JSONObject();
-			ArrayList nameValuePairs = new ArrayList();
-			nameValuePairs.add(new BasicNameValuePair("image", ba.toString()));
-			try {
-				photo.put("image", ba.toString());
-				pic.put("photo", photo);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			HttpClient client = new DefaultHttpClient();
+			HttpContext localContext = new BasicHttpContext();
 			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
 									+ api_key + "&signature=" + signature);
-            post.setHeader("content-type", "application/json");
+            //post.setHeader("content-type", "application/json");
             
+			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			bitmap.compress(CompressFormat.JPEG, 100, bos);
+			byte[] data = bos.toByteArray();
+			entity.addPart("photo[image]", new ByteArrayBody(data, "image.jpg"));
+			post.setEntity(entity);
+			Log.d("entity", data.toString());
+
             try {
-				//StringEntity entity = new StringEntity(pic.toString(), HTTP.UTF_8);
-				//post.setEntity(entity);
-            	post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			} catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
-			}
-            
-            
-            try {
-            	HttpResponse resp = client.execute(post);
+            	HttpResponse resp = client.execute(post, localContext);
 				return EntityUtils.toString(resp.getEntity());
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -333,6 +320,7 @@ public class UserImageGallery extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			dialog.dismiss();
+			
 			Log.d("Resultado", result);
 			
 		}
