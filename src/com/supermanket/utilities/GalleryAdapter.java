@@ -18,7 +18,7 @@ public class GalleryAdapter extends PagerAdapter {
 	ImageLoader imageLoader;
 	
 	public GalleryAdapter(Context context, JSONArray images){
-		this.context=context;
+		this.context = context;
 		userImages = images;
 		picsURL = new String[userImages.length()];
 		imageLoader = new ImageLoader(context);

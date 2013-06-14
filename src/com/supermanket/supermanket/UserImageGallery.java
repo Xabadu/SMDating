@@ -67,14 +67,19 @@ public class UserImageGallery extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
-		setContentView(R.layout.activity_user_image_gallery);
+		loadGallery(intent.getStringExtra("from"), intent.getStringExtra("images"));
 		
+	    
+	}
+	
+	public void loadGallery(String from, String images) {
+		setContentView(R.layout.activity_user_image_gallery);
 		ViewPager viewPager = (ViewPager) findViewById(R.id.userGalleryViewPager);
-	    referral = intent.getStringExtra("from");
+	    Intent intent = getIntent();
+		referral = intent.getStringExtra("from");
 	    if(referral.equalsIgnoreCase("account")) {
 	    	try {
-	    		resultObject = new JSONObject(intent.getStringExtra("images"));
-				userImages = resultObject.getJSONArray("photos");
+	    		userImages = new JSONArray(images);
 				for(int i = 0; i < userImages.length(); i++) {
 					JSONObject imageInfo = userImages.getJSONObject(i);
 					if(imageInfo.getBoolean("avatar?")) {
@@ -87,7 +92,7 @@ public class UserImageGallery extends Activity {
 			}
 	    } else if(referral.equalsIgnoreCase("profile")) {
 	    	try {
-				userImages = new JSONArray(intent.getStringExtra("images"));
+				userImages = new JSONArray(images);
 				position = intent.getIntExtra("position", 0);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -152,7 +157,6 @@ public class UserImageGallery extends Activity {
 	    userGalleryMainBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				
 			}
 	    });
 	    
@@ -162,7 +166,6 @@ public class UserImageGallery extends Activity {
 				
 			}
 	    });
-	    
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -251,7 +254,7 @@ public class UserImageGallery extends Activity {
 		o2.inSampleSize = scale;
 		bitmap = BitmapFactory.decodeFile(filePath, o2);
 		if(bitmap != null) {
-			ImageUpload imageUpload = new ImageUpload();
+			ImageUpload imageUpload = new ImageUpload(this);
 			imageUpload.execute();
 		} else {
 			if(filePath.contains("http://") || filePath.contains("https://")) {
@@ -273,6 +276,12 @@ public class UserImageGallery extends Activity {
 		private String signature;
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
+		UserImageGallery activityRef;
+		
+		
+		public ImageUpload(UserImageGallery activityRef) {
+			this.activityRef = activityRef;
+		}
 		
 		@Override
 		protected void onPreExecute() {
@@ -320,9 +329,7 @@ public class UserImageGallery extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			dialog.dismiss();
-			
-			Log.d("Resultado", result);
-			
+			activityRef.loadGallery("account", result);			
 		}
 		
 	}

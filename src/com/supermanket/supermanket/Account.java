@@ -150,6 +150,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	final Calendar c = Calendar.getInstance();
 	static final int DATE_DIALOG_ID = 999;
 	String[] localBday = new String[3];
+	String imagesList;
 	ProgressDialog pDialog;
 	
 	UserData userData;
@@ -178,9 +179,21 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		userData.execute();
 	}
 	
-	public void loadProfile(final String result) {
+	public void loadProfile(final String[] result) {
 		
 		setContentView(R.layout.activity_account);
+		
+		icon = (ImageView) findViewById(android.R.id.icon);
+		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
+	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+	    sideNavigationView.setMenuClickCallback(this);
+	    
+	    if (getIntent().hasExtra(EXTRA_TITLE)) {
+	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
+	        setTitle(title);
+	        sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
+	    }
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			    
 		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
 		
@@ -198,7 +211,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		JSONObject resultObj;
 		String url = null;
 		try {
-			resultObj = new JSONObject(result);
+			resultObj = new JSONObject(result[0]);
 			JSONArray photos = resultObj.getJSONArray("photos"); 
 			if(!resultObj.getString("sex").equalsIgnoreCase("male")) {
 				accountFlavorsRow.setVisibility(View.GONE);
@@ -246,8 +259,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 
 			@Override
 			public void onLoadingStarted(String arg0, View arg1) {
-				// TODO Auto-generated method stub
-				
 			}
 	    });
 		accountUserAvatar.getLayoutParams().height = 150;
@@ -258,62 +269,62 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			public void onClick(View v) {
 				Intent intent = new Intent(Account.this, UserImageGallery.class);
 				intent.putExtra("from", "account");
-				intent.putExtra("images", result);
+				intent.putExtra("images", result[1]);
 				startActivity(intent);
 			}
 		});
 		
 		accountPersonalInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("personal", result);
+				editUserData("personal", result[0]);
 			}
 		});
 		
 		accountAboutMeRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("about", result);
+				editUserData("about", result[0]);
 			}
 		});
 		
 		accountNutritionalInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("nutritional", result);
+				editUserData("nutritional", result[0]);
 			}
 		});
 		
 		accountFlavorsRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("flavors", result);
+				editUserData("flavors", result[0]);
 			}
 		});
 		
 		accountPackagesRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("packages", result);
+				editUserData("packages", result[0]);
 			}
 		});
 		
 		accountBonusPackRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("bonuspack", result);
+				editUserData("bonuspack", result[0]);
 			}
 		});
 		
 		accountAccessoriesRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("accessories", result);
+				editUserData("accessories", result[0]);
 			}
 		});
 		
 		accountSideEffectsRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("effects", result);
+				editUserData("effects", result[0]);
 			}
 		});
 		
 		accountInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				editUserData("info", result);
+				editUserData("info", result[0]);
 			}
 		});
 	}
@@ -922,7 +933,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         
     }
 	
-	private class UserData extends AsyncTask<Integer, Integer, String> {
+	private class UserData extends AsyncTask<Integer, Integer, String[]> {
 		
 		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
@@ -932,6 +943,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		private SharedPreferences mSharedPreferences;
 		private Account activityRef;
 		private UtilityBelt utilityBelt = new UtilityBelt();
+		private String[] responses = new String[2];
 		
 		public UserData(Account activityRef) {
 			this.activityRef = activityRef;
@@ -952,7 +964,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		}
 		
 		@Override
-		protected String doInBackground(Integer... params) {
+		protected String[] doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
@@ -961,7 +973,22 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             
             try {
             	HttpResponse resp = client.execute(get);
-				return EntityUtils.toString(resp.getEntity());
+				responses[0] = EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            
+			HttpGet getImages = new HttpGet("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
+									+ api_key + "&signature=" + signature);
+            getImages.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(getImages);
+				responses[1] = EntityUtils.toString(resp.getEntity());
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -970,18 +997,19 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
  
-			return null;
+			return responses;
 		}
 		
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String[] result) {
 			super.onPostExecute(result);
 			
 			if(result == null) {
 				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
-				Log.d("Resultado", result);
+				Log.d("Datos", result[0]);
+				Log.d("Images", result[1]);
 				activityRef.loadProfile(result);
 				dialog.dismiss();
 
@@ -1162,11 +1190,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
-				Log.d("Resultado", result);
 				dialog.dismiss();
 			}
 			
 		}
 		
 	}
+	
+	
 }
