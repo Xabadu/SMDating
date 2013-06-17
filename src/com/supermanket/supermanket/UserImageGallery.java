@@ -1,13 +1,13 @@
 package com.supermanket.supermanket;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -44,12 +44,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.GalleryAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
 public class UserImageGallery extends Activity {
 
-	private JSONObject resultObject;
 	private JSONArray userImages;
 	private String referral;
 	private int position = 0;
@@ -74,7 +74,7 @@ public class UserImageGallery extends Activity {
 	
 	public void loadGallery(String from, String images) {
 		setContentView(R.layout.activity_user_image_gallery);
-		ViewPager viewPager = (ViewPager) findViewById(R.id.userGalleryViewPager);
+		final ViewPager viewPager = (ViewPager) findViewById(R.id.userGalleryViewPager);
 	    Intent intent = getIntent();
 		referral = intent.getStringExtra("from");
 	    if(referral.equalsIgnoreCase("account")) {
@@ -87,7 +87,6 @@ public class UserImageGallery extends Activity {
 					}
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    } else if(referral.equalsIgnoreCase("profile")) {
@@ -95,7 +94,6 @@ public class UserImageGallery extends Activity {
 				userImages = new JSONArray(images);
 				position = intent.getIntExtra("position", 0);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    	layout = (LinearLayout) findViewById(R.id.userGalleryActions);
@@ -157,13 +155,47 @@ public class UserImageGallery extends Activity {
 	    userGalleryMainBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
+				Integer[] ids = new Integer[1];
+				try {
+					JSONObject data = userImages.getJSONObject(viewPager.getCurrentItem());
+					ids[0] = data.getInt("id");
+					SetAvatar setAvatar = new SetAvatar();
+					setAvatar.execute(ids);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 	    });
 	    
 	    userGalleryDeleteBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(UserImageGallery.this);
+				builder.setMessage(R.string.delete_image_msg)
+				.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Integer[] ids = new Integer[1];
+						try {
+							JSONObject data = userImages.getJSONObject(viewPager.getCurrentItem());
+							ids[0] = data.getInt("id");
+							DeleteImage deleteImage = new DeleteImage(UserImageGallery.this);
+							deleteImage.execute(ids);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				})
+				.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						Toast.makeText(UserImageGallery.this, "Cancelado", Toast.LENGTH_SHORT).show();
+					}
+				});
 				
+				AlertDialog alert = builder.create();
+				alert.show();
 			}
 	    });
 	}
@@ -265,8 +297,9 @@ public class UserImageGallery extends Activity {
 		
 	}
 	
-	class ImageUpload extends AsyncTask<Void, Void, String> {
+	public class ImageUpload extends AsyncTask<Void, Void, String> {
 		
+		private AlertDialogs alert = new AlertDialogs();
 		private ProgressDialog dialog;
 		InputStream is;
 		BitmapFactory.Options bfo;
@@ -286,7 +319,6 @@ public class UserImageGallery extends Activity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			
 			dialog = ProgressDialog.show(UserImageGallery.this, "", "Subiendo imagen", true);
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
@@ -301,7 +333,6 @@ public class UserImageGallery extends Activity {
 			HttpContext localContext = new BasicHttpContext();
 			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
 									+ api_key + "&signature=" + signature);
-            //post.setHeader("content-type", "application/json");
             
 			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -315,10 +346,8 @@ public class UserImageGallery extends Activity {
             	HttpResponse resp = client.execute(post, localContext);
 				return EntityUtils.toString(resp.getEntity());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -328,10 +357,131 @@ public class UserImageGallery extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			dialog.dismiss();
-			activityRef.loadGallery("account", result);			
+			if(result == null) {
+				alert.showAlertDialog(UserImageGallery.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				dialog.dismiss();
+				activityRef.loadGallery("account", result);	
+			}
 		}
 		
 	}
-
+	
+	public class SetAvatar extends AsyncTask<Integer, Void, String> {
+		
+		private AlertDialogs alert = new AlertDialogs();
+		private ProgressDialog dialog;
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		UserImageGallery activityRef;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(UserImageGallery.this, "", "Definiendo como foto de perfil...", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos/" + Integer.toString(params[0]) + "" +
+					"/set_profile.json?app_key=" + api_key + "&signature=" + signature);
+            post.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserImageGallery.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				dialog.dismiss();
+				Log.d("Resultado", result);
+				Toast.makeText(UserImageGallery.this, "Nueva imagen de perfil definida", Toast.LENGTH_LONG).show();
+			}
+		}
+		
+	}
+	
+	public class DeleteImage extends AsyncTask<Integer, Void, String> {
+		
+		private AlertDialogs alert = new AlertDialogs();
+		private ProgressDialog dialog;
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		UserImageGallery activityRef;
+		
+		public DeleteImage(UserImageGallery activityRef) {
+			this.activityRef = activityRef;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(UserImageGallery.this, "", "Eliminando...", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+			HttpClient client = new DefaultHttpClient();
+			HttpDelete delete = new HttpDelete("http://demosmartphone.supermanket.cl/apim/photos/" + Integer.toString(params[0]) + "" +
+					".json?app_key=" + api_key + "&signature=" + signature);
+            delete.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(delete);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserImageGallery.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				dialog.dismiss();
+				Toast.makeText(UserImageGallery.this, "Imagen eliminada", Toast.LENGTH_SHORT).show();
+				activityRef.loadGallery("account", result);
+			}
+		}
+		
+	}
+	
 }

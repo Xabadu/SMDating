@@ -36,7 +36,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -232,7 +231,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -245,16 +243,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	        }
 
 			@Override
-			public void onLoadingCancelled(String arg0, View arg1) {
-				// TODO Auto-generated method stub
-				
+			public void onLoadingCancelled(String arg0, View arg1) {				
 			}
 
 			@Override
 			public void onLoadingFailed(String arg0, View arg1,
-					FailReason arg2) {
-				// TODO Auto-generated method stub
-				
+					FailReason arg2) {				
 			}
 
 			@Override
@@ -264,6 +258,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		accountUserAvatar.getLayoutParams().height = 150;
 		accountUserAvatar.getLayoutParams().width = 150;
 		accountUserAvatar.setScaleType(ImageView.ScaleType.FIT_CENTER);
+		accountUserAvatar.setVisibility(View.VISIBLE);
 		
 		accountUserAvatar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -372,7 +367,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				personalFormCountyText.setText(resultObject.getString("county"));
 				
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -422,7 +416,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				aboutFormDescriptionText.setText(resultObject.getString("short_description"));
 				aboutFormCrazyText.setText(resultObject.getString("crazy_experience"));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -497,7 +490,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				nutritionalFormSportsText.setText(resultObject.getString("sport"));
 				nutritionalFormFavoriteFoodText.setText(resultObject.getString("favorite_food"));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -529,7 +521,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					flavors[id-1].setChecked(true);
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -564,7 +555,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					packages[id-1].setChecked(true);
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -595,7 +585,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					bonusPack[id-1].setChecked(true);
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -696,7 +685,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				accessoriesCarSpinner.setSelection(adapterCar.getPosition(resultObject.getString("has_car")));
 				accessoriesPetSpinner.setSelection(adapterPet.getPosition(resultObject.getString("has_pet")));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -751,7 +739,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				effectsSmokesSpinner.setSelection(adapterSmokes.getPosition(resultObject.getString("smokes")));
 				effectsFavoriteDrugSpinner.setSelection(adapterDrugs.getPosition(resultObject.getString("favourite_drug")));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -779,7 +766,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				accountInfoUsernameText.setText(resultObject.getString("username"));
 				accountInfoEmailText.setText(resultObject.getString("email"));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -898,6 +884,15 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             super.onBackPressed();
         }
     }
+    
+    @Override
+    protected void onRestart() {
+    	super.onRestart();
+    	accountUserAvatar = (ImageView) findViewById(R.id.accountAvatarImage);
+    	accountUserAvatar.setVisibility(View.INVISIBLE);
+    	userData = new UserData(this);
+		userData.execute();
+    }
 
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
@@ -975,10 +970,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             	HttpResponse resp = client.execute(get);
 				responses[0] = EntityUtils.toString(resp.getEntity());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             
@@ -990,10 +983,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             	HttpResponse resp = client.execute(getImages);
 				responses[1] = EntityUtils.toString(resp.getEntity());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
  
@@ -1056,7 +1047,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					user.put("birthday(2i)", birthdayText[1]);
 					user.put("birthday(1i)", birthdayText[2]);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -1114,7 +1104,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					user.put("has_car", accessoriesCarSpinner.getSelectedItem().toString());
 					user.put("has_pet", accessoriesPetSpinner.getSelectedItem().toString());
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
 			} else if(reference.equalsIgnoreCase("effects")) {
@@ -1148,7 +1137,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			try {
 				usuario.put("user", user);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
