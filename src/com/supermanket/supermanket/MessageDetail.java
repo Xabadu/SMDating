@@ -1,52 +1,69 @@
 package com.supermanket.supermanket;
 
-import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.supermanket.utilities.DiscussArrayAdapter;
 
 public class MessageDetail extends Activity {
-
+	
+	private int position;
+	private String data;
+	private JSONArray contactsList;
+	private JSONArray messageList;
+	private JSONObject messageData;
+	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
+	private ListView list;
+	private DiscussArrayAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		showMessages();
+	}
+	
+	public void showMessages() {
 		setContentView(R.layout.activity_message_detail);
-		// Show the Up button in the action bar.
-		setupActionBar();
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.message_detail, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
+		Intent intent = getIntent();
+		position = intent.getIntExtra("position", 0);
+		data = intent.getStringExtra("data");
+		try {
+			contactsList = new JSONArray(data);
+			messageData = contactsList.getJSONObject(position);
+			messageList = messageData.getJSONArray("messages");
+			if(messageList.length() > 0) {
+				for(int i = 0; i < messageList.length(); i++) {
+					HashMap<String, String> singleMessage = new HashMap<String, String>();
+					JSONObject messageDetail = messageList.getJSONObject(i);
+					singleMessage.put("message", messageDetail.getString("content"));
+					if(messageDetail.getBoolean("mine")) {
+						singleMessage.put("who", "self");
+					} else {
+						singleMessage.put("who", "other");
+					}
+					messages.add(singleMessage);
+				}
+			} else {
+				Toast.makeText(this, "No tienes mensajes", Toast.LENGTH_LONG).show();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		return super.onOptionsItemSelected(item);
+		list = (ListView) findViewById(R.id.messageDetailList);
+		 
+        adapter = new DiscussArrayAdapter(this, messages);
+        list.setAdapter(adapter);
+		
 	}
 
 }

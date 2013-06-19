@@ -72,12 +72,8 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
-    }
-    
-    public void initView() {
-    	
-    	setContentView(R.layout.activity_dashboard);
+        
+        setContentView(R.layout.activity_dashboard);
 		
 		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
 		dashboardBottomLayout = (RelativeLayout) findViewById(R.id.dashboardBottomLayout);
@@ -106,7 +102,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         currentPage[0] = 1;
         users = new getUsers(this);
         users.execute(currentPage);
-    	
+        
     }
     
     public void fillGrid(String result, int page) {
@@ -125,7 +121,6 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     	page++;
     	currentPage[0] = page;
     	
-    
     	mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.dashboardUsersGrid);
     	
 		mGridView = mPullRefreshGridView.getRefreshableView();

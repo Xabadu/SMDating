@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MessageDetail" >
-	
+
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/messageDetailList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/sendCommentLayout"
         android:dividerHeight="1dp" />
 
     <RelativeLayout
+        android:id="@+id/sendCommentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -26,7 +28,6 @@
             android:layout_toLeftOf="@+id/messageDetailSendButton"
             android:ems="10"
             android:inputType="textMultiLine" >
-
         </EditText>
 
         <Button
@@ -35,7 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/lbl_messages_send" />
-
     </RelativeLayout>
-    
+
 </RelativeLayout>

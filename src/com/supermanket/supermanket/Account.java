@@ -156,7 +156,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);    
+		super.onCreate(savedInstanceState); 
+		initView();
+	}
+	
+	public void initView() {
 		setContentView(R.layout.activity_account);
 		icon = (ImageView) findViewById(android.R.id.icon);
 		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
@@ -179,20 +183,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	}
 	
 	public void loadProfile(final String[] result) {
-		
-		setContentView(R.layout.activity_account);
-		
-		icon = (ImageView) findViewById(android.R.id.icon);
-		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
-	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
-	    sideNavigationView.setMenuClickCallback(this);
-	    
-	    if (getIntent().hasExtra(EXTRA_TITLE)) {
-	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
-	        setTitle(title);
-	        sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
-	    }
-	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			    
 		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
 		
@@ -357,15 +347,29 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			 
 			try {
 				JSONObject resultObject = new JSONObject(data);
-				personalFormNameText.setText(resultObject.getString("name"));
-				personalFormWeightText.setText(Integer.toString(resultObject.getInt("weight")));
-				personalFormHeightText.setText(resultObject.getString("height"));
-				localBday = resultObject.getString("birthday").split("-");
-				personalFormBirthdayBtn.setText(localBday[2] + "/" + localBday[1] + "/" + localBday[0]);
-				personalFormCountryText.setText(resultObject.getString("country"));
-				personalFormRegionText.setText(resultObject.getString("state"));
-				personalFormCountyText.setText(resultObject.getString("county"));
-				
+				if(!resultObject.isNull("name")) {
+					personalFormNameText.setText(resultObject.getString("name"));
+				}
+				if(!resultObject.isNull("weight")) {
+					personalFormWeightText.setText(Integer.toString(resultObject.getInt("weight")));
+				}
+				if(!resultObject.isNull("height")) {
+					personalFormHeightText.setText(resultObject.getString("height"));
+				}
+				if(!resultObject.isNull("birthday")) {
+					localBday = resultObject.getString("birthday").split("-");
+					personalFormBirthdayBtn.setText(localBday[2] + "/" + localBday[1] + "/" + localBday[0]);
+				}
+				if(!resultObject.isNull("country")) {
+					personalFormCountryText.setText(resultObject.getString("country"));
+				}
+				if(!resultObject.isNull("state")) {
+					personalFormRegionText.setText(resultObject.getString("state"));
+				}
+				if(!resultObject.isNull("county")) {
+					personalFormCountyText.setText(resultObject.getString("county"));
+				}
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -413,8 +417,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
-				aboutFormDescriptionText.setText(resultObject.getString("short_description"));
-				aboutFormCrazyText.setText(resultObject.getString("crazy_experience"));
+				if(!resultObject.isNull("short_description")) {
+					aboutFormDescriptionText.setText(resultObject.getString("short_description"));
+				}
+				if(!resultObject.isNull("crazy_experience")) {
+					aboutFormCrazyText.setText(resultObject.getString("crazy_experience"));
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -476,19 +484,46 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				nutritionalFormOccupationSpinner.setSelection(adapterOccupation.getPosition(resultObject.getString("occupation")));
 				nutritionalFormPoliticsSpinner.setSelection(adapterPolitics.getPosition(resultObject.getString("political_belief")));
 				nutritionalFormZodiacSignSpinner.setSelection(adapterZodiacSign.getPosition(resultObject.getString("zodiac_sign")));
-				nutritionalFormLanguagesText.setText(resultObject.getString("languages"));
-				nutritionalFormFavoriteAlbumText.setText(resultObject.getString("favorite_album"));
-				nutritionalFormFavoriteBookText.setText(resultObject.getString("favorite_book"));
-				nutritionalFormFavoriteArtistText.setText(resultObject.getString("favorite_artist"));
-				nutritionalFormFavoriteMovieText.setText(resultObject.getString("favorite_movie"));
-				nutritionalFormJokeText.setText(resultObject.getString("a_joke"));
-				nutritionalFormDrinkText.setText(resultObject.getString("a_drink"));
-				nutritionalFormFavoriteCountryText.setText(resultObject.getString("favorite_country"));
-				nutritionalFormQuoteText.setText(resultObject.getString("a_quote"));
-				nutritionalFormHobbyText.setText(resultObject.getString("a_hobby"));
-				nutritionalFormFavoriteDateText.setText(resultObject.getString("favorite_date"));
-				nutritionalFormSportsText.setText(resultObject.getString("sport"));
-				nutritionalFormFavoriteFoodText.setText(resultObject.getString("favorite_food"));
+				if(!resultObject.isNull("languages")) {
+					nutritionalFormLanguagesText.setText(resultObject.getString("languages"));
+				}
+				if(!resultObject.isNull("favorite_album")) {
+					nutritionalFormFavoriteAlbumText.setText(resultObject.getString("favorite_album"));
+				}
+				if(!resultObject.isNull("favorite_book")) {
+					nutritionalFormFavoriteBookText.setText(resultObject.getString("favorite_book"));
+				}
+				if(!resultObject.isNull("favorite_artist")) {
+					nutritionalFormFavoriteArtistText.setText(resultObject.getString("favorite_artist"));
+				}
+				if(!resultObject.isNull("favorite_movie")) {
+					nutritionalFormFavoriteMovieText.setText(resultObject.getString("favorite_movie"));
+				}
+				if(!resultObject.isNull("a_joke")) {
+					nutritionalFormJokeText.setText(resultObject.getString("a_joke"));
+				}
+				if(!resultObject.isNull("a_drink")) {
+					nutritionalFormDrinkText.setText(resultObject.getString("a_drink"));
+				}
+				if(!resultObject.isNull("favorite_country")) {
+					nutritionalFormFavoriteCountryText.setText(resultObject.getString("favorite_country"));
+				}
+				if(!resultObject.isNull("a_quote")) {
+					nutritionalFormQuoteText.setText(resultObject.getString("a_quote"));
+				}
+				if(!resultObject.isNull("a_hobby")) {
+					nutritionalFormHobbyText.setText(resultObject.getString("a_hobby"));
+				}
+				if(!resultObject.isNull("favorite_date")) {
+					nutritionalFormFavoriteDateText.setText(resultObject.getString("favorite_date"));
+				}
+				if(!resultObject.isNull("sport")) {
+					nutritionalFormSportsText.setText(resultObject.getString("sport"));
+				}
+				if(!resultObject.isNull("favorite_food")) {
+					nutritionalFormFavoriteFoodText.setText(resultObject.getString("favorite_food"));
+				}
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -524,10 +559,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			
-			
-			
-
 			accountSaveBtn = (Button) findViewById(R.id.flavorsFormSaveBtn);
 			accountBackBtn = (Button) findViewById(R.id.flavorsFormBackBtn);
 			
@@ -672,8 +703,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
-				accessoriesMaleChildrenText.setText(resultObject.getString("male_childs"));
-				accessoriesFemaleChildrenText.setText(resultObject.getString("female_childs"));
+				if(!resultObject.isNull("male_childs")) {
+					accessoriesMaleChildrenText.setText(resultObject.getString("male_childs"));
+				}
+				if(!resultObject.isNull("female_childs")) {
+					accessoriesFemaleChildrenText.setText(resultObject.getString("female_childs"));
+				}
 				accessoriesLivesWithSpinner.setSelection(adapterLivesWith.getPosition(resultObject.getString("live_with")));
 				accessoriesSalarySpinner.setSelection(adapterSalary.getPosition(resultObject.getString("salary")));
 				accessoriesHomeTypeSpinner.setSelection(adapterHomeType.getPosition(resultObject.getString("home_type")));
@@ -728,13 +763,27 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
-				effectsDefectsText.setText(resultObject.getString("defect"));
-				effectsHatesText.setText(resultObject.getString("hates"));
-				effectsSexPosesText.setText(resultObject.getString("sex_poses"));
-				effectsSexToysText.setText(resultObject.getString("sex_toys"));
-				effectsGuiltyPleasureText.setText(resultObject.getString("guilty_pleasure"));
-				effectsSexualFantasyText.setText(resultObject.getString("sexual_fantasy"));
-				effectsFetishesText.setText(resultObject.getString("fetishes"));
+				if(!resultObject.isNull("defect")) {
+					effectsDefectsText.setText(resultObject.getString("defect"));
+				}
+				if(!resultObject.isNull("hates")) {
+					effectsHatesText.setText(resultObject.getString("hates"));
+				}
+				if(!resultObject.isNull("sex_poses")) {
+					effectsSexPosesText.setText(resultObject.getString("sex_poses"));
+				}
+				if(!resultObject.isNull("sex_toys")) {
+					effectsSexToysText.setText(resultObject.getString("sex_toys"));
+				}
+				if(!resultObject.isNull("guilty_pleasure")) {
+					effectsGuiltyPleasureText.setText(resultObject.getString("guilty_pleasure"));
+				}
+				if(!resultObject.isNull("sexual_fantasy")) {
+					effectsSexualFantasyText.setText(resultObject.getString("sexual_fantasy"));
+				}
+				if(!resultObject.isNull("fetishes")) {
+					effectsFetishesText.setText(resultObject.getString("fetishes"));
+				}
 				effectsDrinksSpinner.setSelection(adapterDrinks.getPosition(resultObject.getString("drinks")));
 				effectsSmokesSpinner.setSelection(adapterSmokes.getPosition(resultObject.getString("smokes")));
 				effectsFavoriteDrugSpinner.setSelection(adapterDrugs.getPosition(resultObject.getString("favourite_drug")));
@@ -763,8 +812,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
-				accountInfoUsernameText.setText(resultObject.getString("username"));
-				accountInfoEmailText.setText(resultObject.getString("email"));
+				if(!resultObject.isNull("username")) {
+					accountInfoUsernameText.setText(resultObject.getString("username"));
+				}
+				if(!resultObject.isNull("email")) {
+					accountInfoEmailText.setText(resultObject.getString("email"));
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -783,8 +836,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		
 		accountBackBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				userData = new UserData(Account.this);
-				userData.execute();
+				initView();
 			}
 		});
 		
@@ -803,14 +855,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
-		// when dialog box is closed, below method will be called.
 		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			
 			personalFormBirthdayBtn.setText(Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year));
-
 		}
 	};
 	
@@ -880,8 +929,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         // hide menu if it shown
         if (sideNavigationView.isShown()) {
             sideNavigationView.hideMenu();
-        } else {
-            super.onBackPressed();
         }
     }
     
@@ -890,8 +937,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     	super.onRestart();
     	accountUserAvatar = (ImageView) findViewById(R.id.accountAvatarImage);
     	accountUserAvatar.setVisibility(View.INVISIBLE);
-    	userData = new UserData(this);
-		userData.execute();
+    	initView();
     }
 
     private void invokeActivity(String title, int resId) {

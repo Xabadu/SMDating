@@ -612,6 +612,7 @@
 		<item>Peñaflor</item>
 	</string-array>
 	<string-array name="religions">
+	    <item>Selecciona</item>
 	    <item>Agnóstico</item>
 	    <item>Ateo</item>
 	    <item>Católico</item>
@@ -625,6 +626,7 @@
 	    <item>Rastafari</item>
 	</string-array>
 	<string-array name="occupation">
+	    <item>Selecciona</item>
 	    <item>armé mi propia empresa</item>
 	    <item>Cesante</item>
 	    <item>estudio</item>
@@ -633,6 +635,7 @@
 	    <item>trabajo en una empresa</item>
 	</string-array>
 	<string-array name="politics">
+	    <item>Selecciona</item>
 	    <item>Apolítico</item>
 	    <item>Centro</item>
 	    <item>Derecha</item>
@@ -642,6 +645,7 @@
 	    <item>Izquierda</item>
 	</string-array>
 	<string-array name="zodiac">
+	    <item>Selecciona</item>
 	    <item>Aries</item>
 	    <item>Tauro</item>
 	    <item>Cancer</item>
@@ -656,6 +660,7 @@
 	    <item>Piscis</item>
 	</string-array>
 	<string-array name="liveswith">
+	    <item>Selecciona</item>
 	    <item>con amigos</item>
 	    <item>con mi mamá</item>
 	    <item>con mi papá</item>
@@ -665,6 +670,7 @@
 	    <item>solo</item>
 	</string-array>
 	<string-array name="salary">
+	    <item>Selecciona</item>
 	    <item>menos de 250.000</item>
 	    <item>entre 250.000 y 500.000</item>
 	    <item>entre 500.000 y 1.000.000</item>
@@ -673,26 +679,31 @@
 	    <item>más de 2.000.000</item>
 	</string-array>
 	<string-array name="housetype">
+	    <item>Selecciona</item>
 	    <item>Arriendo casa</item>
 	    <item>Tengo casa</item>
 	    <item>Arriendo departamento</item>
 	    <item>Tengo departamento</item>
 	</string-array>
 	<string-array name="beachhouse">
+	    <item>Selecciona</item>
 	    <item>Sí</item>
 	    <item>No</item>
 	    <item>Sí, departamento</item>
 	</string-array>
 	<string-array name="pool">
+	    <item>Selecciona</item>
 	    <item>Sí</item>
 	    <item>No</item>
 	    <item>Sí, de plástico</item>
 	</string-array>
 	<string-array name="standardyesno">
+	    <item>Selecciona</item>
 	    <item>Sí</item>
 	    <item>No</item>
 	</string-array>
 	<string-array name="pet">
+	    <item>Selecciona</item>
 	    <item>no tengo</item>
 	    <item>tengo un perro</item>
 	    <item>tengo un gato</item>
@@ -700,6 +711,7 @@
 	    <item>tengo un pavo real</item>
 	</string-array>
 	<string-array name="drinks">
+	    <item>Selecciona</item>
 	    <item>Sí</item>
 	    <item>No</item>
 	    <item>Social</item>
@@ -707,11 +719,13 @@
 	    <item>Un poco</item>
 	</string-array>
 	<string-array name="smokes">
+	    <item>Selecciona</item>
 	    <item>Sí</item>
 	    <item>No</item>
 	    <item>Social</item>
 	</string-array>
 	<string-array name="drugs">
+	    <item>Selecciona</item>
 	    <item>Marihuana, hay que legalizarla</item>
 		<item>Marihuana, no es droga</item>
 		<item>Coca</item>
