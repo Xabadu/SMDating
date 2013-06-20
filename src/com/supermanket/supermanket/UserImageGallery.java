@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -36,8 +37,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -63,13 +67,14 @@ public class UserImageGallery extends Activity {
 	Uri imageUri;
 	MediaPlayer mp = new MediaPlayer();
 	
+	private static SharedPreferences mSharedPreferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		Intent intent = getIntent();
 		loadGallery(intent.getStringExtra("from"), intent.getStringExtra("images"));
-		
-	    
 	}
 	
 	public void loadGallery(String from, String images) {
@@ -296,6 +301,33 @@ public class UserImageGallery extends Activity {
 		
 		
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	NavUtils.navigateUpFromSameTask(this);
+    			return true;
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 	
 	public class ImageUpload extends AsyncTask<Void, Void, String> {
 		

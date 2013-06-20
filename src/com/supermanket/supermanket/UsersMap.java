@@ -28,9 +28,12 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
@@ -79,10 +82,13 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	GetNearUsers getNearUsers;
 	ImageLoader imageLoader = ImageLoader.getInstance();
 	JSONArray otherUsersArray = null;
+	
+	private static SharedPreferences mSharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
 		ImageLoader.getInstance().init(config);
 		mLocationClient = new LocationClient(this, this, this);
@@ -215,6 +221,33 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			userData.execute();	
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	NavUtils.navigateUpFromSameTask(this);
+    			return true;
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 	
 	private class UserData extends AsyncTask<Integer, Integer, String> {
 		

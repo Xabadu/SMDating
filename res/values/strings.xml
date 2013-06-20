@@ -38,6 +38,7 @@
     <string name="lbl_confirm_password">Confirmar contraseña</string>
     <string name="title_activity_users_map">UsersMap</string>
     <string name="btn_ofertar">Ofertar</string>
+    <string name="btn_buy">Comprar</string>
     <string name="btn_send_message">Enviar mensaje</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
@@ -71,6 +72,7 @@
     <string name="lbl_profile_hasbike">Bicicleta:</string>
     <string name="lbl_profile_aboutme">Sobre mi</string>
     <string name="lbl_profile_information">Información Nutricional</string>
+    <string name="lbl_profile_information_female">Información de la clienta</string>
     <string name="lbl_profile_accessories">Accesorios</string>
     <string name="lbl_profile_effects">Efectos Secundarios</string>
     <string name="lbl_profile_defects">Mañas:</string>
@@ -835,4 +837,6 @@
 	    <string name="lbl_profile_packages">Envases:</string>
 	    <string name="lbl_map_changeradius">Ajustar radio de búsqueda:</string>
 	    <string name="delete_image_msg">¿Quieres eliminar la foto?</string>
+	    <string name="logout_icon">Salir</string>
+	    <string name="profile_unblock_btn">Desbloquear información (1 crédito)</string>
 </resources>

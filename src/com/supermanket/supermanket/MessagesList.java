@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -50,11 +51,13 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	ListView list;
 	JSONArray contactsList;
 	
+	 private static SharedPreferences mSharedPreferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		setContentView(R.layout.activity_messages_list);
 		
 		icon = (ImageView) findViewById(android.R.id.icon);
@@ -126,12 +129,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
-        if (sideNavigationView.getMode() == Mode.RIGHT) {
-            menu.findItem(R.id.mode_right).setChecked(true);
-        } else {
-            menu.findItem(R.id.mode_left).setChecked(true);
-        }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 	
     @Override
@@ -140,14 +138,15 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             case android.R.id.home:
                 sideNavigationView.toggleMenu();
                 break;
-            case R.id.mode_left:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.LEFT);
-                break;
-            case R.id.mode_right:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.RIGHT);
-                break;
+            
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,10 +171,6 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
-                break;
-
-            case R.id.side_navigation_menu_item5:
-                invokeActivity(getString(R.string.menu_title5), R.drawable.ic_android5);
                 break;
 
             default:

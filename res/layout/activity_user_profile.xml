@@ -966,6 +966,14 @@
                         android:layout_marginLeft="2dp" />
                 </TableRow>
             </TableLayout>
+
+            <Button
+                android:id="@+id/userProfileUnblockBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/userProfileEffectsTable"
+                android:text="@string/profile_unblock_btn" />
+
         </RelativeLayout>
 
     </ScrollView>
@@ -984,7 +992,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/pink_button"
-            android:text="@string/btn_ofertar" />
+            android:text="@string/btn_ofertar"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/userProfileSendMessageBtn"
@@ -993,7 +1002,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.23"
             android:background="@drawable/orange_button"
-            android:text="@string/btn_send_message" />
+            android:text="@string/btn_send_message"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

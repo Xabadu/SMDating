@@ -20,6 +20,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,6 +64,8 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     private UserAdapter uAdapter;
     private ArrayList<JSONArray> usersContainer = new ArrayList<JSONArray>();
     Integer currentPage[] = new Integer[1];
+    
+    private static SharedPreferences mSharedPreferences;
 
     Button dashboardNearByUsersBtn;
     RelativeLayout dashboardBottomLayout;
@@ -72,7 +75,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
         setContentView(R.layout.activity_dashboard);
 		
 		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
@@ -205,12 +208,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
-        if (sideNavigationView.getMode() == Mode.RIGHT) {
-            menu.findItem(R.id.mode_right).setChecked(true);
-        } else {
-            menu.findItem(R.id.mode_left).setChecked(true);
-        }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 	
     @Override
@@ -219,15 +217,15 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
             case android.R.id.home:
                 sideNavigationView.toggleMenu();
                 break;
-            case R.id.mode_left:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.LEFT);
-                break;
-            case R.id.mode_right:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.RIGHT);
-                break;
-
+            
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -253,10 +251,6 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
                 break;
 
-            case R.id.side_navigation_menu_item5:
-                invokeActivity(getString(R.string.menu_title5), R.drawable.ic_android5);
-                break;
-
             default:
                 return;
         }
@@ -268,8 +262,6 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         // hide menu if it shown
         if (sideNavigationView.isShown()) {
             sideNavigationView.hideMenu();
-        } else {
-            super.onBackPressed();
         }
     }
 

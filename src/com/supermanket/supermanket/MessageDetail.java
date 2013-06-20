@@ -9,7 +9,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,9 +31,12 @@ public class MessageDetail extends Activity {
 	private ListView list;
 	private DiscussArrayAdapter adapter;
 	
+	private static SharedPreferences mSharedPreferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		showMessages();
 	}
 	
@@ -65,5 +73,32 @@ public class MessageDetail extends Activity {
         list.setAdapter(adapter);
 		
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	NavUtils.navigateUpFromSameTask(this);
+    			return true;
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
 }

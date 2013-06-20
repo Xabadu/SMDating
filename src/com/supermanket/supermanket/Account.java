@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -137,6 +139,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	TableRow accountFlavorsRow;
 	TableRow accountPackagesRow;
 	TableRow accountBonusPackRow;
+	TextView accountNutritionalInfoRowText;
 	View flavorsSeparator;
 	View packagesSeparator;
 	View bonusPackSeparator;
@@ -153,6 +156,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	ProgressDialog pDialog;
 	
 	UserData userData;
+	
+	private static SharedPreferences mSharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +167,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	
 	public void initView() {
 		setContentView(R.layout.activity_account);
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		icon = (ImageView) findViewById(android.R.id.icon);
 		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
 	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
@@ -196,6 +202,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		accountFlavorsRow = (TableRow) findViewById(R.id.accountFlavorsRow);
 		accountPackagesRow = (TableRow) findViewById(R.id.accountPackagesRow);
 		accountBonusPackRow = (TableRow) findViewById(R.id.accountBonusPackRow);
+		accountNutritionalInfoRowText = (TextView) findViewById(R.id.accountNutritionalInfoText);
 		
 		JSONObject resultObj;
 		String url = null;
@@ -212,6 +219,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				flavorsSeparator.setVisibility(View.GONE);
 				packagesSeparator.setVisibility(View.GONE);
 				bonusPackSeparator.setVisibility(View.GONE);
+				accountNutritionalInfoRowText.setText(R.string.lbl_profile_information_female);
 			}
 			accountLayout.setVisibility(View.VISIBLE);
 			for(int i = 0; i < photos.length(); i++) {
@@ -866,12 +874,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
-        if (sideNavigationView.getMode() == Mode.RIGHT) {
-            menu.findItem(R.id.mode_right).setChecked(true);
-        } else {
-            menu.findItem(R.id.mode_left).setChecked(true);
-        }
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
@@ -880,15 +883,14 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             case android.R.id.home:
                 sideNavigationView.toggleMenu();
                 break;
-            case R.id.mode_left:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.LEFT);
-                break;
-            case R.id.mode_right:
-                item.setChecked(true);
-                sideNavigationView.setMode(Mode.RIGHT);
-                break;
-
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -912,10 +914,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
-                break;
-
-            case R.id.side_navigation_menu_item5:
-                invokeActivity(getString(R.string.menu_title5), R.drawable.ic_android5);
                 break;
 
             default:

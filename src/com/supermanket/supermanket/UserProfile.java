@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -114,10 +115,12 @@ public class UserProfile extends Activity {
 	TextView userProfileSexualFantasyText;
 	TextView userProfileFetishesText;
 	
+	private static SharedPreferences mSharedPreferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
@@ -141,6 +144,8 @@ public class UserProfile extends Activity {
 		
 		setContentView(R.layout.activity_user_profile);
 		
+		userProfileOfferBtn = (Button) findViewById(R.id.userProfileOfferBtn);
+		userProfileSendMessageBtn = (Button) findViewById(R.id.userProfileSendMessageBtn);
 		userProfileUserImage = (ImageView) findViewById(R.id.userProfileUserImage);
 		userProfileNameText = (TextView) findViewById(R.id.userProfileNameText);
 		userProfileAgeText = (TextView) findViewById(R.id.userProfileAgeText);
@@ -232,6 +237,7 @@ public class UserProfile extends Activity {
 				packagesRow.setVisibility(View.GONE);
 				bonusPackRow.setVisibility(View.GONE);
 			} else {
+				userProfileOfferBtn.setText(R.string.btn_buy);
 				userProfileFlavorsText = (TextView) findViewById(R.id.userProfileFlavorsText);
 				userProfilePackagesText = (TextView) findViewById(R.id.userProfilePackagesText);
 				userProfileBonusPackText = (TextView) findViewById(R.id.userProfileBonusPackText);
@@ -262,6 +268,9 @@ public class UserProfile extends Activity {
 				}
 				
 			}
+			
+			userProfileOfferBtn.setVisibility(View.VISIBLE);
+			userProfileSendMessageBtn.setVisibility(View.VISIBLE);
 			
 			if(!resultObject.getString("short_description").equals("") && !resultObject.isNull("short_description")) {
 				userProfileAboutMeText.setText(resultObject.getString("short_description") + "\n");
@@ -510,23 +519,33 @@ public class UserProfile extends Activity {
 		});
 		
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.user_profile, menu);
+		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	NavUtils.navigateUpFromSameTask(this);
+    			return true;
+            case R.id.logout:
+            	Editor e = mSharedPreferences.edit();
+                e.putBoolean("LOGGED_IN", false);
+                e.commit();
+            	Intent intent = new Intent(this, Login.class);
+            	startActivity(intent);
+            	this.finish();
+            	break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 	
 	private class UserInfo extends AsyncTask<Integer, Integer, String> {
 		
