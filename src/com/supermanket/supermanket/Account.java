@@ -1201,7 +1201,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             
             try {
             	StringEntity entity = new StringEntity(usuario.toString(), HTTP.UTF_8);
-            	Log.d("Cadena enviada", usuario.toString());
             	put.setEntity(entity);
             	HttpResponse resp = client.execute(put);
 				return EntityUtils.toString(resp.getEntity());

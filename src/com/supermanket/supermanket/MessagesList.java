@@ -51,7 +51,8 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	ListView list;
 	JSONArray contactsList;
 	
-	 private static SharedPreferences mSharedPreferences;
+	private Integer[] ids;
+	private static SharedPreferences mSharedPreferences;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,6 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
         if (getIntent().hasExtra(EXTRA_TITLE)) {
             String title = getIntent().getStringExtra(EXTRA_TITLE);
             setTitle(title);
-            sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
             sideNavigationView.setMode(Mode.LEFT);
         }
 
@@ -83,11 +83,13 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		
 		try {
 			contactsList = new JSONArray(data[0]);
+			ids = new Integer[contactsList.length()];
 			if(contactsList.length() > 0) {
 				for(int i = 0; i < contactsList.length(); i++) {
 					JSONObject messageData = contactsList.getJSONObject(i);
 					JSONArray messageList = messageData.getJSONArray("messages");
 					HashMap<String, String> contact = new HashMap<String, String>();
+					ids[i] = messageData.getInt("id");
 					if(messageList.length() > 0) {
 						JSONObject lastMessage = messageList.getJSONObject(messageList.length() - 1);
 						contact.put("message", lastMessage.getString("content"));
@@ -118,9 +120,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
             	Intent intent = new Intent(MessagesList.this, MessageDetail.class);
-            	intent.putExtra("position", position);
-            	intent.putExtra("data", data[0]);
-            	intent.putExtra("self", data[1]);
+            	intent.putExtra("id", ids[position]);
             	startActivity(intent);
             }
         });
