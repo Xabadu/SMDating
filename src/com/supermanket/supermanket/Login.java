@@ -471,6 +471,7 @@ public class Login extends Activity {
 					Editor e = mSharedPreferences.edit();
 		            e.putBoolean("LOGGED_IN", true);
 		            e.putString("USER_ID", status.getString("id"));
+		            e.putString("USER_SEX", status.getString("sex"));
 		            e.putString("API_KEY", status.getString("api_key"));
 		            e.putString("API_SECRET", status.getString("api_secret"));
 		            e.commit();

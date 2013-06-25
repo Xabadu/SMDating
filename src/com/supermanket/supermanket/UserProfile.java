@@ -61,6 +61,7 @@ public class UserProfile extends Activity {
 	// UI Elements
 	Button userProfileOfferBtn;
 	Button userProfileSendMessageBtn;
+	Button userProfileUnblockInfoBtn;
 	ImageView userProfileUserImage;
 	TableRow flavorsRow;
 	TableRow packagesRow;
@@ -146,6 +147,7 @@ public class UserProfile extends Activity {
 		
 		userProfileOfferBtn = (Button) findViewById(R.id.userProfileOfferBtn);
 		userProfileSendMessageBtn = (Button) findViewById(R.id.userProfileSendMessageBtn);
+		userProfileUnblockInfoBtn = (Button) findViewById(R.id.userProfileUnblockBtn);
 		userProfileUserImage = (ImageView) findViewById(R.id.userProfileUserImage);
 		userProfileNameText = (TextView) findViewById(R.id.userProfileNameText);
 		userProfileAgeText = (TextView) findViewById(R.id.userProfileAgeText);
@@ -203,6 +205,16 @@ public class UserProfile extends Activity {
 		try {
 			JSONObject resultObject = new JSONObject(result);
 			resultImages = resultObject.getJSONArray("photos");
+			
+			/* Block buttons */
+			
+			if(resultObject.getBoolean("private_information_access")) {
+				userProfileUnblockInfoBtn.setVisibility(View.GONE);
+			}
+			if(!resultObject.getBoolean("is_contact")) {
+				userProfileSendMessageBtn.setEnabled(false);
+				userProfileSendMessageBtn.setAlpha(40);
+			}
 			
 			/* Personal info */
 			

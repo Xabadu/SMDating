@@ -170,7 +170,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		icon = (ImageView) findViewById(android.R.id.icon);
 		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
-	    sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_male_menu);
+        } else {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        }
 	    sideNavigationView.setMenuClickCallback(this);
 	    
 	    accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);

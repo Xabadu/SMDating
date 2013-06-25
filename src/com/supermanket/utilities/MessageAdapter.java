@@ -41,6 +41,11 @@ public class MessageAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    
+    public void clearAdapter() {
+        data.clear();
+        notifyDataSetChanged();
+    }
  
     public View getView(int position, View convertView, ViewGroup parent) {
         

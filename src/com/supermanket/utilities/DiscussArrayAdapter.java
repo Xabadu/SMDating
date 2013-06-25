@@ -37,7 +37,12 @@ public class DiscussArrayAdapter extends BaseAdapter {
 	public int getCount() {
 		return messages.size();
 	}
-
+	
+	public void clearAdapter() {
+        messages.clear();
+        notifyDataSetChanged();
+    }
+	
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		View row = convertView;

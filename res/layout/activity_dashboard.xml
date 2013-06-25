@@ -16,7 +16,7 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         android:paddingTop="10dp"
-        android:paddingBottom="50dp"
+        android:paddingBottom="10dp"
         ptr:ptrMode="both"
         ptr:ptrDrawable="@drawable/android" />
 
@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#cccccc"
+        android:visibility="invisible"
         android:paddingBottom="@dimen/dashboard_footer_top_margin"
         android:paddingLeft="@dimen/dashboard_footer_left_padding"
         android:paddingRight="@dimen/dashboard_footer_left_padding"

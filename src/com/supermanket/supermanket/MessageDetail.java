@@ -33,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.DiscussArrayAdapter;
@@ -41,11 +40,6 @@ import com.supermanket.utilities.UtilityBelt;
 
 public class MessageDetail extends Activity {
 	
-	private int id;
-	private String data;
-	private JSONArray contactsList;
-	private JSONArray messageList;
-	private JSONObject messageData;
 	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 	private ListView list;
 	private DiscussArrayAdapter adapter;
@@ -73,7 +67,7 @@ public class MessageDetail extends Activity {
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		if(!messageDetailTextField.getText().toString().equalsIgnoreCase("")) {
-        			SendMessage message = new SendMessage(MessageDetail.this);
+        			SendMessage message = new SendMessage();
         			message.execute(Integer.toString(intent.getIntExtra("id", 0)));
         		}
         	}
@@ -109,7 +103,6 @@ public class MessageDetail extends Activity {
     }
     
     private class GetMessages extends AsyncTask<Integer, Void, String> {
-    	MessageDetail activityRef;
     	private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -173,7 +166,6 @@ public class MessageDetail extends Activity {
 						messages.add(msgInfo);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     			list = (ListView) findViewById(R.id.messageDetailList);
@@ -190,7 +182,6 @@ public class MessageDetail extends Activity {
     
     private class SendMessage extends AsyncTask<String, Void, String> {
     	
-    	MessageDetail activityRef;
     	private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -201,10 +192,6 @@ public class MessageDetail extends Activity {
 		private JSONObject message = new JSONObject();
 		private JSONObject mensaje = new JSONObject();
 		private JSONArray allMessages;
-    	
-    	public SendMessage(MessageDetail activityRef) {
-    		this.activityRef = activityRef;
-    	}
     	
     	@Override
     	protected void onPreExecute() {
@@ -218,14 +205,12 @@ public class MessageDetail extends Activity {
 			try {
 				message.put("content", messageDetailTextField.getText().toString());
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			try {
 				mensaje.put("message", message);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -260,9 +245,10 @@ public class MessageDetail extends Activity {
     			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
     		} else {
-    			Log.d("Result 2", result);
+    			messageDetailTextField.setText("");
     			try {
 					allMessages = new JSONArray(result);
+					messages.clear();
 					for(int i = 0; i < allMessages.length(); i++) {
 						JSONObject singleMessage = allMessages.getJSONObject(i);
 						HashMap<String, String> msgInfo = new HashMap<String, String>();
@@ -275,12 +261,13 @@ public class MessageDetail extends Activity {
 						messages.add(msgInfo);
 					}
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     			list = (ListView) findViewById(R.id.messageDetailList);
-    	        DiscussArrayAdapter adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
-    	        list.setAdapter(adapter);
+    			adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
+    			list.setAdapter(adapter);
+    	        
+    	        Log.d("Total", Integer.toString(allMessages.length()));
     	        list.setSelection(allMessages.length() - 1);
     			dialog.dismiss();
     		}

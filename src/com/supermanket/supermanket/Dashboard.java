@@ -77,9 +77,15 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         super.onCreate(savedInstanceState);
         mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
         setContentView(R.layout.activity_dashboard);
-		
+        
 		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
 		dashboardBottomLayout = (RelativeLayout) findViewById(R.id.dashboardBottomLayout);
+		
+		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+			dashboardBottomLayout.setVisibility(View.GONE);
+		} else {
+			dashboardBottomLayout.setVisibility(View.VISIBLE);
+		}
 		
 		dashboardNearByUsersBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -90,7 +96,11 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 		
         icon = (ImageView) findViewById(android.R.id.icon);
         sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
-        sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_male_menu);
+        } else {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        }
         sideNavigationView.setMenuClickCallback(this);
 
         if (getIntent().hasExtra(EXTRA_TITLE)) {

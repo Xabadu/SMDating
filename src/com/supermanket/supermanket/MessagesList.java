@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -63,7 +64,11 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		
 		icon = (ImageView) findViewById(android.R.id.icon);
         sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
-        sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_male_menu);
+        } else {
+        	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        }
         sideNavigationView.setMenuClickCallback(this);
 
         if (getIntent().hasExtra(EXTRA_TITLE)) {
@@ -287,6 +292,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				alert.showAlertDialog(MessagesList.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
+				Log.d("Contacts", result[0]);
 				dialog.dismiss();
 				activityRef.loadInbox(result);
 			}
