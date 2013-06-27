@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -30,6 +31,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -169,11 +173,23 @@ public class MessageDetail extends Activity {
 					e.printStackTrace();
 				}
     			list = (ListView) findViewById(R.id.messageDetailList);
-   			 
+   			 	
     	        adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
     	        list.setAdapter(adapter);
     	        list.setSelection(allMessages.length() - 1);
-    			dialog.dismiss();
+    			
+    	        list.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						InputMethodManager imm = (InputMethodManager)getSystemService(
+  	        			      Context.INPUT_METHOD_SERVICE);
+  	        			imm.hideSoftInputFromWindow(messageDetailTextField.getWindowToken(), 0);
+					}
+    	        });
+    	        
+    	        dialog.dismiss();
     		}
 			
 		}

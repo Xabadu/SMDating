@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableRow;
@@ -38,9 +39,7 @@ import com.jess.ui.TwoWayGridView;
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.ImageLoader;
 import com.supermanket.utilities.PictureAdapter;
-import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.UtilityBelt;
-import com.supermanket.utilities.SideNavigationView.Mode;
 
 public class UserProfile extends Activity {
 
@@ -203,17 +202,42 @@ public class UserProfile extends Activity {
 		Intent intent = getIntent();
 		
 		try {
-			JSONObject resultObject = new JSONObject(result);
+			final JSONObject resultObject = new JSONObject(result);
 			resultImages = resultObject.getJSONArray("photos");
 			
 			/* Block buttons */
 			
 			if(resultObject.getBoolean("private_information_access")) {
 				userProfileUnblockInfoBtn.setVisibility(View.GONE);
+			} else {
+				userProfileUnblockInfoBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
+						try {
+							unblockInfo.execute(resultObject.getInt("id"));
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
 			}
-			if(!resultObject.getBoolean("is_contact")) {
+			if(resultObject.getInt("contact") == 0) {
 				userProfileSendMessageBtn.setEnabled(false);
 				userProfileSendMessageBtn.setAlpha(40);
+			} else {
+				userProfileSendMessageBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						Intent intent = new Intent(UserProfile.this, MessageDetail.class);
+						try {
+							intent.putExtra("id", resultObject.getInt("contact"));
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						startActivity(intent);
+					}
+				});
 			}
 			
 			/* Personal info */
@@ -225,6 +249,8 @@ public class UserProfile extends Activity {
 			}
 			if(!resultObject.getString("birthday").equals("") && !resultObject.isNull("birthday")) {
 				userProfileAgeText.setText(Integer.toString(utilityBelt.calculateAge(resultObject.getString("birthday"))) + " años");
+			} else {
+				userProfileAgeText.setText("-");
 			}
 			if(!resultObject.getString("height").equals("") && !resultObject.isNull("height")) {
 				userProfileHeightText.setText(resultObject.getString("height") + "mt");
@@ -501,7 +527,11 @@ public class UserProfile extends Activity {
 				userProfileFetishesText.setText("-");
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			userProfileNameText.setText(intent.getStringExtra("username"));
+			userProfileAgeText.setText("-");
+			userProfileHeightText.setText("-");
+			userProfileWeightText.setText("-");
+			userProfileCountryText.setText("-");
 			e.printStackTrace();
 		}
 		
@@ -625,6 +655,70 @@ public class UserProfile extends Activity {
 			
 		}
 		
+	}
+	
+	private class UnblockInfo extends AsyncTask<Integer, Void, String> {
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UserProfile activityRef;
+		
+		public UnblockInfo(UserProfile activityRef) {
+			this.activityRef = activityRef;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+		
+			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(UserProfile.this, "", "Desbloqueando...", true);
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/unlocked/" + Integer.toString(params[0]) + ".json?app_key="
+									+ api_key + "&signature=" + signature);
+            get.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(get);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserProfile.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				Log.d("Resultado", result);
+				activityRef.profileLoad(result);
+				dialog.dismiss();
+
+			}
+			
+		}
 	}
 
 }
