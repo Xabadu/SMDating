@@ -463,7 +463,7 @@ public class Login extends Activity {
 				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
-				
+				Log.d("Resultado", result);
 				try {
 					JSONObject response = new JSONObject(result);
 					JSONObject status = response.getJSONObject("user");
@@ -485,7 +485,7 @@ public class Login extends Activity {
 					JSONObject response;
 					try {
 						response = new JSONObject(result);
-						String error = response.getString("error");
+						String error = response.getString("errors");
 						alert.showAlertDialog(Login.this, "Oh noes!", error, false);
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -598,15 +598,15 @@ public class Login extends Activity {
 				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
-				
+				Log.d("Resultado", result);
 				try {
 					JSONObject response = new JSONObject(result);
-					JSONObject status = response.getJSONObject("user");
 					mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 					Editor e = mSharedPreferences.edit();
-		            e.putString("USER_ID", status.getString("id"));
-		            e.putString("API_KEY", status.getString("api_key"));
-		            e.putString("API_SECRET", status.getString("api_secret"));
+		            e.putString("USER_ID", response.getString("id"));
+		            e.putString("USER_SEX", response.getString("sex"));
+		            e.putString("API_KEY", response.getString("api_key"));
+		            e.putString("API_SECRET", response.getString("api_secret"));
 		            e.commit();
 		                
 		            Intent intent = new Intent(Login.this, Dashboard.class);
@@ -619,12 +619,22 @@ public class Login extends Activity {
 					JSONObject errors;
 					try {
 						response = new JSONObject(result);
+						Log.d("Resultado", result);
 						errors = response.getJSONObject("errors");
-						String error = "";
+						String error = "Existen los siguientes errores: \n\n";
 						Iterator<?> keys = errors.keys();
+						JSONArray errorLines;
 						while(keys.hasNext()) {
 							String key = (String) keys.next();
-							error += key + ": " + errors.getString(key) + "\n";
+							error += key + ": ";
+							errorLines = errors.getJSONArray(key);
+							if(errorLines.length() > 1) {
+								for(int i = 0; i < errorLines.length(); i++) {
+									error += errorLines.getString(i) + "\n";
+								}
+							} else {
+								error += errorLines.getString(0) + "\n";
+							}
 						}
 						dialog.dismiss();
 						alert.showAlertDialog(Login.this, "Oh noes!", error, false);

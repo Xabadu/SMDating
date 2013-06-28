@@ -839,4 +839,9 @@
 	    <string name="delete_image_msg">¿Quieres eliminar la foto?</string>
 	    <string name="logout_icon">Salir</string>
 	    <string name="profile_unblock_btn">Desbloquear información (1 crédito)</string>
+	    <string name="btn_buy_credits">Comprar créditos</string>
+	    <string name="alert_attention_title">Atención</string>
+	    <string name="alert_credit_discount_buy">Vas a comprar este producto, ¿Segura?.</string>
+	    <string name="alert_credit_discount_offer">Ofrecerte a esta clienta descontará 1 crédito de tu cuenta.</string>
+	    <string name="btn_continue_text">Continuar</string>
 </resources>

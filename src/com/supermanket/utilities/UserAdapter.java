@@ -143,7 +143,11 @@ public class UserAdapter extends BaseAdapter{
 		 
 		if(imageCaption) {
 			overlay.setVisibility(View.VISIBLE);
-			username.setText(mUsernames[position]);
+			if(mUsernames[position].length() > 10) {
+				username.setText(mUsernames[position].substring(0, 10) + "...");
+			} else {
+				username.setText(mUsernames[position]);
+			}
 		} else {
 			username.setBackgroundColor(Color.TRANSPARENT);
 			overlay.setVisibility(View.GONE);

@@ -18,7 +18,6 @@
         android:hint="@string/lbl_email_login"
         android:inputType="textEmailAddress" >
 
-        <requestFocus />
     </EditText>
 
     <EditText
