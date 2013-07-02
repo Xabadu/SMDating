@@ -844,4 +844,7 @@
 	    <string name="alert_credit_discount_buy">Vas a comprar este producto, ¿Segura?.</string>
 	    <string name="alert_credit_discount_offer">Ofrecerte a esta clienta descontará 1 crédito de tu cuenta.</string>
 	    <string name="btn_continue_text">Continuar</string>
+	    <string name="alert_message_disabled_male">Esta clienta no es contacto tuyo. ¡Intenta ofertar para que te compre!</string>
+	    <string name="alert_message_disabled_female">Este producto aún no es tuyo. ¡Cómpralo para enviarle mensajes!</string>
+	    <string name="alert_oh_noes">¡Oh noes!</string>
 </resources>

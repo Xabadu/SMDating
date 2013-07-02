@@ -2,10 +2,14 @@ package com.supermanket.supermanket;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +17,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -26,16 +29,22 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -52,6 +61,9 @@ import com.facebook.Session.OpenRequest;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.ConectivityTools;
 
@@ -98,6 +110,24 @@ public class Login extends Activity {
     final Calendar c = Calendar.getInstance();
     
     static final int DATE_DIALOG_ID = 999;
+    
+    public static final String EXTRA_MESSAGE = "message";
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    private static final String PROPERTY_ON_SERVER_EXPIRATION_TIME = "onServerExpirationTimeMs"; 
+    
+    public static final long REGISTRATION_EXPIRY_TIME_MS = 1000 * 3600 * 24 * 7;
+    
+    String SENDER_ID = "924830394291";
+    
+    static final String TAG = "GCMDemo";
+    
+    GoogleCloudMessaging gcm;
+    AtomicInteger msgId = new AtomicInteger();
+    Context context;
+    String regid;
+    
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +147,15 @@ public class Login extends Activity {
         }
 		 
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+		
+		context = getApplicationContext();
+		regid = getRegistrationId(context);
+		
+		if(regid.length() == 0) {
+			registerBackground();
+		}
+		
+		gcm = GoogleCloudMessaging.getInstance(this);
 	        
 	    if(!isLoggedInAlready()){
 	    	loginScreen();
@@ -127,9 +166,124 @@ public class Login extends Activity {
 		
 	}
 	
+	private String getRegistrationId(Context context) {
+		String registrationId = mSharedPreferences.getString(PROPERTY_REG_ID, "");
+		if(registrationId.length() == 0) {
+			Log.v(TAG, "Registration not found");
+			return "";
+		}
+		
+		int registeredVersion = mSharedPreferences.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+		int currentVersion = getAppVersion(context);
+		if(registeredVersion != currentVersion || isRegistrationExpired()) {
+			Log.v(TAG, "Registration expired or App version changed");
+			return "";
+		}
+		return registrationId;
+	}
+	
+	private static int getAppVersion(Context context) {
+		try {
+			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch(NameNotFoundException e) {
+			throw new RuntimeException("Could not get package name: " + e);
+		}
+	}
+	
+	private boolean isRegistrationExpired() {
+		long expirationTime = mSharedPreferences.getLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, -1);
+		return System.currentTimeMillis() > expirationTime;
+	}
+	
+	private void registerBackground() {
+		new AsyncTask<Void, Void, String>() {
+			@Override
+			protected String doInBackground(Void... params) {
+				String msg = "";
+				try {
+					if(gcm == null) {
+						gcm = GoogleCloudMessaging.getInstance(context);
+					}
+					regid = gcm.register(SENDER_ID);
+					msg = "Device registered, registration id=" + regid;
+					setRegistrationId(context, regid);
+				} catch(IOException ex) {
+					msg = "Error: " + ex.getMessage();
+				}
+				return msg;
+			}
+			
+			@Override
+			protected void onPostExecute(String msg) {
+				Log.v("ID", msg);
+			}
+		}.execute();
+	}
+	
+	private void setRegistrationId(Context context, String regId) {
+		int appVersion = getAppVersion(context);
+		Log.v(TAG, "Saving regId on app version " + appVersion);
+		SharedPreferences.Editor editor = mSharedPreferences.edit();
+		editor.putString(PROPERTY_REG_ID, regId);
+		editor.putInt(PROPERTY_APP_VERSION, appVersion);
+		long expirationTime = System.currentTimeMillis() + REGISTRATION_EXPIRY_TIME_MS;
+		
+		Log.v(TAG, "Setting registration expiry time to " + new Timestamp(expirationTime));
+		editor.putLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, expirationTime);
+		editor.commit();
+	}
+	
+	protected void onResume() {
+		super.onResume();
+		int code = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		
+		if(ConnectionResult.SUCCESS != code) {
+			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(code, this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+			if (errorDialog != null) {
+                ErrorDialogFragment errorFragment =
+                        new ErrorDialogFragment();
+                errorFragment.setDialog(errorDialog);
+                errorFragment.show(getFragmentManager(),
+                        "GCM Updates");
+            }
+		}
+		
+	}
+	
+	public static class ErrorDialogFragment extends DialogFragment {
+        private Dialog mDialog;
+        public ErrorDialogFragment() {
+            super();
+            mDialog = null;
+        }
+        public void setDialog(Dialog dialog) {
+            mDialog = dialog;
+        }
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return mDialog;
+        }
+    }
+	
 	public void loginScreen() {
 		
 		setContentView(R.layout.activity_login);
+		
+		try {
+		    PackageInfo info = getPackageManager().getPackageInfo(
+		            "com.supermanket.supermanket", 
+		            PackageManager.GET_SIGNATURES);
+		    for (Signature signature : info.signatures) {
+		        MessageDigest md = MessageDigest.getInstance("SHA");
+		        md.update(signature.toByteArray());
+		        Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+		    }
+		} catch (NameNotFoundException e) {
+
+		} catch (NoSuchAlgorithmException e) {
+
+		}
 		
 		btnLogin = (Button) findViewById(R.id.loginLoginBtn);
     	btnRegister = (Button) findViewById(R.id.loginRegisterBtn);

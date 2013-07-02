@@ -227,13 +227,53 @@ public class UserProfile extends Activity {
 				});
 			}
 			if(resultObject.getInt("contact") == 0) {
-				userProfileSendMessageBtn.setEnabled(false);
-				userProfileSendMessageBtn.setAlpha(40);
+				
+				userProfileSendMessageBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle(R.string.alert_oh_noes);
+						if(mSharedPreferences.getString("USER_SEX", "").equalsIgnoreCase("male")) {
+							builder.setMessage(R.string.alert_message_disabled_male);
+							builder.setPositiveButton(R.string.btn_ofertar, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				SendOffer sendOffer = new SendOffer();
+									try {
+										sendOffer.execute(resultObject.getInt("id"));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+				    			}
+				    		});
+						} else {
+							builder.setMessage(R.string.alert_message_disabled_female);
+							builder.setPositiveButton(R.string.btn_buy, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				BuyProduct buyProduct = new BuyProduct();
+									try {
+										buyProduct.execute(resultObject.getInt("id"));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+				    			}
+				    		});
+						}
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								Toast.makeText(UserProfile.this, "Cancelado", Toast.LENGTH_SHORT).show();
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+					}
+				});
 				
 				userProfileOfferBtn.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
 						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
-						builder.setTitle("Atención");
+						builder.setTitle(R.string.alert_attention_title);
 						if(mSharedPreferences.getString("USER_SEX", "").equalsIgnoreCase("male")) {
 							builder.setMessage(R.string.alert_credit_discount_offer);
 							builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
