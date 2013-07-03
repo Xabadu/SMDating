@@ -1,6 +1,6 @@
 package com.supermanket.supermanket;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -9,6 +9,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.supermanket.utilities.DiscussArrayAdapter;
 
 public class GcmBroadcastReceiver extends BroadcastReceiver {
 	
@@ -17,18 +22,50 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 	private NotificationManager mNotificationManager;
 	NotificationCompat.Builder builder;
 	Context ctx;
+	private DiscussArrayAdapter adapter;
+	private ListView list;
+	
+	public static Activity currentActivity;
+	public static final Object CURRENTACTIVITYLOCK = new Object();
+	
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 		ctx = context;
 		String messageType = gcm.getMessageType(intent);
+	
 		if(GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-			sendNotification("Send error: " + intent.getExtras().toString());
+			//sendNotification("Send error: " + intent.getExtras().toString());
 		} else if(GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) { 
-			sendNotification("Deleted messages on server: " + intent.getExtras().toString());
 		} else {
-			sendNotification("Received: " + intent.getExtras().toString());
+			synchronized(CURRENTACTIVITYLOCK) {
+	    		if (currentActivity != null) {
+	    			if (currentActivity.getClass() == MessageDetail.class) {
+	    				MessageDetail act = (MessageDetail) currentActivity;
+	    				adapter = MessageDetail.getAdapter();
+	    				list = MessageDetail.getList();
+	    				HashMap<String, String> message = new HashMap<String, String>();
+	    				message.put("message", "test flc");
+	    				message.put("who", "other");
+	    				adapter.add(message);
+	    				list.setSelection(list.getSelectedItemPosition() + 1);
+	    				act.runOnUiThread(new Runnable() {
+	    					public void run() {
+	    						
+	    					}
+	    				});
+	    				sendNotification("Received en detalle: " + intent.getExtras().toString());
+	    			} else if(currentActivity.getClass() == MessagesList.class) {
+	    				
+	    			} else {
+	    				Toast.makeText(ctx, R.string.toast_new_message + "", Toast.LENGTH_LONG).show();
+	    			}
+	    		} else {
+	    			sendNotification("Received cerrada: " + intent.getExtras().toString());
+	        	}
+			}
+			
 		}
 		setResultCode(Activity.RESULT_OK);
 	}

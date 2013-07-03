@@ -847,4 +847,5 @@
 	    <string name="alert_message_disabled_male">Esta clienta no es contacto tuyo. ¡Intenta ofertar para que te compre!</string>
 	    <string name="alert_message_disabled_female">Este producto aún no es tuyo. ¡Cómpralo para enviarle mensajes!</string>
 	    <string name="alert_oh_noes">¡Oh noes!</string>
+	    <string name="toast_new_message">Has recibido un nuevo mensaje de: </string>
 </resources>

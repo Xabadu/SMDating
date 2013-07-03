@@ -234,22 +234,33 @@ public class Login extends Activity {
 		editor.commit();
 	}
 	
+	@Override
 	protected void onResume() {
-		super.onResume();
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+            GcmBroadcastReceiver.currentActivity = this;
+		}
 		int code = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-		
+	
 		if(ConnectionResult.SUCCESS != code) {
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(code, this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-			if (errorDialog != null) {
-                ErrorDialogFragment errorFragment =
-                        new ErrorDialogFragment();
-                errorFragment.setDialog(errorDialog);
-                errorFragment.show(getFragmentManager(),
-                        "GCM Updates");
-            }
+			if(errorDialog != null) {
+				ErrorDialogFragment errorFragment =
+                    new ErrorDialogFragment();
+				errorFragment.setDialog(errorDialog);
+				errorFragment.show(getFragmentManager(),
+                    "GCM Updates");
+			}
 		}
-		
+		super.onResume();
 	}
+	
+	@Override
+    protected void onPause() {
+        synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+        	GcmBroadcastReceiver.currentActivity = null;
+        }
+        super.onPause();
+    }
 	
 	public static class ErrorDialogFragment extends DialogFragment {
         private Dialog mDialog;

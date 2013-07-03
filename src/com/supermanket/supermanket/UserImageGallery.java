@@ -205,6 +205,22 @@ public class UserImageGallery extends Activity {
 	    });
 	}
 	
+	@Override
+	protected void onResume() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+	           GcmBroadcastReceiver.currentActivity = this;
+		}
+		super.onResume();
+	}
+		
+	@Override
+	protected void onPause() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+			GcmBroadcastReceiver.currentActivity = null;
+	    }
+	    super.onPause();
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 		Uri selectedImageUri = null;

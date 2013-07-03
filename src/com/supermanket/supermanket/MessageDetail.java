@@ -45,8 +45,8 @@ import com.supermanket.utilities.UtilityBelt;
 public class MessageDetail extends Activity {
 	
 	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
-	private ListView list;
-	private DiscussArrayAdapter adapter;
+	private static ListView list;
+	private static DiscussArrayAdapter adapter;
 	private Button sendMessageBtn;
 	public EditText messageDetailTextField;
 	
@@ -56,27 +56,92 @@ public class MessageDetail extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-		showMessages();
+		Intent intent = getIntent();
+		GetMessages getMessages = new GetMessages(this);
+		getMessages.execute(intent.getIntExtra("id", 0));
 	}
 	
-	public void showMessages() {
+	public void showMessages(String data) {
 		setContentView(R.layout.activity_message_detail);
 
 		sendMessageBtn = (Button) findViewById(R.id.messageDetailSendButton);
 		messageDetailTextField = (EditText) findViewById(R.id.messageDetailTextField);
+		
+		JSONArray allMessages = null;
+		try {
+			allMessages = new JSONArray(data);
+			messages.clear();
+			for(int i = 0; i < allMessages.length(); i++) {
+				JSONObject singleMessage = allMessages.getJSONObject(i);
+				HashMap<String, String> msgInfo = new HashMap<String, String>();
+				msgInfo.put("message", singleMessage.getString("content"));
+				if(singleMessage.getBoolean("mine")) {
+					msgInfo.put("who", "self");
+				} else {
+					msgInfo.put("who", "other");
+				}
+				messages.add(msgInfo);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		list = (ListView) findViewById(R.id.messageDetailList);
+		 	
+        adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
+        list.setAdapter(adapter);
+        list.setSelection(allMessages.length() - 1);
+		
+        list.setOnItemClickListener(new OnItemClickListener() {
+        	
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				InputMethodManager imm = (InputMethodManager)getSystemService(
+      			      Context.INPUT_METHOD_SERVICE);
+      			imm.hideSoftInputFromWindow(messageDetailTextField.getWindowToken(), 0);
+			}
+        });
+		
 		final Intent intent = getIntent();
-		GetMessages getMessages = new GetMessages();
-		getMessages.execute(intent.getIntExtra("id", 0));
+		
+		HashMap<String, String> message = new HashMap<String, String>();
+		message.put("message", "test flc");
+		message.put("who", "other");
+		adapter.add(message);
 		
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		if(!messageDetailTextField.getText().toString().equalsIgnoreCase("")) {
-        			SendMessage message = new SendMessage();
+        			SendMessage message = new SendMessage(MessageDetail.this);
         			message.execute(Integer.toString(intent.getIntExtra("id", 0)));
         		}
         	}
         });
 		
+	}
+	
+	public static DiscussArrayAdapter getAdapter() {
+		return adapter;
+	}
+	
+	public static ListView getList() {
+		return list;
+	}
+	
+	@Override
+	protected void onResume() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+			GcmBroadcastReceiver.currentActivity = this;
+		}
+		super.onResume();
+	}
+		
+	@Override
+	protected void onPause() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+			GcmBroadcastReceiver.currentActivity = null;
+	    }
+	    super.onPause();
 	}
 	
 	@Override
@@ -114,7 +179,11 @@ public class MessageDetail extends Activity {
 		private String signature;
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
-		private JSONArray allMessages = null;
+		private MessageDetail activityRef;
+		
+		public GetMessages(MessageDetail activityRef) {
+			this.activityRef = activityRef;
+		}
 		
 		@Override
 		protected void onPreExecute() {
@@ -156,39 +225,7 @@ public class MessageDetail extends Activity {
 				dialog.dismiss();
     		} else {
     			Log.d("Result", result);
-    			try {
-					allMessages = new JSONArray(result);
-					for(int i = 0; i < allMessages.length(); i++) {
-						JSONObject singleMessage = allMessages.getJSONObject(i);
-						HashMap<String, String> msgInfo = new HashMap<String, String>();
-						msgInfo.put("message", singleMessage.getString("content"));
-						if(singleMessage.getBoolean("mine")) {
-							msgInfo.put("who", "self");
-						} else {
-							msgInfo.put("who", "other");
-						}
-						messages.add(msgInfo);
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-    			list = (ListView) findViewById(R.id.messageDetailList);
-   			 	
-    	        adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
-    	        list.setAdapter(adapter);
-    	        list.setSelection(allMessages.length() - 1);
-    			
-    	        list.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> arg0, View arg1,
-							int arg2, long arg3) {
-						InputMethodManager imm = (InputMethodManager)getSystemService(
-  	        			      Context.INPUT_METHOD_SERVICE);
-  	        			imm.hideSoftInputFromWindow(messageDetailTextField.getWindowToken(), 0);
-					}
-    	        });
-    	        
+    			activityRef.showMessages(result);
     	        dialog.dismiss();
     		}
 			
@@ -208,7 +245,12 @@ public class MessageDetail extends Activity {
 		private JSONObject message = new JSONObject();
 		private JSONObject mensaje = new JSONObject();
 		private JSONArray allMessages;
+		private MessageDetail activityRef;
     	
+		public SendMessage(MessageDetail activityRef) {
+			this.activityRef = activityRef;
+		}
+		
     	@Override
     	protected void onPreExecute() {
     		super.onPreExecute();
@@ -261,30 +303,7 @@ public class MessageDetail extends Activity {
     			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
     		} else {
-    			messageDetailTextField.setText("");
-    			try {
-					allMessages = new JSONArray(result);
-					messages.clear();
-					for(int i = 0; i < allMessages.length(); i++) {
-						JSONObject singleMessage = allMessages.getJSONObject(i);
-						HashMap<String, String> msgInfo = new HashMap<String, String>();
-						msgInfo.put("message", singleMessage.getString("content"));
-						if(singleMessage.getBoolean("mine")) {
-							msgInfo.put("who", "self");
-						} else {
-							msgInfo.put("who", "other");
-						}
-						messages.add(msgInfo);
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-    			list = (ListView) findViewById(R.id.messageDetailList);
-    			adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
-    			list.setAdapter(adapter);
-    	        
-    	        Log.d("Total", Integer.toString(allMessages.length()));
-    	        list.setSelection(allMessages.length() - 1);
+    			activityRef.showMessages(result);
     			dialog.dismiss();
     		}
     	}

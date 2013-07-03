@@ -43,11 +43,14 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.supermanket.supermanket.Login.ErrorDialogFragment;
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.ISideNavigationCallback;
 import com.supermanket.utilities.SideNavigationView;
@@ -941,6 +944,22 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     	accountUserAvatar.setVisibility(View.INVISIBLE);
     	initView();
     }
+    
+    @Override
+	protected void onResume() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+            GcmBroadcastReceiver.currentActivity = this;
+		}
+		super.onResume();
+	}
+	
+	@Override
+    protected void onPause() {
+        synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+        	GcmBroadcastReceiver.currentActivity = null;
+        }
+        super.onPause();
+    }
 
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
@@ -1132,11 +1151,51 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				}
 				
 			} else if(reference.equalsIgnoreCase("flavors")) {
-				
-			} else if(reference.equalsIgnoreCase("packaging")) {
-				
+				String flavorsChecked = "";
+				for(int i = 0; i < flavors.length ; i++) {
+					if(flavors[i].isChecked()) {
+						flavorsChecked += Integer.toString(i+1);
+						if(i < flavors.length - 1) {
+							flavorsChecked += ",";
+						}
+					}
+				}
+				try {
+					user.put("flavor_ids", flavorsChecked);
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
+			} else if(reference.equalsIgnoreCase("packages")) {
+				String packagesChecked = "";
+				for(int i = 0; i < packages.length ; i++) {
+					if(packages[i].isChecked()) {
+						packagesChecked += Integer.toString(i+1);
+						if(i < packages.length - 1) {
+							packagesChecked += ",";
+						}
+					}
+				}
+				try {
+					user.put("packaging_ids", packagesChecked);
+					Log.d("Envases", packagesChecked);
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
 			} else if(reference.equalsIgnoreCase("bonuspack")) {
-				
+				String bonusPackChecked = "";
+				for(int i = 0; i < bonusPack.length; i++) {
+					if(bonusPack[i].isChecked()) {
+						bonusPackChecked += Integer.toString(i+1);
+						if(i < bonusPack.length - 1) {
+							bonusPackChecked += ",";
+						}
+					}
+				}
+				try {
+					user.put("bonus_pack_ids", bonusPackChecked);
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
 			} else if(reference.equalsIgnoreCase("accessories")) {
 				try {
 					user.put("male_childs", accessoriesMaleChildrenText.getText().toString());
@@ -1225,6 +1284,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
+				Log.d("Resultado", result);
 				dialog.dismiss();
 			}
 			

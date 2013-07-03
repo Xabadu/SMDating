@@ -2,9 +2,6 @@ package com.supermanket.utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import com.supermanket.supermanket.R;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,11 +11,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.supermanket.supermanket.R;
 
 public class DiscussArrayAdapter extends BaseAdapter {
 
@@ -27,7 +24,12 @@ public class DiscussArrayAdapter extends BaseAdapter {
 	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 	private Activity activity;
 	private static LayoutInflater inflater = null;
-
+	
+	public void add(HashMap<String, String> message) {
+		messages.add(message);
+		notifyDataSetChanged();
+	}
+	
 	public DiscussArrayAdapter(Activity a, ArrayList<HashMap<String, String>> m) {
 		messages = m;
 		activity = a;

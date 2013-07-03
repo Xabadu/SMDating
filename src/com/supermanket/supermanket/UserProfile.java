@@ -658,6 +658,22 @@ public class UserProfile extends Activity {
 	}
 	
 	@Override
+	protected void onResume() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+	           GcmBroadcastReceiver.currentActivity = this;
+		}
+		super.onResume();
+	}
+		
+	@Override
+	protected void onPause() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+			GcmBroadcastReceiver.currentActivity = null;
+	    }
+	    super.onPause();
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
