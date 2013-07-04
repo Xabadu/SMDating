@@ -29,10 +29,6 @@
         android:name="com.supermanket.supermanket.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-    <meta-data
-        android:name="com.facebook.sdk.ApplicationId"
-        android:value="@string/app_id" />
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -124,6 +120,8 @@
         </receiver>
  
         <service android:name=".GCMIntentService" />
+        <meta-data android:value="@string/app_id" android:name="com.facebook.sdk.ApplicationId"/>
+        <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name"></activity>
         
     </application>
 

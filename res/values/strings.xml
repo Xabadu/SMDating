@@ -848,4 +848,6 @@
 	    <string name="alert_message_disabled_female">Este producto aún no es tuyo. ¡Cómpralo para enviarle mensajes!</string>
 	    <string name="alert_oh_noes">¡Oh noes!</string>
 	    <string name="toast_new_message">Has recibido un nuevo mensaje de: </string>
+	    <string name="alert_logout">¿Quieres salir de Supermanket?</string>
+	    <string name="btn_logout">Salir</string>
 </resources>

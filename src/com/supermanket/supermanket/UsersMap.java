@@ -16,8 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -252,12 +254,28 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
             	NavUtils.navigateUpFromSameTask(this);
     			return true;
             case R.id.logout:
-            	Editor e = mSharedPreferences.edit();
-                e.putBoolean("LOGGED_IN", false);
-                e.commit();
-            	Intent intent = new Intent(this, Login.class);
-            	startActivity(intent);
-            	this.finish();
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_logout);
+				builder.setPositiveButton(R.string.btn_logout, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Editor e = mSharedPreferences.edit();
+	                	e.remove("LOGGED_IN");
+	                    e.commit();
+	                	Intent intent = new Intent(UsersMap.this, Login.class);
+	                	startActivity(intent);
+	                	UsersMap.this.finish();
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+            	
             	break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -18,8 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -47,6 +49,8 @@ public class MessageDetail extends Activity {
 	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 	private static ListView list;
 	private static DiscussArrayAdapter adapter;
+	private static int contactId;
+	private static int currentPosition;
 	private Button sendMessageBtn;
 	public EditText messageDetailTextField;
 	
@@ -57,8 +61,9 @@ public class MessageDetail extends Activity {
 		super.onCreate(savedInstanceState);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		Intent intent = getIntent();
+		contactId = intent.getIntExtra("id", 0);
 		GetMessages getMessages = new GetMessages(this);
-		getMessages.execute(intent.getIntExtra("id", 0));
+		getMessages.execute(contactId);
 	}
 	
 	public void showMessages(String data) {
@@ -86,10 +91,10 @@ public class MessageDetail extends Activity {
 			e.printStackTrace();
 		}
 		list = (ListView) findViewById(R.id.messageDetailList);
-		 	
+		currentPosition = allMessages.length(); 	
         adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
         list.setAdapter(adapter);
-        list.setSelection(allMessages.length() - 1);
+        list.setSelection(currentPosition - 1);
 		
         list.setOnItemClickListener(new OnItemClickListener() {
         	
@@ -103,11 +108,6 @@ public class MessageDetail extends Activity {
         });
 		
 		final Intent intent = getIntent();
-		
-		HashMap<String, String> message = new HashMap<String, String>();
-		message.put("message", "test flc");
-		message.put("who", "other");
-		adapter.add(message);
 		
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -126,6 +126,14 @@ public class MessageDetail extends Activity {
 	
 	public static ListView getList() {
 		return list;
+	}
+	
+	public static int getContact() {
+		return contactId;
+	}
+	
+	public static int getCurrentPosition() {
+		return currentPosition;
 	}
 	
 	@Override
@@ -158,12 +166,28 @@ public class MessageDetail extends Activity {
             	NavUtils.navigateUpFromSameTask(this);
     			return true;
             case R.id.logout:
-            	Editor e = mSharedPreferences.edit();
-                e.putBoolean("LOGGED_IN", false);
-                e.commit();
-            	Intent intent = new Intent(this, Login.class);
-            	startActivity(intent);
-            	this.finish();
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_logout);
+				builder.setPositiveButton(R.string.btn_logout, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Editor e = mSharedPreferences.edit();
+	                	e.remove("LOGGED_IN");
+	                    e.commit();
+	                	Intent intent = new Intent(MessageDetail.this, Login.class);
+	                	startActivity(intent);
+	                	MessageDetail.this.finish();
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+            	
             	break;
             default:
                 return super.onOptionsItemSelected(item);

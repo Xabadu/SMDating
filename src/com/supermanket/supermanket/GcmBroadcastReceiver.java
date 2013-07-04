@@ -36,33 +36,27 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		String messageType = gcm.getMessageType(intent);
 	
 		if(GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-			//sendNotification("Send error: " + intent.getExtras().toString());
 		} else if(GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) { 
 		} else {
 			synchronized(CURRENTACTIVITYLOCK) {
 	    		if (currentActivity != null) {
-	    			if (currentActivity.getClass() == MessageDetail.class) {
+	    			if ((currentActivity.getClass() == MessageDetail.class)
+	    					&& (Integer.parseInt(intent.getStringExtra("contact_id")) == MessageDetail.getContact())) {
 	    				MessageDetail act = (MessageDetail) currentActivity;
 	    				adapter = MessageDetail.getAdapter();
 	    				list = MessageDetail.getList();
 	    				HashMap<String, String> message = new HashMap<String, String>();
-	    				message.put("message", "test flc");
+	    				message.put("message", intent.getStringExtra("message"));
 	    				message.put("who", "other");
 	    				adapter.add(message);
-	    				list.setSelection(list.getSelectedItemPosition() + 1);
-	    				act.runOnUiThread(new Runnable() {
-	    					public void run() {
-	    						
-	    					}
-	    				});
-	    				sendNotification("Received en detalle: " + intent.getExtras().toString());
+	    				list.setSelection(MessageDetail.getCurrentPosition());
 	    			} else if(currentActivity.getClass() == MessagesList.class) {
-	    				
+	    				Toast.makeText(ctx, "Has recibido un mensaje de " + intent.getStringExtra("sender_username"), Toast.LENGTH_LONG).show();
 	    			} else {
-	    				Toast.makeText(ctx, R.string.toast_new_message + "", Toast.LENGTH_LONG).show();
+	    				Toast.makeText(ctx, "Has recibido un mensaje de " + intent.getStringExtra("sender_username"), Toast.LENGTH_LONG).show();
 	    			}
 	    		} else {
-	    			sendNotification("Received cerrada: " + intent.getExtras().toString());
+	    			sendNotification("Te ha llegado un mensaje.");
 	        	}
 			}
 			
@@ -73,7 +67,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 	private void sendNotification(String msg) {
 		mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 		
-		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, Login.class), 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MessagesList.class), 0);
 		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)
 		.setSmallIcon(R.drawable.ic_launcher)

@@ -133,11 +133,6 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if (Build.VERSION.SDK_INT > 9) {
-        	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        	StrictMode.setThreadPolicy(policy);
-        }
-		
 		ct = new ConectivityTools(getApplicationContext());
 		 
         if (!ct.isConnectingToInternet()) {
@@ -156,13 +151,13 @@ public class Login extends Activity {
 		}
 		
 		gcm = GoogleCloudMessaging.getInstance(this);
-	        
-	    if(!isLoggedInAlready()){
-	    	loginScreen();
-	    } else {
-	    	Intent intent = new Intent(this, Dashboard.class);
-	        startActivity(intent);
-	    }
+	    
+		if(!isLoggedInAlready()) {
+			loginScreen();
+		} else {
+			Intent intent = new Intent(this, Dashboard.class);
+			startActivity(intent);
+		}
 		
 	}
 	
@@ -389,98 +384,35 @@ public class Login extends Activity {
 	}
 	
 	public void loginFacebook() {
-		
-		Session session = Session.getActiveSession();
-    	
-    	if(session != null) {
-    		session.close();
-    	}
-		
-		pDialog = ProgressDialog.show(Login.this, "", "Un momento...");
-    	
-		if(!isLoggedInAlready()) {
-			
-			openActiveSession(Login.this, true, new Session.StatusCallback() {
+					
+		openActiveSession(Login.this, true, new Session.StatusCallback() {
 
-				@Override
-				public void call(Session session, SessionState state, Exception exception) {
-					if (state.isOpened()) {
-						Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-
-							@Override
-							public void onCompleted(GraphUser user, Response response) {
-								if (user != null) {
-														                									
-									/* Preferencia Interna */
-									
-									Editor e = mSharedPreferences.edit();
-					                e.putBoolean("LOGGED_IN", true);
-					                e.putString("USER_ID", user.getId());
-					                e.putString("USER_FIRSTNAME", user.getFirstName());
-					                e.putString("USER_FULLNAME", user.getName());
-					                e.putString("USER_EMAIL", user.asMap().get("email").toString());
-					                e.commit();
-					                
-					                HttpClient client = new DefaultHttpClient();
-					                
-					                HttpPost post = new HttpPost("http://play.medialabs.net/usuario/update/");
-					                post.setHeader("content-type", "application/json");
-					                
-					                String userLocation = "Parts Unknown";
-					                
-					                if(user.getLocation() != null) {
-					                	userLocation = user.getLocation().getProperty("name").toString();
-					                }
-					                
-					                JSONObject usuario = new JSONObject();
-					                
-					                try {
-										usuario.put("fb_id", user.getId());
-										usuario.put("first_name", user.getFirstName());
-										usuario.put("middle_name", user.getMiddleName());
-										usuario.put("last_name", user.getLastName());
-										usuario.put("full_name", user.getName());
-										usuario.put("birthday", user.getBirthday());
-										usuario.put("username", user.getUsername());
-										usuario.put("location", userLocation);
-										usuario.put("fb_url", user.getLink());
-										usuario.put("email", user.asMap().get("email").toString());
-										
-										try {
-											StringEntity entity = new StringEntity(usuario.toString());
-											post.setEntity(entity);
-										} catch (UnsupportedEncodingException e1) {
-											e1.printStackTrace();
-										}
-										
-										try {
-											HttpResponse resp = client.execute(post);
-										} catch (ClientProtocolException e1) {
-											e1.printStackTrace();
-										} catch (IOException e1) {
-											e1.printStackTrace();
-										}
-										
-									} catch (JSONException e1) {
-										e1.printStackTrace();
-									}
-					                
-								} 
-							}
-						});
-					}
-					if(state.isClosed()) {
-						pDialog.dismiss();
-						Toast.makeText(Login.this, "Autentificación cancelada", Toast.LENGTH_SHORT).show();
-						loginScreen();
-					}
+			@Override
+			public void call(Session session, SessionState state, Exception exception) {
+				if (state.isOpened()) {
+					Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+						@Override
+						public void onCompleted(GraphUser user, Response response) {
+							if (user != null) {
+								Session sesion = Session.getActiveSession();
+								Editor editor = mSharedPreferences.edit();
+								editor.putString("FB_TOKEN", sesion.getAccessToken());
+								editor.commit();
+								if(pDialog != null && pDialog.isShowing()) {
+									pDialog.dismiss();
+								}
+								loginFbService loginFb = new loginFbService();
+								loginFb.execute(sesion.getAccessToken());
+							} 
+						}
+					});
 				}
-			}, READ_PERMISSIONS);
-
-		} else {
-			Intent intent = new Intent(this, Dashboard.class);
-            startActivity(intent);
-		}
+				if(state.isClosed()) {
+					Toast.makeText(Login.this, "Autentificación cancelada", Toast.LENGTH_SHORT).show();
+					loginScreen();
+				}
+			}
+		}, READ_PERMISSIONS);
 		
 	}
 	
@@ -519,8 +451,6 @@ public class Login extends Activity {
 	}
 	
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
-
-		// when dialog box is closed, below method will be called.
 		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
@@ -531,8 +461,7 @@ public class Login extends Activity {
 		}
 	};
 	
-	public boolean isEmailValid(String email) {
-        
+	public boolean isEmailValid(String email) { 
 		Pattern pattern;
 		Matcher matcher;
 		String regExpn =
@@ -645,6 +574,109 @@ public class Login extends Activity {
 		            startActivity(intent);
 		                dialog.dismiss();
 		                finish();
+					
+				} catch (JSONException e1) {
+					JSONObject response;
+					try {
+						response = new JSONObject(result);
+						String error = response.getString("errors");
+						alert.showAlertDialog(Login.this, "Oh noes!", error, false);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					e1.printStackTrace();
+				}
+				
+				dialog.dismiss();
+
+			}
+			
+		}
+	}
+	
+	private class loginFbService extends AsyncTask<String, Integer, String> {
+		
+		ProgressDialog dialog;
+		AlertDialogs alertDialog = new AlertDialogs();
+		EditText emailField;
+		EditText passwordField;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(Login.this, "", "Validando...", true, true);
+		}
+		
+		@Override
+		protected String doInBackground(String... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/session/facebook.json");
+            post.setHeader("content-type", "application/json");
+            
+            JSONObject usuario = new JSONObject();
+            JSONObject user = new JSONObject();
+            
+            try {
+				user.put("token", params[0]);
+			} catch (JSONException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+            try {
+            	usuario.put("user", user);
+            } catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+            
+            try {
+				StringEntity entity = new StringEntity(usuario.toString());
+				post.setEntity(entity);
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+            
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {				
+				try {
+					JSONObject response = new JSONObject(result);
+					JSONObject status = response.getJSONObject("user");
+					mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+					Editor e = mSharedPreferences.edit();
+					e.putBoolean("LOGGED_IN", true);
+		            e.putString("USER_ID", status.getString("id"));
+		            e.putString("USER_SEX", status.getString("sex"));
+		            e.putString("API_KEY", status.getString("api_key"));
+		            e.putString("API_SECRET", status.getString("api_secret"));
+		            e.commit();
+		                
+		            Intent intent = new Intent(Login.this, Dashboard.class);
+		            startActivity(intent);
+		            dialog.dismiss();
+		            finish();
 					
 				} catch (JSONException e1) {
 					JSONObject response;

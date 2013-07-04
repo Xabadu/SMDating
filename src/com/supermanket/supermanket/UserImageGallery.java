@@ -332,12 +332,28 @@ public class UserImageGallery extends Activity {
             	NavUtils.navigateUpFromSameTask(this);
     			return true;
             case R.id.logout:
-            	Editor e = mSharedPreferences.edit();
-                e.putBoolean("LOGGED_IN", false);
-                e.commit();
-            	Intent intent = new Intent(this, Login.class);
-            	startActivity(intent);
-            	this.finish();
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_logout);
+				builder.setPositiveButton(R.string.btn_logout, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Editor e = mSharedPreferences.edit();
+	                	e.remove("LOGGED_IN");
+	                    e.commit();
+	                	Intent intent = new Intent(UserImageGallery.this, Login.class);
+	                	startActivity(intent);
+	                	UserImageGallery.this.finish();
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+            	
             	break;
             default:
                 return super.onOptionsItemSelected(item);

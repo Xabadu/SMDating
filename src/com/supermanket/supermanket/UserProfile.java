@@ -214,17 +214,26 @@ public class UserProfile extends Activity {
 			if(resultObject.getBoolean("private_information_access")) {
 				userProfileUnblockInfoBtn.setVisibility(View.GONE);
 			} else {
-				userProfileUnblockInfoBtn.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
-						try {
-							unblockInfo.execute(resultObject.getInt("id"));
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+				if( (resultObject.isNull("sex_poses") || resultObject.getString("sex_poses").equalsIgnoreCase("")) &&
+					(resultObject.isNull("sex_toys") || resultObject.getString("sex_toys").equalsIgnoreCase("")) &&
+					(resultObject.isNull("guilty_pleasure") || resultObject.getString("guilty_pleasure").equalsIgnoreCase("")) &&
+					(resultObject.isNull("sexual_fantasy") || resultObject.getString("sexual_fantasy").equalsIgnoreCase("")) &&
+					(resultObject.isNull("fetishes") || resultObject.getString("fetishes").equalsIgnoreCase("")) ) {
+					userProfileUnblockInfoBtn.setVisibility(View.GONE);
+				} else {
+					userProfileUnblockInfoBtn.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
+							try {
+								unblockInfo.execute(resultObject.getInt("id"));
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
-					}
-				});
+					});
+				}
+				
 			}
 			if(resultObject.getInt("contact") == 0) {
 				
@@ -687,12 +696,28 @@ public class UserProfile extends Activity {
             	NavUtils.navigateUpFromSameTask(this);
     			return true;
             case R.id.logout:
-            	Editor e = mSharedPreferences.edit();
-                e.putBoolean("LOGGED_IN", false);
-                e.commit();
-            	Intent intent = new Intent(this, Login.class);
-            	startActivity(intent);
-            	this.finish();
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_logout);
+				builder.setPositiveButton(R.string.btn_logout, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Editor e = mSharedPreferences.edit();
+	                	e.remove("LOGGED_IN");
+	                    e.commit();
+	                	Intent intent = new Intent(UserProfile.this, Login.class);
+	                	startActivity(intent);
+	                	UserProfile.this.finish();
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+            	
             	break;
             default:
                 return super.onOptionsItemSelected(item);
