@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -40,9 +39,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -97,10 +94,7 @@ public class Login extends Activity {
     RadioGroup registerFormGenreGroup;
     
     // Facebook elements
-    private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
-    private static final List<String> READ_PERMISSIONS = Arrays.asList("email");
-    private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
-    private boolean pendingPublishReauthorization = false;
+    private static final List<String> READ_PERMISSIONS = Arrays.asList("email", "user_birthday", "user_hometown");
     
     // Other
     private int day;
@@ -128,46 +122,50 @@ public class Login extends Activity {
     String regid;
     
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		ct = new ConectivityTools(getApplicationContext());
-		 
+
         if (!ct.isConnectingToInternet()) {
             alert.showAlertDialog(Login.this, "Error de Conexión",
                     "Esta aplicación necesita una conexión a Internet para funcionar.", false);
             return;
         }
-		 
+
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		
-		context = getApplicationContext();
-		regid = getRegistrationId(context);
-		
-		if(regid.length() == 0) {
-			registerBackground();
-		}
-		
-		gcm = GoogleCloudMessaging.getInstance(this);
-	    
 		if(!isLoggedInAlready()) {
 			loginScreen();
 		} else {
 			Intent intent = new Intent(this, Dashboard.class);
 			startActivity(intent);
 		}
-		
+
 	}
 	
+	private void registerDevice() {
+		context = getApplicationContext();
+		regid = getRegistrationId(context);
+
+		if(regid.length() == 0) {
+			registerBackground();
+		} else {
+			gcm = GoogleCloudMessaging.getInstance(this);
+			Intent intent = new Intent(this, Dashboard.class);
+			startActivity(intent);
+		}
+	}
+
 	private String getRegistrationId(Context context) {
 		String registrationId = mSharedPreferences.getString(PROPERTY_REG_ID, "");
 		if(registrationId.length() == 0) {
 			Log.v(TAG, "Registration not found");
 			return "";
 		}
-		
+
 		int registeredVersion = mSharedPreferences.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
 		int currentVersion = getAppVersion(context);
 		if(registeredVersion != currentVersion || isRegistrationExpired()) {
@@ -176,7 +174,7 @@ public class Login extends Activity {
 		}
 		return registrationId;
 	}
-	
+
 	private static int getAppVersion(Context context) {
 		try {
 			PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -185,12 +183,12 @@ public class Login extends Activity {
 			throw new RuntimeException("Could not get package name: " + e);
 		}
 	}
-	
+
 	private boolean isRegistrationExpired() {
 		long expirationTime = mSharedPreferences.getLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, -1);
 		return System.currentTimeMillis() > expirationTime;
 	}
-	
+
 	private void registerBackground() {
 		new AsyncTask<Void, Void, String>() {
 			@Override
@@ -208,34 +206,39 @@ public class Login extends Activity {
 				}
 				return msg;
 			}
-			
+
 			@Override
 			protected void onPostExecute(String msg) {
 				Log.v("ID", msg);
+				Intent intent = new Intent(Login.this, Devices.class);
+				startActivity(intent);
 			}
 		}.execute();
 	}
-	
+
 	private void setRegistrationId(Context context, String regId) {
 		int appVersion = getAppVersion(context);
 		Log.v(TAG, "Saving regId on app version " + appVersion);
 		SharedPreferences.Editor editor = mSharedPreferences.edit();
+		if(!mSharedPreferences.getString(PROPERTY_REG_ID, "").equalsIgnoreCase("")) {
+			editor.putString("OLD_REG_ID", regId);
+		}
 		editor.putString(PROPERTY_REG_ID, regId);
 		editor.putInt(PROPERTY_APP_VERSION, appVersion);
 		long expirationTime = System.currentTimeMillis() + REGISTRATION_EXPIRY_TIME_MS;
-		
+
 		Log.v(TAG, "Setting registration expiry time to " + new Timestamp(expirationTime));
 		editor.putLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, expirationTime);
 		editor.commit();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
             GcmBroadcastReceiver.currentActivity = this;
 		}
 		int code = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-	
+
 		if(ConnectionResult.SUCCESS != code) {
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(code, this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
 			if(errorDialog != null) {
@@ -248,7 +251,7 @@ public class Login extends Activity {
 		}
 		super.onResume();
 	}
-	
+
 	@Override
     protected void onPause() {
         synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -256,7 +259,7 @@ public class Login extends Activity {
         }
         super.onPause();
     }
-	
+
 	public static class ErrorDialogFragment extends DialogFragment {
         private Dialog mDialog;
         public ErrorDialogFragment() {
@@ -271,11 +274,11 @@ public class Login extends Activity {
             return mDialog;
         }
     }
-	
+
 	public void loginScreen() {
-		
+
 		setContentView(R.layout.activity_login);
-		
+
 		try {
 		    PackageInfo info = getPackageManager().getPackageInfo(
 		            "com.supermanket.supermanket", 
@@ -290,7 +293,7 @@ public class Login extends Activity {
 		} catch (NoSuchAlgorithmException e) {
 
 		}
-		
+
 		btnLogin = (Button) findViewById(R.id.loginLoginBtn);
     	btnRegister = (Button) findViewById(R.id.loginRegisterBtn);
     	btnFacebookLogin = (Button) findViewById(R.id.loginFacebookBtn);
@@ -303,11 +306,11 @@ public class Login extends Activity {
 					alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar tus datos.", false);
 				} else {
 					if(isEmailValid(loginFormEmailField.getText().toString())) {
-						new loginService().execute();
+						new LoginSupermanket(Login.this).execute();
 					} else {
 						alert.showAlertDialog(Login.this, "Oh noes!", "Email no válido", false);
 					}
-					
+
 				}
 			}
 	    });
@@ -325,15 +328,15 @@ public class Login extends Activity {
 				loginFacebook();
 			}
 	    });
-		
+
 	}
-	
+
 	public void createAccount() {
-		
+
 		pDialog.dismiss();
-		
+
 		setContentView(R.layout.register_form);
-		
+
 		registerFormRegisterBtn = (Button) findViewById(R.id.registerFormRegisterBtn);
 		registerFormCancelBtn = (Button) findViewById(R.id.registerFormCancelBtn);
 		registerFormChangeBirthdayBtn = (Button) findViewById(R.id.registerFormChangeBirthdayBtn);
@@ -341,18 +344,18 @@ public class Login extends Activity {
 		registerFormEmailField = (EditText) findViewById(R.id.registerFormEmailField);
 		registerFormPasswordField = (EditText) findViewById(R.id.registerFormPasswordField);
 		registerFormConfirmPasswordField = (EditText) findViewById(R.id.registerFormConfirmPasswordField);
-		
+
 		day = c.get(Calendar.DAY_OF_MONTH);
 		month = c.get(Calendar.MONTH);
 		year = c.get(Calendar.YEAR);
-				
+
 		registerFormChangeBirthdayBtn.setOnClickListener(new OnClickListener() {
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 				showDialog(DATE_DIALOG_ID);
 			}
 		});
-		
+
 		registerFormRegisterBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if(registerFormUsernameField.getText().toString().equals("") 
@@ -366,7 +369,7 @@ public class Login extends Activity {
 						alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar un correo válido.", false);
 					} else {
 						if(registerFormPasswordField.getText().toString().equals(registerFormConfirmPasswordField.getText().toString())) {
-							new registerService().execute();
+							new RegisterUser(Login.this).execute();
 						} else {
 							alert.showAlertDialog(Login.this, "Oh noes!", "Las contraseñas no coinciden.", false);
 						}
@@ -374,17 +377,17 @@ public class Login extends Activity {
 				}
 			}
 		});
-		
+
 		registerFormCancelBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loginScreen();
 			}
 		});
-		
+
 	}
-	
+
 	public void loginFacebook() {
-					
+
 		openActiveSession(Login.this, true, new Session.StatusCallback() {
 
 			@Override
@@ -401,7 +404,7 @@ public class Login extends Activity {
 								if(pDialog != null && pDialog.isShowing()) {
 									pDialog.dismiss();
 								}
-								loginFbService loginFb = new loginFbService();
+								LoginFb loginFb = new LoginFb(Login.this);
 								loginFb.execute(sesion.getAccessToken());
 							} 
 						}
@@ -413,21 +416,21 @@ public class Login extends Activity {
 				}
 			}
 		}, READ_PERMISSIONS);
-		
-	}
-	
 
-	
+	}
+
+
+
 	private boolean isLoggedInAlready() {
 		return mSharedPreferences.getBoolean("LOGGED_IN", false);
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
-	
+
 	private static Session openActiveSession(Activity activity, boolean allowLoginUI, StatusCallback callback, List<String> permissions) {
 	    OpenRequest openRequest = new OpenRequest(activity).setPermissions(permissions).setCallback(callback);
 	    Session session = new Builder(activity).build();
@@ -438,7 +441,7 @@ public class Login extends Activity {
 	    }
 	    return null;
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -449,18 +452,18 @@ public class Login extends Activity {
 		}
 		return null;
 	}
-	
+
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			
+
 			registerFormChangeBirthdayBtn.setText(Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year));
 
 		}
 	};
-	
+
 	public boolean isEmailValid(String email) { 
 		Pattern pattern;
 		Matcher matcher;
@@ -482,30 +485,34 @@ public class Login extends Activity {
          else
         	 return false;
 	}
-	
-	
-	
-	private class loginService extends AsyncTask<Void, Integer, String> {
-		
+
+
+
+	private class LoginSupermanket extends AsyncTask<Void, Integer, String> {
+
 		ProgressDialog dialog;
-		AlertDialogs alertDialog = new AlertDialogs();
 		EditText emailField;
 		EditText passwordField;
+		Login activityRef;
 		
-		@Override
-		protected void onPreExecute() {
-		
-			super.onPreExecute();
-		    
-			emailField = (EditText) findViewById(R.id.loginEmailField);
-			passwordField = (EditText) findViewById(R.id.loginPasswordField);
-			dialog = ProgressDialog.show(Login.this, "", "Validando...", true, true);
-		    
+		public LoginSupermanket(Login activityRef) {
+			this.activityRef = activityRef;
 		}
 		
 		@Override
+		protected void onPreExecute() {
+
+			super.onPreExecute();
+
+			emailField = (EditText) findViewById(R.id.loginEmailField);
+			passwordField = (EditText) findViewById(R.id.loginPasswordField);
+			dialog = ProgressDialog.show(Login.this, "", "Validando...", true, true);
+
+		}
+
+		@Override
 		protected String doInBackground(Void... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/session.json");
             post.setHeader("content-type", "application/json");
@@ -548,11 +555,11 @@ public class Login extends Activity {
  
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
 				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
@@ -569,12 +576,10 @@ public class Login extends Activity {
 		            e.putString("API_KEY", status.getString("api_key"));
 		            e.putString("API_SECRET", status.getString("api_secret"));
 		            e.commit();
-		                
-		            Intent intent = new Intent(Login.this, Dashboard.class);
-		            startActivity(intent);
-		                dialog.dismiss();
-		                finish();
-					
+
+		            activityRef.registerDevice();
+		            dialog.dismiss();
+
 				} catch (JSONException e1) {
 					JSONObject response;
 					try {
@@ -587,30 +592,32 @@ public class Login extends Activity {
 					}
 					e1.printStackTrace();
 				}
-				
+
 				dialog.dismiss();
 
 			}
-			
+
 		}
 	}
-	
-	private class loginFbService extends AsyncTask<String, Integer, String> {
-		
+
+	private class LoginFb extends AsyncTask<String, Integer, String> {
+
 		ProgressDialog dialog;
-		AlertDialogs alertDialog = new AlertDialogs();
-		EditText emailField;
-		EditText passwordField;
+		Login activityRef;
 		
+		public LoginFb(Login activityRef) {
+			this.activityRef = activityRef;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 			dialog = ProgressDialog.show(Login.this, "", "Validando...", true, true);
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/session/facebook.json");
             post.setHeader("content-type", "application/json");
@@ -652,11 +659,11 @@ public class Login extends Activity {
  
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
 				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
@@ -672,12 +679,10 @@ public class Login extends Activity {
 		            e.putString("API_KEY", status.getString("api_key"));
 		            e.putString("API_SECRET", status.getString("api_secret"));
 		            e.commit();
-		                
-		            Intent intent = new Intent(Login.this, Dashboard.class);
-		            startActivity(intent);
+
+		            activityRef.registerDevice();
 		            dialog.dismiss();
-		            finish();
-					
+
 				} catch (JSONException e1) {
 					JSONObject response;
 					try {
@@ -690,18 +695,17 @@ public class Login extends Activity {
 					}
 					e1.printStackTrace();
 				}
-				
+
 				dialog.dismiss();
 
 			}
-			
+
 		}
 	}
-	
-	private class registerService extends AsyncTask<Void, Integer, String> {
-		
+
+	private class RegisterUser extends AsyncTask<Void, Integer, String> {
+
 		ProgressDialog dialog;
-		AlertDialogs alertDialog = new AlertDialogs();
 		int genre;
 		int radioId;
 		Button birthdayBtn;
@@ -710,34 +714,39 @@ public class Login extends Activity {
 		EditText passwordField;
 		RadioGroup genreGroup;
 		String[] birthdayText;
+		Login activityRef;
+		
+		public RegisterUser(Login activityRef) {
+			this.activityRef = activityRef;
+		}
 		
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-		    
+
 			usernameField = (EditText) findViewById(R.id.registerFormUsernameField);
 			emailField = (EditText) findViewById(R.id.registerFormEmailField);
 			passwordField = (EditText) findViewById(R.id.registerFormPasswordField);
 			genreGroup = (RadioGroup) findViewById(R.id.registerFormGenreGroup);
 			birthdayBtn = (Button) findViewById(R.id.registerFormChangeBirthdayBtn);
 			birthdayText = birthdayBtn.getText().toString().split("/");
-			
+
 			radioId = genreGroup.getCheckedRadioButtonId();
-			
+
 			if(radioId == R.id.registerFormGenreFemale) {
 				genre = 0;
 			} else if(radioId == R.id.registerFormGenreMale) {
 				genre = 1;
 			}
-			
+
 			dialog = ProgressDialog.show(Login.this, "", "Creando cuenta...", true);
-		    
+
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/users.json");
             post.setHeader("content-type", "application/json");
@@ -786,11 +795,11 @@ public class Login extends Activity {
  
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
 				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
@@ -805,12 +814,10 @@ public class Login extends Activity {
 		            e.putString("API_KEY", response.getString("api_key"));
 		            e.putString("API_SECRET", response.getString("api_secret"));
 		            e.commit();
-		                
-		            Intent intent = new Intent(Login.this, Dashboard.class);
-		            startActivity(intent);
+
+		            activityRef.registerDevice();
 		            dialog.dismiss();
-		            Login.this.finish();
-					
+
 				} catch (JSONException e1) {
 					JSONObject response;
 					JSONObject errors;
@@ -841,13 +848,13 @@ public class Login extends Activity {
 					}
 					e1.printStackTrace();
 				}
-				
+
 				dialog.dismiss();
 
 			}
-			
+
 		}
-		
+
 	}
 
 }

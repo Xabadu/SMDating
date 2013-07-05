@@ -1,9 +1,6 @@
 package com.supermanket.supermanket;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -20,10 +17,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,14 +30,10 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
@@ -54,7 +45,7 @@ import com.supermanket.utilities.UserAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
 public class Dashboard extends SherlockActivity implements ISideNavigationCallback {
-	
+
 	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
     public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
@@ -82,20 +73,20 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         
 		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
 		dashboardBottomLayout = (RelativeLayout) findViewById(R.id.dashboardBottomLayout);
-		
+
 		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
 			dashboardBottomLayout.setVisibility(View.GONE);
 		} else {
 			dashboardBottomLayout.setVisibility(View.VISIBLE);
 		}
-		
+
 		dashboardNearByUsersBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(Dashboard.this, UsersMap.class);
 				startActivity(intent);
 			}
 		});
-		
+
         icon = (ImageView) findViewById(android.R.id.icon);
         sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
         if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
@@ -141,18 +132,18 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 		mGridView = mPullRefreshGridView.getRefreshableView();
 		uAdapter = new UserAdapter(Dashboard.this, true, true, 4, 0, 4, 0, 95, 95, usersContainer);
 		mGridView.setAdapter(uAdapter);
-				
+
 		uAdapter.notifyDataSetChanged();
 
 		// Call onRefreshComplete when the list has been refreshed.
 		mPullRefreshGridView.onRefreshComplete();
-		
+
 		if(page > 2) {
 			int actualPage = (page - 2)*15;
 			Log.d("Position", Integer.toString(actualPage));
 			mGridView.setSelection(actualPage);
 		}
-		
+
 		// Set a listener to be invoked when the list should be refreshed.
 		mPullRefreshGridView.setOnRefreshListener(new OnRefreshListener2<GridView>() {
 
@@ -171,18 +162,18 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 			}
 
 		});
-		
+
 		mGridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				
+
 				int arrayNumber;
-				
+
 				if(position < 16) {
 					arrayNumber = 0;
 				} else {
 					arrayNumber = (int) Math.floor(position/16);
 				}
-				
+
 				JSONArray userArray = usersContainer.get(arrayNumber);
 				try {
 					JSONObject userPosition;
@@ -211,7 +202,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
     	
@@ -238,7 +229,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-	
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -343,7 +334,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     }
     
     private class getUsers extends AsyncTask<Integer, Integer, String> {
-		
+
 		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -352,28 +343,28 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 		private SharedPreferences mSharedPreferences;
 		private Dashboard activityRef;
 		private UtilityBelt utilityBelt = new UtilityBelt();
-		
+
 		public getUsers(Dashboard activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-			
+
 			dialog = ProgressDialog.show(Dashboard.this, "", "Cargando usuarios...", true);
-			
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + "page" + Integer.toString(currentPage[0]) + api_secret);
 
 		}
-		
+
 		@Override
 		protected String doInBackground(Integer... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/users.json?app_key="
 									+ api_key + "&page=" + Integer.toString(currentPage[0]) + "&signature=" + signature);
@@ -392,11 +383,11 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
  
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
 				alert.showAlertDialog(Dashboard.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
@@ -405,9 +396,9 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 				dialog.dismiss();
 
 			}
-			
+
 		}
-		
+
 	}
 
 

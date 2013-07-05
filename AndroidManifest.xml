@@ -20,11 +20,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.supermanket.supermanket.permission.C2D_MESSAGE" />
-    
+
     <permission
         android:name="com.supermanket.supermanket.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    
     <permission
         android:name="com.supermanket.supermanket.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
@@ -32,7 +31,6 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-    
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -108,21 +106,31 @@
             android:label="@string/title_activity_account"
             android:screenOrientation="portrait" >
         </activity>
-        
+
         <receiver
-            android:name=".GcmBroadcastReceiver"
+            android:name="com.supermanket.supermanket.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
- 
+
                 <category android:name="com.supermanket.supermanket" />
             </intent-filter>
         </receiver>
- 
-        <service android:name=".GCMIntentService" />
-        <meta-data android:value="@string/app_id" android:name="com.facebook.sdk.ApplicationId"/>
-        <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name"></activity>
-        
+
+        <service android:name="com.supermanket.supermanket.GCMIntentService" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.supermanket.supermanket.Devices"
+            android:label="@string/title_activity_devices" >
+        </activity>
     </application>
 
 </manifest>

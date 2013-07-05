@@ -42,7 +42,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 	    		if (currentActivity != null) {
 	    			if ((currentActivity.getClass() == MessageDetail.class)
 	    					&& (Integer.parseInt(intent.getStringExtra("contact_id")) == MessageDetail.getContact())) {
-	    				MessageDetail act = (MessageDetail) currentActivity;
 	    				adapter = MessageDetail.getAdapter();
 	    				list = MessageDetail.getList();
 	    				HashMap<String, String> message = new HashMap<String, String>();
