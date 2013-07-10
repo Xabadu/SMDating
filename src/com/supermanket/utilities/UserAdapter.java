@@ -35,6 +35,7 @@ public class UserAdapter extends BaseAdapter{
 	private JSONArray userImages;
 	public String mThumbsURL[];
 	public String mUsernames[];
+	public String mUserStatus[];
 	public ImageLoader imageLoader;
 	
 	public  UserAdapter(Context c, boolean caption, boolean status, int left, int top, int right, int bottom, int width, int height) {
@@ -70,6 +71,7 @@ public class UserAdapter extends BaseAdapter{
 	    
 	    mUsernames = new String[totalUsers];
 	    mThumbsURL = new String[totalUsers];
+	    mUserStatus = new String[totalUsers];
 	    
 	    for(int i = 0; i < usersInfo.size(); i++) {
 	    	
@@ -81,6 +83,7 @@ public class UserAdapter extends BaseAdapter{
 					userObject = userData.getJSONObject(j);
 					mUsernames[j+(16*i)] = userObject.getString("username");
 		    		mThumbsURL[j+(16*i)] = userObject.getString("avatar_medium");
+		    		mUserStatus[j+(16*i)] = userObject.getString("session_status");
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -130,9 +133,7 @@ public class UserAdapter extends BaseAdapter{
 		imageLoader.DisplayImage(mThumbsURL[position], userImage);
 		 
 		if(userStatus) {
-			Random generator = new Random();
-			int statusValue  = generator.nextInt(4) +1;
-			if(statusValue == 2) {
+			if(!mUserStatus[position].equalsIgnoreCase("inactive")) {
 				ImageView statusIcon = (ImageView) view.findViewById(R.id.dashboardItemStatusImage);
 				statusIcon.setImageResource(R.drawable.ic_status_online);
 				statusIcon.setPadding(4, 2, 0, 0);
@@ -144,7 +145,7 @@ public class UserAdapter extends BaseAdapter{
 		if(imageCaption) {
 			overlay.setVisibility(View.VISIBLE);
 			if(mUsernames[position].length() > 10) {
-				username.setText(mUsernames[position].substring(0, 10) + "...");
+				username.setText(mUsernames[position].substring(0, 9) + "...");
 			} else {
 				username.setText(mUsernames[position]);
 			}

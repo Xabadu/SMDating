@@ -67,7 +67,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(ctx, MessagesList.class), 0);
-		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx)
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setContentTitle("Supermanket")

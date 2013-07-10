@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +42,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.DiscussArrayAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
@@ -53,6 +55,7 @@ public class MessageDetail extends Activity {
 	private static int currentPosition;
 	private Button sendMessageBtn;
 	public EditText messageDetailTextField;
+	ConectivityTools ct;
 	
 	private static SharedPreferences mSharedPreferences;
 	
@@ -62,8 +65,30 @@ public class MessageDetail extends Activity {
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		Intent intent = getIntent();
 		contactId = intent.getIntExtra("id", 0);
-		GetMessages getMessages = new GetMessages(this);
-		getMessages.execute(contactId);
+		ct = new ConectivityTools(getApplicationContext());
+		if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	GetMessages getMessages = new GetMessages(this);
+    		getMessages.execute(contactId);
+        }
+		
 	}
 	
 	public void showMessages(String data) {
@@ -112,8 +137,29 @@ public class MessageDetail extends Activity {
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		if(!messageDetailTextField.getText().toString().equalsIgnoreCase("")) {
-        			SendMessage message = new SendMessage(MessageDetail.this);
-        			message.execute(Integer.toString(intent.getIntExtra("id", 0)));
+        			if (!ct.isConnectingToInternet()) {
+        				AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
+        				builder.setTitle(R.string.alert_attention_title);
+        				builder.setMessage(R.string.alert_internet);
+        				builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+        	    			@Override
+        	    			public void onClick(DialogInterface dialog, int id) {
+        	    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        	    				startActivity(intent);
+        	    			}
+        	    		});
+        				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+        					@Override
+        					public void onClick(DialogInterface dialog, int id) {
+        					}
+        				});
+        				AlertDialog alert = builder.create();
+        				alert.show();
+        	        } else {
+        	        	SendMessage message = new SendMessage(MessageDetail.this);
+            			message.execute(Integer.toString(intent.getIntExtra("id", 0)));
+        	        }
+        			
         		}
         	}
         });

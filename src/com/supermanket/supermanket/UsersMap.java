@@ -29,6 +29,7 @@ import android.graphics.Canvas;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.DisplayMetrics;
@@ -62,6 +63,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.PopupAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
@@ -84,6 +86,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	GetNearUsers getNearUsers;
 	ImageLoader imageLoader = ImageLoader.getInstance();
 	JSONArray otherUsersArray = null;
+	ConectivityTools ct;
 	
 	private static SharedPreferences mSharedPreferences;
 
@@ -91,9 +94,31 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+		ct = new ConectivityTools(getApplicationContext());
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
 		ImageLoader.getInstance().init(config);
-		mLocationClient = new LocationClient(this, this, this);
+		if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(UsersMap.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	mLocationClient = new LocationClient(this, this, this);
+        }
+		
 	}
 	
 	public void loadMap(String result) {
@@ -235,8 +260,29 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	public void onConnected(Bundle arg0) {
 		if(map == null) {
 			mCurrentLocation = mLocationClient.getLastLocation();
-			userData = new UserData(this);
-			userData.execute();	
+			if (!ct.isConnectingToInternet()) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(UsersMap.this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_internet);
+				builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+	    				startActivity(intent);
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+	        } else {
+	        	userData = new UserData(this);
+				userData.execute();
+	        }
+				
 		}
 	}
 	

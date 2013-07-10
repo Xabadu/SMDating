@@ -22,6 +22,7 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -41,6 +42,7 @@ import com.jess.ui.TwoWayAdapterView;
 import com.jess.ui.TwoWayAdapterView.OnItemClickListener;
 import com.jess.ui.TwoWayGridView;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ImageLoader;
 import com.supermanket.utilities.PictureAdapter;
 import com.supermanket.utilities.UtilityBelt;
@@ -120,6 +122,7 @@ public class UserProfile extends Activity {
 	TextView userProfileFetishesText;
 	
 	private static SharedPreferences mSharedPreferences;
+	ConectivityTools ct;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +133,31 @@ public class UserProfile extends Activity {
 		
 		Intent intent = getIntent();
 		int userId = intent.getIntExtra("id", 0);
-		
+		ct = new ConectivityTools(getApplicationContext());
 		currentUser[0] = userId;
-        userInfo = new UserInfo(this);
-        userInfo.execute(currentUser);
+		if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	userInfo = new UserInfo(this);
+            userInfo.execute(currentUser);
+        }
+        
 		
 	}
 
@@ -223,13 +247,34 @@ public class UserProfile extends Activity {
 				} else {
 					userProfileUnblockInfoBtn.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
-							UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
-							try {
-								unblockInfo.execute(resultObject.getInt("id"));
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							if (!ct.isConnectingToInternet()) {
+								AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+								builder.setTitle(R.string.alert_attention_title);
+								builder.setMessage(R.string.alert_internet);
+								builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+					    			@Override
+					    			public void onClick(DialogInterface dialog, int id) {
+					    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+					    				startActivity(intent);
+					    			}
+					    		});
+								builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+								AlertDialog alert = builder.create();
+								alert.show();
+					        } else {
+					        	UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
+								try {
+									unblockInfo.execute(resultObject.getInt("id"));
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					        }
+							
 						}
 					});
 				}
@@ -246,12 +291,33 @@ public class UserProfile extends Activity {
 							builder.setPositiveButton(R.string.btn_ofertar, new DialogInterface.OnClickListener() {
 				    			@Override
 				    			public void onClick(DialogInterface dialog, int id) {
-				    				SendOffer sendOffer = new SendOffer();
-									try {
-										sendOffer.execute(resultObject.getInt("id"));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	SendOffer sendOffer = new SendOffer();
+										try {
+											sendOffer.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
 				    			}
 				    		});
 						} else {
@@ -259,12 +325,33 @@ public class UserProfile extends Activity {
 							builder.setPositiveButton(R.string.btn_buy, new DialogInterface.OnClickListener() {
 				    			@Override
 				    			public void onClick(DialogInterface dialog, int id) {
-				    				BuyProduct buyProduct = new BuyProduct();
-									try {
-										buyProduct.execute(resultObject.getInt("id"));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	BuyProduct buyProduct = new BuyProduct();
+										try {
+											buyProduct.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
 				    			}
 				    		});
 						}
@@ -294,12 +381,33 @@ public class UserProfile extends Activity {
 							builder.setPositiveButton(R.string.btn_continue_text, new DialogInterface.OnClickListener() {
 				    			@Override
 				    			public void onClick(DialogInterface dialog, int id) {
-				    				SendOffer sendOffer = new SendOffer();
-									try {
-										sendOffer.execute(resultObject.getInt("id"));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	SendOffer sendOffer = new SendOffer();
+										try {
+											sendOffer.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
 				    			}
 				    		});
 							AlertDialog alert = builder.create();
@@ -316,12 +424,33 @@ public class UserProfile extends Activity {
 							builder.setPositiveButton(R.string.btn_continue_text, new DialogInterface.OnClickListener() {
 				    			@Override
 				    			public void onClick(DialogInterface dialog, int id) {
-				    				BuyProduct buyProduct = new BuyProduct();
-									try {
-										buyProduct.execute(resultObject.getInt("id"));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	BuyProduct buyProduct = new BuyProduct();
+										try {
+											buyProduct.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
 				    			}
 				    		});
 							AlertDialog alert = builder.create();

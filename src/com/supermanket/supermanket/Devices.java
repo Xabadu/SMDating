@@ -34,13 +34,19 @@ public class Devices extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_devices);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-		if(mSharedPreferences.getString("OLD_REG_ID", "").equalsIgnoreCase("")) {
-			RegisterDevice registerDevice = new RegisterDevice();
-			registerDevice.execute(mSharedPreferences.getString("registration_id", ""));
+		if(!mSharedPreferences.getString("registration_id", "").equals("")) {
+			if(mSharedPreferences.getString("OLD_REG_ID", "").equalsIgnoreCase("")) {
+				RegisterDevice registerDevice = new RegisterDevice();
+				registerDevice.execute(mSharedPreferences.getString("registration_id", ""));
+			} else {
+				UpdateDevice updateDevice = new UpdateDevice();
+				updateDevice.execute(mSharedPreferences.getString("OLD_REG_ID", ""), mSharedPreferences.getString("registration_id", ""));
+			}
 		} else {
-			UpdateDevice updateDevice = new UpdateDevice();
-			updateDevice.execute(mSharedPreferences.getString("OLD_REG_ID", ""), mSharedPreferences.getString("registration_id", ""));
+			Intent intent = new Intent(this, Dashboard.class);
+			startActivity(intent);
 		}
+		
 	}
 	
 	private class RegisterDevice extends AsyncTask<String, Void, String> {
@@ -113,12 +119,14 @@ public class Devices extends Activity {
             
             try {
             	HttpResponse resp = client.execute(post);
-				return EntityUtils.toString(resp.getEntity());
+            	/*if(resp != null) {
+            		return EntityUtils.toString(resp.getEntity());
+            	} else {
+            		return "Yeas";
+            	}*/
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
  
@@ -129,10 +137,10 @@ public class Devices extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 
-			Log.d("Resultado registro", result);
-			dialog.dismiss();
+			
 			Intent intent = new Intent(Devices.this, Dashboard.class);
 			startActivity(intent);
+			dialog.dismiss();
 			Devices.this.finish();
 
 		}
@@ -208,7 +216,11 @@ public class Devices extends Activity {
             
             try {
             	HttpResponse resp = client.execute(post);
-				return EntityUtils.toString(resp.getEntity());
+				/*if(resp != null) {
+					return EntityUtils.toString(resp.getEntity());
+				} else {
+					return "Yeas";
+				}*/
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -224,7 +236,6 @@ public class Devices extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 
-			Log.d("Resultado actualizacion", result);
 			Intent intent = new Intent(Devices.this, Dashboard.class);
 			startActivity(intent);
 			dialog.dismiss();

@@ -853,5 +853,6 @@
     <string name="alert_logout">¿Quieres salir de Supermanket?</string>
     <string name="btn_logout">Salir</string>
     <string name="title_activity_devices">Devices</string>
-
+	<string name="alert_internet">Tu dispositivo no está conectado a Internet en estos momentos. ¿Quieres revisar tus ajustes?</string>
+	<string name="btn_settings">Ir a Ajustes</string>
 </resources>

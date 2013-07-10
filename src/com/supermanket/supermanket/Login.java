@@ -26,11 +26,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -40,6 +42,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -129,34 +132,61 @@ public class Login extends Activity {
 
 		ct = new ConectivityTools(getApplicationContext());
 
-        if (!ct.isConnectingToInternet()) {
-            alert.showAlertDialog(Login.this, "Error de Conexión",
-                    "Esta aplicación necesita una conexión a Internet para funcionar.", false);
-            return;
-        }
+        
 
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+		
+		regid = getRegistrationId(this);
 		
 		if(!isLoggedInAlready()) {
 			loginScreen();
 		} else {
-			Intent intent = new Intent(this, Dashboard.class);
-			startActivity(intent);
+			if(regid.length() == 0) {
+				registerDevice(null);
+			} else {
+				Intent intent = new Intent(this, Dashboard.class);
+				startActivity(intent);
+			}
 		}
 
 	}
 	
-	private void registerDevice() {
+	private void registerDevice(ProgressDialog dialog) {
 		context = getApplicationContext();
 		regid = getRegistrationId(context);
 
 		if(regid.length() == 0) {
-			registerBackground();
+			if (!ct.isConnectingToInternet()) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_internet);
+				builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+	    				startActivity(intent);
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+	        } else {
+	        	registerBackground(dialog);
+	        }
+			
 		} else {
 			gcm = GoogleCloudMessaging.getInstance(this);
 			Intent intent = new Intent(this, Dashboard.class);
 			startActivity(intent);
+			if(dialog.isShowing()) {
+				dialog.dismiss();
+			}
 		}
+		gcm = GoogleCloudMessaging.getInstance(this);
 	}
 
 	private String getRegistrationId(Context context) {
@@ -189,7 +219,7 @@ public class Login extends Activity {
 		return System.currentTimeMillis() > expirationTime;
 	}
 
-	private void registerBackground() {
+	private void registerBackground(final ProgressDialog dialog) {
 		new AsyncTask<Void, Void, String>() {
 			@Override
 			protected String doInBackground(Void... params) {
@@ -212,6 +242,11 @@ public class Login extends Activity {
 				Log.v("ID", msg);
 				Intent intent = new Intent(Login.this, Devices.class);
 				startActivity(intent);
+				if(dialog != null) {
+					if(dialog.isShowing()) {
+						dialog.dismiss();
+					}
+				}
 			}
 		}.execute();
 	}
@@ -306,7 +341,28 @@ public class Login extends Activity {
 					alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar tus datos.", false);
 				} else {
 					if(isEmailValid(loginFormEmailField.getText().toString())) {
-						new LoginSupermanket(Login.this).execute();
+						if (!ct.isConnectingToInternet()) {
+							AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+							builder.setTitle(R.string.alert_attention_title);
+							builder.setMessage(R.string.alert_internet);
+							builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+				    				startActivity(intent);
+				    			}
+				    		});
+							builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int id) {
+								}
+							});
+							AlertDialog alert = builder.create();
+							alert.show();
+				        } else {
+				        	new LoginSupermanket(Login.this).execute();
+				        }
+						
 					} else {
 						alert.showAlertDialog(Login.this, "Oh noes!", "Email no válido", false);
 					}
@@ -324,8 +380,29 @@ public class Login extends Activity {
     	
     	btnFacebookLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				pDialog = ProgressDialog.show(Login.this, "", "Cargando...", true);
-				loginFacebook();
+				if (!ct.isConnectingToInternet()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+					builder.setTitle(R.string.alert_attention_title);
+					builder.setMessage(R.string.alert_internet);
+					builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+		    			@Override
+		    			public void onClick(DialogInterface dialog, int id) {
+		    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+		    				startActivity(intent);
+		    			}
+		    		});
+					builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+					AlertDialog alert = builder.create();
+					alert.show();
+		        } else {
+		        	pDialog = ProgressDialog.show(Login.this, "", "Cargando...", true);
+					loginFacebook();
+		        }
+				
 			}
 	    });
 
@@ -369,7 +446,28 @@ public class Login extends Activity {
 						alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar un correo válido.", false);
 					} else {
 						if(registerFormPasswordField.getText().toString().equals(registerFormConfirmPasswordField.getText().toString())) {
-							new RegisterUser(Login.this).execute();
+							if (!ct.isConnectingToInternet()) {
+								AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+								builder.setTitle(R.string.alert_attention_title);
+								builder.setMessage(R.string.alert_internet);
+								builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+					    			@Override
+					    			public void onClick(DialogInterface dialog, int id) {
+					    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+					    				startActivity(intent);
+					    			}
+					    		});
+								builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+								AlertDialog alert = builder.create();
+								alert.show();
+					        } else {
+					        	new RegisterUser(Login.this).execute();
+					        }
+							
 						} else {
 							alert.showAlertDialog(Login.this, "Oh noes!", "Las contraseñas no coinciden.", false);
 						}
@@ -388,6 +486,7 @@ public class Login extends Activity {
 
 	public void loginFacebook() {
 
+		
 		openActiveSession(Login.this, true, new Session.StatusCallback() {
 
 			@Override
@@ -404,8 +503,29 @@ public class Login extends Activity {
 								if(pDialog != null && pDialog.isShowing()) {
 									pDialog.dismiss();
 								}
-								LoginFb loginFb = new LoginFb(Login.this);
-								loginFb.execute(sesion.getAccessToken());
+								if (!ct.isConnectingToInternet()) {
+									AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+									builder.setTitle(R.string.alert_attention_title);
+									builder.setMessage(R.string.alert_internet);
+									builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+						    			@Override
+						    			public void onClick(DialogInterface dialog, int id) {
+						    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+						    				startActivity(intent);
+						    			}
+						    		});
+									builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int id) {
+										}
+									});
+									AlertDialog alert = builder.create();
+									alert.show();
+						        } else {
+						        	LoginFb loginFb = new LoginFb(Login.this);
+									loginFb.execute(sesion.getAccessToken());
+						        }
+								
 							} 
 						}
 					});
@@ -577,8 +697,8 @@ public class Login extends Activity {
 		            e.putString("API_SECRET", status.getString("api_secret"));
 		            e.commit();
 
-		            activityRef.registerDevice();
-		            dialog.dismiss();
+		            activityRef.registerDevice(dialog);
+		            //dialog.dismiss();
 
 				} catch (JSONException e1) {
 					JSONObject response;
@@ -591,9 +711,10 @@ public class Login extends Activity {
 						e.printStackTrace();
 					}
 					e1.printStackTrace();
+					dialog.dismiss();
 				}
 
-				dialog.dismiss();
+				
 
 			}
 
@@ -680,8 +801,7 @@ public class Login extends Activity {
 		            e.putString("API_SECRET", status.getString("api_secret"));
 		            e.commit();
 
-		            activityRef.registerDevice();
-		            dialog.dismiss();
+		            activityRef.registerDevice(dialog);
 
 				} catch (JSONException e1) {
 					JSONObject response;
@@ -694,9 +814,10 @@ public class Login extends Activity {
 						e.printStackTrace();
 					}
 					e1.printStackTrace();
+					dialog.dismiss();
 				}
 
-				dialog.dismiss();
+				
 
 			}
 
@@ -815,8 +936,7 @@ public class Login extends Activity {
 		            e.putString("API_SECRET", response.getString("api_secret"));
 		            e.commit();
 
-		            activityRef.registerDevice();
-		            dialog.dismiss();
+		            activityRef.registerDevice(dialog);
 
 				} catch (JSONException e1) {
 					JSONObject response;
@@ -847,9 +967,10 @@ public class Login extends Activity {
 						e.printStackTrace();
 					}
 					e1.printStackTrace();
+					dialog.dismiss();
 				}
 
-				dialog.dismiss();
+				
 
 			}
 

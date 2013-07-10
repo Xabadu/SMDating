@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ISideNavigationCallback;
 import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.SideNavigationView.Mode;
@@ -62,6 +64,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 
     Button dashboardNearByUsersBtn;
     RelativeLayout dashboardBottomLayout;
+    ConectivityTools ct;
     
     getUsers users;
 
@@ -106,8 +109,32 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         currentPage[0] = 1;
-        users = new getUsers(this);
-        users.execute(currentPage);
+        
+        ct = new ConectivityTools(getApplicationContext());
+        
+        if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	users = new getUsers(this);
+            users.execute(currentPage);
+        }
+        
         
     }
     
@@ -147,18 +174,62 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 		// Set a listener to be invoked when the list should be refreshed.
 		mPullRefreshGridView.setOnRefreshListener(new OnRefreshListener2<GridView>() {
 
+			
+			
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
 				usersContainer = new ArrayList<JSONArray>();
 				currentPage[0] = 1;
-		        users = new getUsers(Dashboard.this);
-		        users.execute(currentPage);
+				if (!ct.isConnectingToInternet()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+					builder.setTitle(R.string.alert_attention_title);
+					builder.setMessage(R.string.alert_internet);
+					builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+		    			@Override
+		    			public void onClick(DialogInterface dialog, int id) {
+		    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+		    				startActivity(intent);
+		    			}
+		    		});
+					builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+					AlertDialog alert = builder.create();
+					alert.show();
+		        } else {
+		        	users = new getUsers(Dashboard.this);
+			        users.execute(currentPage);
+		        }
+		        
 			}
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
-				users = new getUsers(Dashboard.this);
-		        users.execute(currentPage);
+				if (!ct.isConnectingToInternet()) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(Dashboard.this);
+					builder.setTitle(R.string.alert_attention_title);
+					builder.setMessage(R.string.alert_internet);
+					builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+		    			@Override
+		    			public void onClick(DialogInterface dialog, int id) {
+		    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+		    				startActivity(intent);
+		    			}
+		    		});
+					builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+						}
+					});
+					AlertDialog alert = builder.create();
+					alert.show();
+		        } else {
+		        	users = new getUsers(Dashboard.this);
+			        users.execute(currentPage);
+		        }
+				
 			}
 
 		});
@@ -217,12 +288,20 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
    	}
    	
    	@Override
-       protected void onPause() {
-           synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
-           	GcmBroadcastReceiver.currentActivity = null;
-           }
-           super.onPause();
-       }
+    protected void onPause() {
+   		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+   			GcmBroadcastReceiver.currentActivity = null;
+        }
+        super.onPause();
+    }
+   	
+   	@Override
+   	protected void onRestart() {
+   		super.onRestart();
+   		currentPage[0] = 1;
+   		getUsers users = new getUsers(this);
+        users.execute(currentPage);
+   	}
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -392,6 +471,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 				alert.showAlertDialog(Dashboard.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
+				Log.d("Resultado", result);
 				activityRef.fillGrid(result, currentPage[0]);
 				dialog.dismiss();
 

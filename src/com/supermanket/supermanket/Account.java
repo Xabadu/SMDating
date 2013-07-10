@@ -27,6 +27,7 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,6 +55,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.supermanket.supermanket.Login.ErrorDialogFragment;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ISideNavigationCallback;
 import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.UtilityBelt;
@@ -159,6 +161,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	String[] localBday = new String[3];
 	String imagesList;
 	ProgressDialog pDialog;
+	ConectivityTools ct;
 	
 	UserData userData;
 	
@@ -185,6 +188,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	    accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);
 	    accountLayout.setVisibility(View.INVISIBLE);
 	    
+	    ct = new ConectivityTools(getApplicationContext());
+	    
 	    if (getIntent().hasExtra(EXTRA_TITLE)) {
 	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
 	        setTitle(title);
@@ -193,8 +198,29 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
 		ImageLoader.getInstance().init(config);
-		userData = new UserData(this);
-		userData.execute();
+		if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	userData = new UserData(this);
+    		userData.execute();
+        }
+		
 	}
 	
 	public void loadProfile(final String[] result) {
@@ -416,8 +442,29 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("personal");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("personal");
+						account.execute();
+			        }
+					
 				}
 			});
 			
@@ -446,8 +493,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("about");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("about");
+						account.execute();
+			        }
 				}
 			});
 
@@ -551,8 +618,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("nutritional");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("nutritional");
+						account.execute();
+			        }
 				}
 			});
 			
@@ -611,8 +698,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("packages");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("packages");
+						account.execute();
+			        }
 				}
 			});
 			
@@ -641,8 +748,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("bonuspack");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("bonuspack");
+						account.execute();
+			        }
 				}
 			});
 			
@@ -742,8 +869,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("accessories");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("accessories");
+						account.execute();
+			        }
 				}
 			});
 
@@ -813,8 +960,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("effects");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("effects");
+						account.execute();
+			        }
 				}
 			});
 			
@@ -844,8 +1011,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					UpdateAccount account = new UpdateAccount("info");
-					account.execute();
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(Account.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	UpdateAccount account = new UpdateAccount("info");
+						account.execute();
+			        }
 				}
 			});
 			

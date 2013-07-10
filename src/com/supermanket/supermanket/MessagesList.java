@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ISideNavigationCallback;
 import com.supermanket.utilities.MessageAdapter;
 import com.supermanket.utilities.SideNavigationView;
@@ -53,6 +55,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	MessageAdapter adapter;
 	ListView list;
 	JSONArray contactsList;
+	ConectivityTools ct;
 	
 	private Integer[] ids;
 	private static SharedPreferences mSharedPreferences;
@@ -85,9 +88,30 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	        }
 
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	        ct = new ConectivityTools(getApplicationContext());
+	        if (!ct.isConnectingToInternet()) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MessagesList.this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_internet);
+				builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+	    				startActivity(intent);
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+	        } else {
+	        	GetContacts contacts = new GetContacts(this);
+		        contacts.execute();
+	        }
 	        
-	        GetContacts contacts = new GetContacts(this);
-	        contacts.execute();
 		}
 		
       	

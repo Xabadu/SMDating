@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -49,6 +50,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.GalleryAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
@@ -66,6 +68,7 @@ public class UserImageGallery extends Activity {
 	private Bitmap bitmap;
 	Uri imageUri;
 	MediaPlayer mp = new MediaPlayer();
+	ConectivityTools ct;
 	
 	private static SharedPreferences mSharedPreferences;
 	
@@ -73,6 +76,7 @@ public class UserImageGallery extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+		ct = new ConectivityTools(getApplicationContext());
 		Intent intent = getIntent();
 		loadGallery(intent.getStringExtra("from"), intent.getStringExtra("images"));
 	}
@@ -164,8 +168,29 @@ public class UserImageGallery extends Activity {
 				try {
 					JSONObject data = userImages.getJSONObject(viewPager.getCurrentItem());
 					ids[0] = data.getInt("id");
-					SetAvatar setAvatar = new SetAvatar();
-					setAvatar.execute(ids);
+					if (!ct.isConnectingToInternet()) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserImageGallery.this);
+						builder.setTitle(R.string.alert_attention_title);
+						builder.setMessage(R.string.alert_internet);
+						builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+			    				startActivity(intent);
+			    			}
+			    		});
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+			        } else {
+			        	SetAvatar setAvatar = new SetAvatar();
+						setAvatar.execute(ids);
+			        }
+					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -185,8 +210,29 @@ public class UserImageGallery extends Activity {
 						try {
 							JSONObject data = userImages.getJSONObject(viewPager.getCurrentItem());
 							ids[0] = data.getInt("id");
-							DeleteImage deleteImage = new DeleteImage(UserImageGallery.this);
-							deleteImage.execute(ids);
+							if (!ct.isConnectingToInternet()) {
+								AlertDialog.Builder builder = new AlertDialog.Builder(UserImageGallery.this);
+								builder.setTitle(R.string.alert_attention_title);
+								builder.setMessage(R.string.alert_internet);
+								builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+					    			@Override
+					    			public void onClick(DialogInterface dialog, int id) {
+					    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+					    				startActivity(intent);
+					    			}
+					    		});
+								builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+								AlertDialog alert = builder.create();
+								alert.show();
+					        } else {
+					        	DeleteImage deleteImage = new DeleteImage(UserImageGallery.this);
+								deleteImage.execute(ids);
+					        }
+							
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -307,8 +353,29 @@ public class UserImageGallery extends Activity {
 		o2.inSampleSize = scale;
 		bitmap = BitmapFactory.decodeFile(filePath, o2);
 		if(bitmap != null) {
-			ImageUpload imageUpload = new ImageUpload(this);
-			imageUpload.execute();
+			if (!ct.isConnectingToInternet()) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(UserImageGallery.this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_internet);
+				builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+	    				startActivity(intent);
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+	        } else {
+	        	ImageUpload imageUpload = new ImageUpload(this);
+				imageUpload.execute();
+	        }
+			
 		} else {
 			if(filePath.contains("http://") || filePath.contains("https://")) {
 				Toast.makeText(this, "Solo puedes subir imágenes almacenadas en tu teléfono", Toast.LENGTH_LONG).show();
