@@ -28,6 +28,8 @@ import com.supermanket.utilities.UtilityBelt;
 public class Devices extends Activity {
 	
 	SharedPreferences mSharedPreferences;
+	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class Devices extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/devices.json?app_key="
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "devices.json?app_key="
 					+ api_key + "&page=" + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
             
@@ -175,7 +177,7 @@ public class Devices extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/devices/" + params[0] + ".json?app_key="
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "devices/" + params[0] + ".json?app_key="
 					+ api_key + "&page=" + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
             

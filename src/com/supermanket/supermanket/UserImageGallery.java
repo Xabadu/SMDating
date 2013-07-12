@@ -72,6 +72,8 @@ public class UserImageGallery extends Activity {
 	
 	private static SharedPreferences mSharedPreferences;
 	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -462,7 +464,7 @@ public class UserImageGallery extends Activity {
 			
 			HttpClient client = new DefaultHttpClient();
 			HttpContext localContext = new BasicHttpContext();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "photos.json?app_key="
 									+ api_key + "&signature=" + signature);
             
 			MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -523,7 +525,7 @@ public class UserImageGallery extends Activity {
 		@Override
 		protected String doInBackground(Integer... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/photos/" + Integer.toString(params[0]) + "" +
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "photos/" + Integer.toString(params[0]) + "" +
 					"/set_profile.json?app_key=" + api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
             
@@ -583,7 +585,7 @@ public class UserImageGallery extends Activity {
 		@Override
 		protected String doInBackground(Integer... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpDelete delete = new HttpDelete("http://demosmartphone.supermanket.cl/apim/photos/" + Integer.toString(params[0]) + "" +
+			HttpDelete delete = new HttpDelete(SERVICE_BASE_URL + "photos/" + Integer.toString(params[0]) + "" +
 					".json?app_key=" + api_key + "&signature=" + signature);
             delete.setHeader("content-type", "application/json");
             

@@ -18,8 +18,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.widget.ImageView;
 
+import com.actionbarsherlock.R.color;
 import com.supermanket.supermanket.R;
 
 public class ImageLoader {
@@ -34,7 +36,7 @@ public class ImageLoader {
 		executorService = Executors.newFixedThreadPool(5);
 	}
 	
-	final int stub_id = R.drawable.no_image;
+	final int stub_id = R.drawable.ic_content_picture;
 	
 	public void DisplayImage(String url, ImageView imageView) {
 		imageViews.put(imageView, url);
@@ -44,6 +46,7 @@ public class ImageLoader {
 		} else {
 			queuePhoto(url, imageView);
 			imageView.setImageResource(stub_id);
+			imageView.setBackgroundColor(Color.BLACK);
 		}
 	}
 	

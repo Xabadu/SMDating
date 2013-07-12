@@ -22,6 +22,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,6 +68,8 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     ConectivityTools ct;
     
     getUsers users;
+    
+    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +160,38 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     	mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.dashboardUsersGrid);
     	
 		mGridView = mPullRefreshGridView.getRefreshableView();
-		uAdapter = new UserAdapter(Dashboard.this, true, true, 4, 0, 4, 0, 95, 95, usersContainer);
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+		int width = 0;
+		int height = 0;
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 width = 71;
+				 height = 71;
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 width = 95;
+				 height = 95;
+				 break;
+			
+			case DisplayMetrics.DENSITY_HIGH:
+				 width = 142;
+				 height = 142;
+				 break;
+			
+			case DisplayMetrics.DENSITY_XHIGH:
+				 width = 190;
+				 height = 190;
+				 break;
+		}
+		
+		uAdapter = new UserAdapter(Dashboard.this, true, true, 4, 0, 4, 0, width, height, usersContainer);
 		mGridView.setAdapter(uAdapter);
 
 		uAdapter.notifyDataSetChanged();
@@ -298,6 +332,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
    	@Override
    	protected void onRestart() {
    		super.onRestart();
+   		usersContainer.clear();
    		currentPage[0] = 1;
    		getUsers users = new getUsers(this);
         users.execute(currentPage);
@@ -350,19 +385,19 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     public void onSideNavigationItemClick(int itemId) {
         switch (itemId) {
             case R.id.side_navigation_menu_item1:
-                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_android1);
+                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_social_group);
                 break;
 
             case R.id.side_navigation_menu_item2:
-                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_android2);
+                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_location_place);
                 break;
 
             case R.id.side_navigation_menu_item3:
-                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_android3);
+                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_content_email);
                 break;
 
             case R.id.side_navigation_menu_item4:
-                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
+                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
 
             default:
@@ -445,7 +480,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 		protected String doInBackground(Integer... params) {
 
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/users.json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "users.json?app_key="
 									+ api_key + "&page=" + Integer.toString(currentPage[0]) + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             

@@ -7,7 +7,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Login" >
-
+	<LinearLayout
+    	android:focusable="true" android:focusableInTouchMode="true"
+   		android:layout_width="0px" android:layout_height="0px"/>
     <EditText
         android:id="@+id/loginEmailField"
         style="@style/PinkEditText"

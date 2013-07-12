@@ -60,6 +60,8 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	private Integer[] ids;
 	private static SharedPreferences mSharedPreferences;
 	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -228,19 +230,19 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
     public void onSideNavigationItemClick(int itemId) {
         switch (itemId) {
             case R.id.side_navigation_menu_item1:
-                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_android1);
+                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_social_group);
                 break;
 
             case R.id.side_navigation_menu_item2:
-                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_android2);
+                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_location_place);
                 break;
 
             case R.id.side_navigation_menu_item3:
-                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_android3);
+                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_content_email);
                 break;
 
             case R.id.side_navigation_menu_item4:
-                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
+                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
 
             default:
@@ -321,7 +323,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		@Override 
 		protected String[] doInBackground(Void... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/contacts.json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contacts.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -334,7 +336,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				e.printStackTrace();
 			}
             
-			get = new HttpGet("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
+			get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             

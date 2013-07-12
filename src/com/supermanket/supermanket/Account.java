@@ -28,6 +28,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -166,6 +167,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	UserData userData;
 	
 	private static SharedPreferences mSharedPreferences;
+	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -288,8 +291,39 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			public void onLoadingStarted(String arg0, View arg1) {
 			}
 	    });
-		accountUserAvatar.getLayoutParams().height = 150;
-		accountUserAvatar.getLayoutParams().width = 150;
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+		int avatarWidth = 0;
+		int avatarHeight = 0;
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 avatarWidth = 113;
+				 avatarHeight = 113;
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 avatarWidth = 150;
+				 avatarHeight = 150;
+				 break;
+			
+			case DisplayMetrics.DENSITY_HIGH:
+				 avatarWidth = 225;
+				 avatarHeight = 225;
+				 break;
+			
+			case DisplayMetrics.DENSITY_XHIGH:
+				 avatarWidth = 300;
+				 avatarHeight = 300;
+				 break;
+		}
+		
+		accountUserAvatar.getLayoutParams().height = avatarWidth;
+		accountUserAvatar.getLayoutParams().width = avatarHeight;
 		accountUserAvatar.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		accountUserAvatar.setVisibility(View.VISIBLE);
 		
@@ -1113,19 +1147,19 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     public void onSideNavigationItemClick(int itemId) {
         switch (itemId) {
             case R.id.side_navigation_menu_item1:
-                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_android1);
+                invokeActivity(getString(R.string.menu_title1), R.drawable.ic_social_group);
                 break;
 
             case R.id.side_navigation_menu_item2:
-                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_android2);
+                invokeActivity(getString(R.string.menu_title2), R.drawable.ic_location_place);
                 break;
 
             case R.id.side_navigation_menu_item3:
-                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_android3);
+                invokeActivity(getString(R.string.menu_title3), R.drawable.ic_content_email);
                 break;
 
             case R.id.side_navigation_menu_item4:
-                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_android4);
+                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
 
             default:
@@ -1234,8 +1268,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		protected String[] doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
-									+ api_key + "&signature=" + signature);
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
             try {
@@ -1247,7 +1280,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
             
-			HttpGet getImages = new HttpGet("http://demosmartphone.supermanket.cl/apim/photos.json?app_key="
+			HttpGet getImages = new HttpGet(SERVICE_BASE_URL + "photos.json?app_key="
 									+ api_key + "&signature=" + signature);
             getImages.setHeader("content-type", "application/json");
             
@@ -1271,8 +1304,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
 			} else {
-				Log.d("Datos", result[0]);
-				Log.d("Images", result[1]);
 				activityRef.loadProfile(result);
 				dialog.dismiss();
 
@@ -1463,7 +1494,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpPut put = new HttpPut("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
+			HttpPut put = new HttpPut(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             put.setHeader("content-type", "application/json");
             

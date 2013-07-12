@@ -27,6 +27,7 @@ import android.support.v4.app.NavUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -123,6 +124,8 @@ public class UserProfile extends Activity {
 	
 	private static SharedPreferences mSharedPreferences;
 	ConectivityTools ct;
+	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -772,13 +775,54 @@ public class UserProfile extends Activity {
 		
 		imageLoader = new ImageLoader(this);
 		
-		userProfileUserImage.getLayoutParams().height = 95;
-		userProfileUserImage.getLayoutParams().width = 95;
+		mImageGrid = (TwoWayGridView) findViewById(R.id.userProfileImageGalleryGrid);
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+		int width = 0;
+		int height = 0;
+		int avatarWidth = 0;
+		int avatarHeight = 0;
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 width = 45;
+				 height = 45;
+				 avatarWidth = 71;
+				 avatarHeight = 71;
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 width = 60;
+				 height = 60;
+				 avatarWidth = 95;
+				 avatarHeight = 95;
+				 break;
+			
+			case DisplayMetrics.DENSITY_HIGH:
+				 width = 90;
+				 height = 90;
+				 avatarWidth = 142;
+				 avatarHeight = 142;
+				 break;
+			
+			case DisplayMetrics.DENSITY_XHIGH:
+				 width = 120;
+				 height = 120;
+				 avatarWidth = 190;
+				 avatarHeight = 190;
+				 break;
+		}
+		
+		userProfileUserImage.getLayoutParams().height = avatarHeight;
+		userProfileUserImage.getLayoutParams().width = avatarWidth;
 		userProfileUserImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageLoader.DisplayImage(intent.getStringExtra("pic"), userProfileUserImage);
 		
-		mImageGrid = (TwoWayGridView) findViewById(R.id.userProfileImageGalleryGrid);
-		imageAdapter = new PictureAdapter(this, 0, 0, 0, 0, 60, 60, resultImages);
+		imageAdapter = new PictureAdapter(this, 0, 0, 0, 0, width, height, resultImages);
 		mImageGrid.setAdapter(imageAdapter);
 		
 		mImageGrid.setOnItemClickListener(new OnItemClickListener() {
@@ -886,7 +930,7 @@ public class UserProfile extends Activity {
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/users/" + Integer.toString(currentUser[0]) + ".json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "users/" + Integer.toString(currentUser[0]) + ".json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -953,7 +997,7 @@ public class UserProfile extends Activity {
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/access/unlocked/" + Integer.toString(params[0]) + ".json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "access/unlocked/" + Integer.toString(params[0]) + ".json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -1043,7 +1087,7 @@ public class UserProfile extends Activity {
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/offers/client/" + Integer.toString(params[0]) + ".json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "offers/client/" + Integer.toString(params[0]) + ".json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -1143,7 +1187,7 @@ public class UserProfile extends Activity {
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/orders/product/" + Integer.toString(params[0]) + ".json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "orders/product/" + Integer.toString(params[0]) + ".json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             

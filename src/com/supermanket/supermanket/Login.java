@@ -124,6 +124,8 @@ public class Login extends Activity {
     Context context;
     String regid;
     
+    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+    
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
 	@Override
@@ -314,7 +316,15 @@ public class Login extends Activity {
 
 		setContentView(R.layout.activity_login);
 
-		try {
+		
+
+		btnLogin = (Button) findViewById(R.id.loginLoginBtn);
+    	btnRegister = (Button) findViewById(R.id.loginRegisterBtn);
+    	btnFacebookLogin = (Button) findViewById(R.id.loginFacebookBtn);
+    	loginFormEmailField = (EditText) findViewById(R.id.loginEmailField);
+    	loginFormPasswordField = (EditText) findViewById(R.id.loginPasswordField);
+    	
+    	try {
 		    PackageInfo info = getPackageManager().getPackageInfo(
 		            "com.supermanket.supermanket", 
 		            PackageManager.GET_SIGNATURES);
@@ -328,12 +338,6 @@ public class Login extends Activity {
 		} catch (NoSuchAlgorithmException e) {
 
 		}
-
-		btnLogin = (Button) findViewById(R.id.loginLoginBtn);
-    	btnRegister = (Button) findViewById(R.id.loginRegisterBtn);
-    	btnFacebookLogin = (Button) findViewById(R.id.loginFacebookBtn);
-    	loginFormEmailField = (EditText) findViewById(R.id.loginEmailField);
-    	loginFormPasswordField = (EditText) findViewById(R.id.loginPasswordField);
     	
     	btnLogin.setOnClickListener(new OnClickListener() {
     		public void onClick(View v) {
@@ -634,7 +638,7 @@ public class Login extends Activity {
 		protected String doInBackground(Void... params) {
 
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/session.json");
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "session.json");
             post.setHeader("content-type", "application/json");
             
             JSONObject usuario = new JSONObject();
@@ -740,7 +744,7 @@ public class Login extends Activity {
 		protected String doInBackground(String... params) {
 
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/session/facebook.json");
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "session/facebook.json");
             post.setHeader("content-type", "application/json");
             
             JSONObject usuario = new JSONObject();
@@ -869,7 +873,7 @@ public class Login extends Activity {
 		protected String doInBackground(Void... params) {
 
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/users.json");
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "users.json");
             post.setHeader("content-type", "application/json");
             
             JSONObject usuario = new JSONObject();

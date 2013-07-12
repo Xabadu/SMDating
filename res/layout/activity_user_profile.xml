@@ -12,7 +12,7 @@
         android:id="@+id/userProfileUserImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/green_lantern" />
+        android:src="@drawable/ic_content_picture" />
 
     <TextView
         android:id="@+id/userProfileWeightText"

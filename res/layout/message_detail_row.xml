@@ -18,7 +18,7 @@
             android:id="@+id/messageListUserImage"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/green_lantern" />
+            android:src="@drawable/ic_content_picture" />
  
     </LinearLayout>
  

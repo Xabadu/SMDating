@@ -59,6 +59,8 @@ public class MessageDetail extends Activity {
 	
 	private static SharedPreferences mSharedPreferences;
 	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -271,7 +273,7 @@ public class MessageDetail extends Activity {
 		protected String doInBackground(Integer... params) {
 			
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/contact/" + Integer.toString(params[0]) + "/messages.json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contact/" + Integer.toString(params[0]) + "/messages.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -348,7 +350,7 @@ public class MessageDetail extends Activity {
     	protected String doInBackground(String... params) {
     		
     		HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/contact/" + params[0] + "/messages.json?app_key="
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contact/" + params[0] + "/messages.json?app_key="
 									+ api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
             

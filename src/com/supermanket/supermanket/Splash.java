@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 
 public class Splash extends Activity {
 
-private final int SPLASH_DISPLAY_LENGTH = 3000;
+private final int SPLASH_DISPLAY_LENGTH = 1000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

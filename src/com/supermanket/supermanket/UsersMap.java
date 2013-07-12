@@ -89,6 +89,8 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	ConectivityTools ct;
 	
 	private static SharedPreferences mSharedPreferences;
+	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -362,7 +364,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/profile.json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -425,7 +427,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		protected String doInBackground(Double... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost("http://demosmartphone.supermanket.cl/apim/point.json?app_key="
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "point.json?app_key="
 									+ api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
             
@@ -512,7 +514,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			signature = utilityBelt.md5("app_key" + api_key + "page1" + api_secret);
 			radius = params[2].intValue();
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/near_people/"
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "near_people/"
 									+ Double.toString(params[0]) + "/" + Double.toString(params[1]) + 
 									"/" + Integer.toString(radius) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
             get.setHeader("content-type", "application/json");
