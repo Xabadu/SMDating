@@ -13,18 +13,36 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/usersMapSeekBar"
+        android:layout_above="@+id/mapDistanceBtns"
         class="com.google.android.gms.maps.SupportMapFragment" />
+    
+    <LinearLayout
+              android:id="@+id/mapDistanceBtns"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true" >
 
-    <SeekBar
-        android:id="@+id/usersMapSeekBar"
-        style="@style/PinkSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/usersMapMap"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="10dp" />
+              <Button
+                  android:id="@+id/mapDistance100Btn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="@string/lbl_100_mts" />
+
+              <Button
+                  android:id="@+id/mapDistance1000Btn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="@string/lbl_1000_mts" />
+
+              <Button
+                  android:id="@+id/mapDistance3000btn"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:text="@string/lbl_3000_mts" />
+          </LinearLayout>
     
     <com.supermanket.utilities.SideNavigationView
         android:id="@+id/side_navigation_view"

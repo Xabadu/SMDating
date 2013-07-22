@@ -7,6 +7,7 @@ import com.supermanket.supermanket.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,9 @@ public class MessageAdapter extends BaseAdapter {
  
         userName.setText(message.get("name"));
         lastMessage.setText(message.get("message"));
+        if(message.get("read").equalsIgnoreCase("false")) {
+        	lastMessage.setTypeface(null, Typeface.BOLD);
+        }
         messageDate.setText(message.get("date"));
         imageLoader.DisplayImage(message.get("image"), userImage);
         

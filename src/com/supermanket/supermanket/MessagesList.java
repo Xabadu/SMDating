@@ -134,6 +134,11 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 						JSONObject lastMessage = messageList.getJSONObject(messageList.length() - 1);
 						contact.put("message", lastMessage.getString("content"));
 						contact.put("date", lastMessage.getString("created_at"));
+						if(lastMessage.getBoolean("read")) {
+							contact.put("read", "true");
+						} else {
+							contact.put("read", "false");
+						}
 					} else {
 						contact.put("message", "");
 						contact.put("date", "");
@@ -323,7 +328,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		@Override 
 		protected String[] doInBackground(Void... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contacts.json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contacts.json?app_key=" 
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             

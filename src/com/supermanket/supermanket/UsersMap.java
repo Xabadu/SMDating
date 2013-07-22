@@ -2,7 +2,6 @@ package com.supermanket.supermanket;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -38,7 +37,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -50,7 +51,6 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -76,7 +76,6 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	private GoogleMap map;
 	private Marker customMarker;
 	private LatLng CURRENT_POSITION;
-	private SeekBar radiusBar;
 	private UiSettings mapSettings;
 	private AlertDialogs aDialog = new AlertDialogs();
 	private LocationClient mLocationClient;
@@ -87,6 +86,10 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	ImageLoader imageLoader = ImageLoader.getInstance();
 	JSONArray otherUsersArray = null;
 	ConectivityTools ct;
+	
+	Button mapDistance100Btn;
+	Button mapDistance1000Btn;
+	Button mapDistance3000Btn;
 	
 	private static SharedPreferences mSharedPreferences;
 	
@@ -147,35 +150,50 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				getNearUsers.execute(coordenadas);
 			}
 			
-			radiusBar = (SeekBar) findViewById(R.id.usersMapSeekBar);
-			radiusBar.setMax(4);
-			radiusBar.setProgress(2);
-			radiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-				@Override
-				public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-					
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void onStopTrackingTouch(SeekBar arg0) {
+			mapDistance100Btn = (Button) findViewById(R.id.mapDistance100Btn);
+			mapDistance1000Btn = (Button) findViewById(R.id.mapDistance1000Btn);
+			mapDistance3000Btn = (Button) findViewById(R.id.mapDistance3000btn);
+			
+			mapDistance100Btn.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
 					Double[] coordenadas = new Double[3];
 					coordenadas[0] = mCurrentLocation.getLatitude();
 					coordenadas[1] = mCurrentLocation.getLongitude();
-					coordenadas[2] = (double) (radiusBar.getProgress() + 1) * 3;
+					coordenadas[2] = 0.1;
 					map.clear();
 					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
 					getNearUsers = new GetNearUsers();
 					getNearUsers.execute(coordenadas);
 				}
-				
 			});
+			
+			mapDistance1000Btn.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					Double[] coordenadas = new Double[3];
+					coordenadas[0] = mCurrentLocation.getLatitude();
+					coordenadas[1] = mCurrentLocation.getLongitude();
+					coordenadas[2] = 1.0;
+					map.clear();
+					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
+					getNearUsers = new GetNearUsers();
+					getNearUsers.execute(coordenadas);
+				}
+			});
+			
+			mapDistance3000Btn.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					Double[] coordenadas = new Double[3];
+					coordenadas[0] = mCurrentLocation.getLatitude();
+					coordenadas[1] = mCurrentLocation.getLongitude();
+					coordenadas[2] = 3.0;
+					map.clear();
+					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
+					getNearUsers = new GetNearUsers();
+					getNearUsers.execute(coordenadas);
+				}
+			});
+			
+			
 		} else {
 			Toast.makeText(this, "Error detectando ubicación. Verifica que tu dispositivo esté bien configurado."
 					, Toast.LENGTH_LONG).show();
