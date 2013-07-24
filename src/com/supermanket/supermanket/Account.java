@@ -56,8 +56,10 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.supermanket.supermanket.Login.ErrorDialogFragment;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.AutoCompleteDbAdapter;
 import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ISideNavigationCallback;
+import com.supermanket.utilities.LocationAdapter;
 import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.UtilityBelt;
 import com.supermanket.utilities.SideNavigationView.Mode;
@@ -71,9 +73,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     
     private ImageView icon;
     private SideNavigationView sideNavigationView;
-	AutoCompleteTextView personalFormCountryText;
-	AutoCompleteTextView personalFormRegionText;
-	AutoCompleteTextView personalFormCountyText;
+	AutoCompleteTextView personalFormLocationText;
 	Button personalFormBirthdayBtn;
 	Button accountSaveBtn;
 	Button accountBackBtn;
@@ -148,6 +148,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	TableRow accountPackagesRow;
 	TableRow accountBonusPackRow;
 	TextView accountNutritionalInfoRowText;
+	static TextView personalLocationId;
 	View flavorsSeparator;
 	View packagesSeparator;
 	View bonusPackSeparator;
@@ -169,6 +170,9 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	private static SharedPreferences mSharedPreferences;
 	
 	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+	
+	LocationAdapter locationAdapter;
+	AutoCompleteDbAdapter dbAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -400,27 +404,16 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			personalFormNameText = (EditText) findViewById(R.id.personalFormNameText);
 			personalFormWeightText = (EditText) findViewById(R.id.personalFormWeightText);
 			personalFormHeightText = (EditText) findViewById(R.id.personalFormHeightText);
-			personalFormCountryText = (AutoCompleteTextView) findViewById(R.id.personalFormCountryText);
-			personalFormRegionText = (AutoCompleteTextView) findViewById(R.id.personalFormRegionText);
-			personalFormCountyText = (AutoCompleteTextView) findViewById(R.id.personalFormCountyText);
+			personalFormLocationText = (AutoCompleteTextView) findViewById(R.id.personalFormLocationText);
+			personalLocationId = (TextView) findViewById(R.id.personalFormLocationId);
 			personalFormBirthdayBtn = (Button) findViewById(R.id.personalFormBirthdayBtn);
 			accountSaveBtn = (Button) findViewById(R.id.personalFormSaveBtn);
 			accountBackBtn = (Button) findViewById(R.id.personalFormBackBtn);
 			
-			String[] COUNTRIES = getResources().getStringArray(R.array.countries);
-			String[] STATES = getResources().getStringArray(R.array.states);
-			String[] COUNTIES = getResources().getStringArray(R.array.counties);
-			
-			ArrayAdapter<String> adapterCountries = new ArrayAdapter<String>(this,
-	                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
-			ArrayAdapter<String> adapterStates = new ArrayAdapter<String>(this,
-	                 android.R.layout.simple_dropdown_item_1line, STATES);
-			ArrayAdapter<String> adapterCounties = new ArrayAdapter<String>(this,
-	                 android.R.layout.simple_dropdown_item_1line, COUNTIES);
-			
-			personalFormCountryText.setAdapter(adapterCountries);
-			personalFormRegionText.setAdapter(adapterStates);
-			personalFormCountyText.setAdapter(adapterCounties);
+			dbAdapter = new AutoCompleteDbAdapter(this);
+			locationAdapter = new LocationAdapter(dbAdapter, this);
+			personalFormLocationText.setAdapter(locationAdapter);
+			personalFormLocationText.setOnItemClickListener(locationAdapter);
 			 
 			try {
 				JSONObject resultObject = new JSONObject(data);
@@ -437,14 +430,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					localBday = resultObject.getString("birthday").split("-");
 					personalFormBirthdayBtn.setText(localBday[2] + "/" + localBday[1] + "/" + localBday[0]);
 				}
-				if(!resultObject.isNull("country")) {
-					personalFormCountryText.setText(resultObject.getString("country"));
-				}
-				if(!resultObject.isNull("state")) {
-					personalFormRegionText.setText(resultObject.getString("state"));
-				}
-				if(!resultObject.isNull("county")) {
-					personalFormCountyText.setText(resultObject.getString("county"));
+				if(!resultObject.isNull("city")) {
+					personalFormLocationText.setText(resultObject.getString("city"));
 				}
 
 			} catch (JSONException e) {
@@ -1080,6 +1067,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		
 	}
 	
+	public static void setId(int id) {
+		personalLocationId.setText(Integer.toString(id));
+	}
+	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -1349,6 +1341,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					user.put("birthday(3i)", birthdayText[0]);
 					user.put("birthday(2i)", birthdayText[1]);
 					user.put("birthday(1i)", birthdayText[2]);
+					//user.put("city", personalLocationId.getText().toString());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}

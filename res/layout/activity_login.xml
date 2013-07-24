@@ -3,16 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_bg"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Login" >
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/img_login_bgshape" />
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/loginFacebookBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
         android:src="@drawable/img_login_dude" />
 
     <LinearLayout
@@ -75,8 +83,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="20dp"
         android:background="@null"
         android:src="@drawable/btn_facebook" />
+
+    <ImageView
+        android:id="@+id/loginLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/img_login_logo" />
 
 </RelativeLayout>

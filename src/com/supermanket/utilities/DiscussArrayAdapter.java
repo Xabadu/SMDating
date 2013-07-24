@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,9 @@ public class DiscussArrayAdapter extends BaseAdapter {
 		HashMap<String, String> messageData = new HashMap<String, String>();
 		messageData = messages.get(position);
 		messageBubble.setText(messageData.get("message"));
+		if(messageData.get("read").equalsIgnoreCase("false")) {
+			messageBubble.setTypeface(null, Typeface.BOLD);
+		}
 		
 		if(messageData.get("who").equalsIgnoreCase("self")) {
 			messageBubble.setBackgroundResource(R.drawable.bubble_green);

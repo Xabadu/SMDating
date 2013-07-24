@@ -44,12 +44,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -80,10 +83,10 @@ public class Login extends Activity {
     private AlertDialogs alert = new AlertDialogs();
     
     // UI Elements
-    Button btnLogin;
-    Button btnRegister;
-    Button btnFacebookLogin;
-    Button loginFormLoginBtn;
+    ImageButton btnLogin;
+    ImageButton btnRegister;
+    ImageButton btnFacebookLogin;
+    ImageButton loginFormLoginBtn;
     Button loginFormCancelBtn;
     Button registerFormRegisterBtn;
     Button registerFormCancelBtn;
@@ -94,6 +97,7 @@ public class Login extends Activity {
     EditText registerFormEmailField;
     EditText registerFormPasswordField;
     EditText registerFormConfirmPasswordField;
+    ImageView loginLogoImage;
     RadioGroup registerFormGenreGroup;
     
     // Facebook elements
@@ -318,11 +322,28 @@ public class Login extends Activity {
 
 		
 
-		btnLogin = (Button) findViewById(R.id.loginLoginBtn);
-    	btnRegister = (Button) findViewById(R.id.loginRegisterBtn);
-    	btnFacebookLogin = (Button) findViewById(R.id.loginFacebookBtn);
+		btnLogin = (ImageButton) findViewById(R.id.loginLoginBtn);
+    	btnRegister = (ImageButton) findViewById(R.id.loginRegisterBtn);
+    	btnFacebookLogin = (ImageButton) findViewById(R.id.loginFacebookBtn);
     	loginFormEmailField = (EditText) findViewById(R.id.loginEmailField);
     	loginFormPasswordField = (EditText) findViewById(R.id.loginPasswordField);
+    	loginLogoImage = (ImageView) findViewById(R.id.loginLogo);
+    	
+    	DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 loginLogoImage.setVisibility(View.INVISIBLE);
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 loginLogoImage.setVisibility(View.INVISIBLE);
+				 break;
+		}
     	
     	try {
 		    PackageInfo info = getPackageManager().getPackageInfo(

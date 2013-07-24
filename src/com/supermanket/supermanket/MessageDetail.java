@@ -112,6 +112,12 @@ public class MessageDetail extends Activity {
 				} else {
 					msgInfo.put("who", "other");
 				}
+				if(singleMessage.getBoolean("read")) {
+					msgInfo.put("read", "true");
+				} else {
+					msgInfo.put("read", "false");
+				}
+				
 				messages.add(msgInfo);
 			}
 		} catch (JSONException e) {

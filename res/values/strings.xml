@@ -858,4 +858,5 @@
 	<string name="lbl_100_mts">100 mts</string>
 	<string name="lbl_1000_mts">1000 mts</string>
 	<string name="lbl_3000_mts">3000 mts</string>
+	<string name="lbl_account_location">Ubicación</string>
 </resources>
