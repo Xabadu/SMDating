@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.supermanket.supermanket.R;
 
 public class UserAdapter extends BaseAdapter{
-	
+
 	private Context mContext;
 	private boolean imageCaption;
 	private boolean userStatus;

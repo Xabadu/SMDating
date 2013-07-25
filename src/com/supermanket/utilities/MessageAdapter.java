@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MessageAdapter extends BaseAdapter {
-	
+
 	private Activity activity;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater = null;
@@ -80,5 +80,4 @@ public class MessageAdapter extends BaseAdapter {
     
     }
 	
-
 }

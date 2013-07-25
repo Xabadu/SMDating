@@ -66,13 +66,13 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:background="@null"
-            android:src="@drawable/btn_login" />
+            android:src="@drawable/button_login" />
 
         <ImageButton
             android:id="@+id/loginRegisterBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_register"
+            android:src="@drawable/button_register"
             android:background="@null" />
 
     </LinearLayout>

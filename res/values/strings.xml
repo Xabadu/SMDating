@@ -853,10 +853,12 @@
     <string name="alert_logout">¿Quieres salir de Supermanket?</string>
     <string name="btn_logout">Salir</string>
     <string name="title_activity_devices">Devices</string>
-	<string name="alert_internet">Tu dispositivo no está conectado a Internet en estos momentos. ¿Quieres revisar tus ajustes?</string>
-	<string name="btn_settings">Ir a Ajustes</string>
-	<string name="lbl_100_mts">100 mts</string>
-	<string name="lbl_1000_mts">1000 mts</string>
-	<string name="lbl_3000_mts">3000 mts</string>
-	<string name="lbl_account_location">Ubicación</string>
+    <string name="alert_internet">Tu dispositivo no está conectado a Internet en estos momentos. ¿Quieres revisar tus ajustes?</string>
+    <string name="btn_settings">Ir a Ajustes</string>
+    <string name="lbl_100_mts">100 mts</string>
+    <string name="lbl_1000_mts">1000 mts</string>
+    <string name="lbl_3000_mts">3000 mts</string>
+    <string name="lbl_account_location">Ubicación</string>
+    <string name="title_activity_search">Search</string>
+
 </resources>

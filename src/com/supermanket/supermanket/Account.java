@@ -69,8 +69,6 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
     public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
-	
-    
     private ImageView icon;
     private SideNavigationView sideNavigationView;
 	AutoCompleteTextView personalFormLocationText;

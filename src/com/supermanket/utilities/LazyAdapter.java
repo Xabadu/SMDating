@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class LazyAdapter extends BaseAdapter {
-	
+
 	private Activity activity;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater=null;

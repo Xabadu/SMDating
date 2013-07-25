@@ -131,6 +131,10 @@
             android:name="com.supermanket.supermanket.Devices"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.supermanket.supermanket.Search"
+            android:label="@string/title_activity_search" >
+        </activity>
     </application>
 
 </manifest>

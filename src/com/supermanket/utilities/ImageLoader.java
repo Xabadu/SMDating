@@ -21,7 +21,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.widget.ImageView;
 
-import com.actionbarsherlock.R.color;
 import com.supermanket.supermanket.R;
 
 public class ImageLoader {
