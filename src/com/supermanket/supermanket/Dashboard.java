@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -64,7 +65,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     
     private static SharedPreferences mSharedPreferences;
 
-    Button dashboardNearByUsersBtn;
+    ImageButton dashboardNearByUsersBtn;
     RelativeLayout dashboardBottomLayout;
     ConectivityTools ct;
     
@@ -78,7 +79,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
         setContentView(R.layout.activity_dashboard);
         
-		dashboardNearByUsersBtn = (Button) findViewById(R.id.dashboardNearByUsersBtn);
+		dashboardNearByUsersBtn = (ImageButton) findViewById(R.id.dashboardNearByUsersBtn);
 		dashboardBottomLayout = (RelativeLayout) findViewById(R.id.dashboardBottomLayout);
 
 		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
@@ -400,6 +401,10 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
+            
+            case R.id.side_navigation_menu_item6:
+            	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
+            	break;
 
             default:
                 return;
@@ -409,7 +414,6 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
 
     @Override
     public void onBackPressed() {
-        // hide menu if it shown
         if (sideNavigationView.isShown()) {
             sideNavigationView.hideMenu();
         }
@@ -431,6 +435,9 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
         }
         if(title.equalsIgnoreCase("perfil")) {
         	intent = new Intent(this, Account.class);
+        }
+        if(title.equalsIgnoreCase("buscar gente")) {
+        	intent = new Intent(this, Search.class);
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
         	

@@ -249,6 +249,10 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
+            
+            case R.id.side_navigation_menu_item6:
+            	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
+            	break;
 
             default:
                 return;
@@ -282,6 +286,9 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
         }
         if(title.equalsIgnoreCase("perfil")) {
         	intent = new Intent(this, Account.class);
+        }
+        if(title.equalsIgnoreCase("buscar gente")) {
+        	intent = new Intent(this, Search.class);
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
         	

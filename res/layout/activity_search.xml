@@ -1,16 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:accordion="http://schemas.android.com/apk/res-auto/com.sentaca.android.accordion"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Search" >
+ 
+    <ExpandableListView
+        android:id="@+id/searchList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+    </ExpandableListView>
+    
+    <com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
 
-        
-    </ScrollView>
+    <TextView
+        android:id="@+id/searchAgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchList"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/lbl_search_age"
+        android:textStyle="bold" />
 
-</LinearLayout>
+    <EditText
+        android:id="@+id/searchAgeFromText"
+        style="@style/PinkEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeText"
+        android:layout_marginLeft="10dp"
+        android:inputType="number"
+        android:maxLength="2" />
+
+
+    <EditText
+        android:id="@+id/searchAgeToText"
+        style="@style/PinkEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeText"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/searchAgeNexusText"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <TextView
+        android:id="@+id/searchAgeNexusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/searchAgeFromText"
+        android:layout_alignBottom="@+id/searchAgeFromText"
+        android:layout_toRightOf="@+id/searchAgeText"
+        android:layout_marginLeft="30dp"
+        android:text="@string/lbl_search_nexus" />
+
+    <TextView
+        android:id="@+id/searchLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeFromText"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/lbl_search_location"
+        android:textStyle="bold" />
+
+    <AutoCompleteTextView
+        android:id="@+id/searchLocationFieldText"
+        style="@style/PinkEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchLocationText"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/searchLocationId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchLocationFieldText"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/searchBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchLocationId"
+        android:text="Buscar" />
+ 
+</RelativeLayout>

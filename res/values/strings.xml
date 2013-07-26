@@ -26,11 +26,12 @@
     <string name="profile_section3">Efectos</string>
     <string name="profile_section4">Fotos</string>
     <string name="title_activity_user_full_picture">UserFullPicture</string>
-    <string name="menu_title1">Gente</string>
+    <string name="menu_title1">Inicio</string>
     <string name="menu_title2">Cercanos</string>
     <string name="menu_title3">Mensajes</string>
     <string name="menu_title4">Perfil</string>
     <string name="menu_title5">Cerrar sesión</string>
+    <string name="menu_title6">Buscar gente</string>
     <string name="mode">Mode</string>
     <string name="mode_left">Left</string>
     <string name="mode_right">Right</string>
@@ -860,5 +861,8 @@
     <string name="lbl_3000_mts">3000 mts</string>
     <string name="lbl_account_location">Ubicación</string>
     <string name="title_activity_search">Search</string>
+    <string name="lbl_search_age">Edad</string>
+    <string name="lbl_search_nexus">hasta</string>
+    <string name="lbl_search_location">Ubicación</string>
 
 </resources>

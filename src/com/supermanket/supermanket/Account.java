@@ -1151,7 +1151,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
-
+            
+            case R.id.side_navigation_menu_item6:
+            	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
+            	break;
+                
             default:
                 return;
         }
@@ -1207,6 +1211,9 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         	Account.this.finish();
         	startActivity(getIntent());
         	
+        }
+        if(title.equalsIgnoreCase("buscar gente")) {
+        	intent = new Intent(this, Search.class);
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
         	
