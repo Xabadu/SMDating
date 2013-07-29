@@ -63,12 +63,14 @@
         android:textStyle="bold" />
  
      <!-- Rightend Arrow -->
-     <ImageView 
-       	android:id="@+id/messageListArrowImage"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+
+     <ImageButton
+         android:id="@+id/messageListBlockBtn"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_centerVertical="true"
+         android:src="@drawable/ic_block"
+         android:background="@null" />
  
 </RelativeLayout>

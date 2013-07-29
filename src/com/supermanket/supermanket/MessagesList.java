@@ -1,6 +1,7 @@
 package com.supermanket.supermanket;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,6 +9,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -23,8 +26,10 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
@@ -145,6 +150,12 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 					}
 					contact.put("name", messageData.getString("username"));
 					contact.put("image", messageData.getString("avatar"));
+					contact.put("contact", Integer.toString(messageData.getInt("id")));
+					if(messageData.getBoolean("is_blocked")) {
+						contact.put("blocked", "true");
+					} else {
+						contact.put("blocked", "false");
+					}
 					messages.add(contact);
 				}
 			} else {
@@ -169,6 +180,12 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             	startActivity(intent);
             }
         });
+	}
+	
+	public void showContact(String id) {
+		Log.d("contacto", id);
+		BlockContact blockContact = new BlockContact(this);
+		blockContact.execute(id);
 	}
 	
 	@Override
@@ -325,8 +342,12 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog = ProgressDialog.show(MessagesList.this, "", "Cargando mensajes", true);
-			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			dialog = new ProgressDialog(activityRef);
+			dialog.setMessage("Bloqueando...");
+			dialog.show();
+			//dialog = ProgressDialog.show(MessagesList.this, "", "Cargando mensajes", true);
+			//mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			mSharedPreferences = activityRef.getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
@@ -375,6 +396,84 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				dialog.dismiss();
 				activityRef.loadInbox(result);
 			}
+		}
+		
+	}
+	
+	public class BlockContact extends AsyncTask<String, Void, String> {
+		
+		MessagesList activityRef;
+		ProgressDialog dialog;
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		
+		public BlockContact(MessagesList activityRef) {
+			this.activityRef = activityRef;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(MessagesList.this, "", "Bloqueando...", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + "page" + api_secret);
+		}
+		
+		@Override
+		protected String doInBackground(String... params) {
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/blocked.json?app_key="
+					+ api_key + "&page=" + "&signature=" + signature);
+            post.setHeader("content-type", "application/json");
+            
+            JSONObject blocked = new JSONObject();
+            JSONObject bloqueado = new JSONObject();
+
+            
+            try {
+				blocked.put("reason", "-");
+			} catch (JSONException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+            try {
+            	bloqueado.put("blocked", blocked);
+            } catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+            
+            try {
+				StringEntity entity = new StringEntity(bloqueado.toString());
+				post.setEntity(entity);
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+            
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			//dialog.dismiss();
+			GetContacts getContacts = new GetContacts(activityRef);
+			getContacts.execute();
+
 		}
 		
 	}

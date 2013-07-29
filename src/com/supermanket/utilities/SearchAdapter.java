@@ -3,8 +3,6 @@ package com.supermanket.utilities;
 import java.util.List;
 import java.util.Map;
 
-import com.supermanket.supermanket.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -13,7 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+
+import com.supermanket.supermanket.R;
+import com.supermanket.supermanket.Search;
 
 public class SearchAdapter extends BaseExpandableListAdapter {
 	
@@ -47,6 +51,15 @@ public class SearchAdapter extends BaseExpandableListAdapter {
  
         CheckBox item = (CheckBox) convertView.findViewById(R.id.searchCheckbox);
         item.setText(null);
+                
+        item.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				Search.changeParam(childPosition, arg1);
+			}
+        	
+        });
         
  
         item.setText(laptop);
@@ -78,6 +91,7 @@ public class SearchAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.search_group_item,
                     null);
         }
+        
         TextView item = (TextView) convertView.findViewById(R.id.searchGroup);
         item.setTypeface(null, Typeface.BOLD);
         item.setText(laptopName);

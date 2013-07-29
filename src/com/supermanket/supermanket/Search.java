@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -49,6 +49,10 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     
     LocationAdapter locationAdapter;
 	AutoCompleteDbAdapter dbAdapter;
+	
+	private static boolean[] flavorsFlags = new boolean[13];
+	private static boolean[] packageFlags = new boolean[16];
+	private static boolean[] bonusPackFlags = new boolean[11];
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +99,6 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
                         groupPosition, childPosition);
                 Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
                         .show();
- 
                 return true;
             }
         });
@@ -215,6 +218,29 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
                 return;
         }
         finish();
+    }
+    
+    public static void changeParam(int position, boolean value) {
+    	/*if(type.equalsIgnoreCase("flavor")) {
+    		if(value) {
+    			flavorsFlags[position] = true;
+    		} else {
+    			flavorsFlags[position] = false;
+    		}
+    	} else if(type.equalsIgnoreCase("package")) {
+    		if(value) {
+    			packageFlags[position] = true;
+    		} else {
+    			packageFlags[position] = false;
+    		}
+    	} else if(type.equalsIgnoreCase("bonuspack")) {
+    		if(value) {
+    			bonusPackFlags[position] = true;
+    		} else {
+    			bonusPackFlags[position] = false;
+    		}
+    	}*/
+    	Log.d("Position", Integer.toString(position));
     }
 
     @Override
