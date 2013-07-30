@@ -1,6 +1,7 @@
 package com.supermanket.supermanket;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,8 +40,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.supermanket.supermanket.MessagesList.GetContacts;
 import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.DiscussArrayAdapter;
@@ -54,6 +58,8 @@ public class MessageDetail extends Activity {
 	private static int contactId;
 	private static int currentPosition;
 	private Button sendMessageBtn;
+	private ImageButton blockBtn;
+	private ImageButton unblockBtn;
 	public EditText messageDetailTextField;
 	ConectivityTools ct;
 	
@@ -98,6 +104,16 @@ public class MessageDetail extends Activity {
 
 		sendMessageBtn = (Button) findViewById(R.id.messageDetailSendButton);
 		messageDetailTextField = (EditText) findViewById(R.id.messageDetailTextField);
+		blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
+		unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);
+		final Intent intent = getIntent();
+		if(intent.getBooleanExtra("blocked", false)) {
+			blockBtn.setVisibility(View.INVISIBLE);
+			Log.d("Val", "true");
+		} else {
+			unblockBtn.setVisibility(View.INVISIBLE);
+			Log.d("Val", "false");
+		}
 		
 		JSONArray allMessages = null;
 		try {
@@ -140,7 +156,51 @@ public class MessageDetail extends Activity {
 			}
         });
 		
-		final Intent intent = getIntent();
+		
+		
+		blockBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_block);
+				builder.setPositiveButton(R.string.alert_block_yes, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				BlockContact block = new BlockContact(MessageDetail.this);
+	    				block.execute(Integer.toString(intent.getIntExtra("id", 0)));
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+		});
+		
+		unblockBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_unblock);
+				builder.setPositiveButton(R.string.alert_unblock_yes, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				UnBlockContact unblock = new UnBlockContact(MessageDetail.this);
+	    				unblock.execute(Integer.toString(intent.getIntExtra("id", 0)));
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+		});
 		
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -387,5 +447,170 @@ public class MessageDetail extends Activity {
     	}
     	
     }
+    
+    public class BlockContact extends AsyncTask<String, Void, String> {
+		
+		MessageDetail activityRef;
+		ProgressDialog dialog;
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		private ImageButton blockBtn;
+		private ImageButton unblockBtn;
+		
+		public BlockContact(MessageDetail activityRef) {
+			this.activityRef = activityRef;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(MessageDetail.this, "", "Bloqueando...", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + "page" + api_secret);
+			blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
+			unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);
+		}
+		
+		@Override
+		protected String doInBackground(String... params) {
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/blocked.json?app_key="
+					+ api_key + "&page=" + "&signature=" + signature);
+            post.setHeader("content-type", "application/json");
+            
+            JSONObject blocked = new JSONObject();
+            JSONObject bloqueado = new JSONObject();
+
+            
+            try {
+				blocked.put("reason", "-");
+			} catch (JSONException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+            try {
+            	bloqueado.put("blocked", blocked);
+            } catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+            
+            try {
+				StringEntity entity = new StringEntity(bloqueado.toString());
+				post.setEntity(entity);
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+            
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+            	return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			Log.d("Resultado", result);
+			try {
+				JSONObject resultObj = new JSONObject(result);
+				if(resultObj.getString("status").equalsIgnoreCase("ok")) {
+					blockBtn.setVisibility(View.INVISIBLE);
+					unblockBtn.setVisibility(View.VISIBLE);
+					Toast.makeText(MessageDetail.this, "Contacto bloqueado", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente", Toast.LENGTH_LONG).show();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente", Toast.LENGTH_LONG).show();
+			}
+			dialog.dismiss();
+			
+		}
+		
+	}
+
+    public class UnBlockContact extends AsyncTask<String, Void, String> {
+	
+	MessageDetail activityRef;
+	ProgressDialog dialog;
+	private String api_key;
+	private String api_secret;
+	private String signature;
+	private SharedPreferences mSharedPreferences;
+	private UtilityBelt utilityBelt = new UtilityBelt();
+	private ImageButton unblockBtn;
+	private ImageButton blockBtn;
+	
+	public UnBlockContact(MessageDetail activityRef) {
+		this.activityRef = activityRef;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		dialog = ProgressDialog.show(MessageDetail.this, "", "Desbloqueando", true);
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+		api_key = mSharedPreferences.getString("API_KEY", "");
+		api_secret = mSharedPreferences.getString("API_SECRET", "");
+		signature = utilityBelt.md5("app_key" + api_key + "page" + api_secret);
+		unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);
+		blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
+	}
+	
+	@Override
+	protected String doInBackground(String... params) {
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/unblocked.json?app_key="
+				+ api_key + "&page=" + "&signature=" + signature);
+        post.setHeader("content-type", "application/json");
+        
+        try {
+        	HttpResponse resp = client.execute(post);
+        	return EntityUtils.toString(resp.getEntity());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	@Override
+	protected void onPostExecute(String result) {
+		super.onPostExecute(result);
+		Log.d("Resultado", result);
+		try {
+			JSONObject resultObj = new JSONObject(result);
+			if(resultObj.getString("status").equalsIgnoreCase("ok")) {
+				unblockBtn.setVisibility(View.INVISIBLE);
+				blockBtn.setVisibility(View.VISIBLE);
+				Toast.makeText(MessageDetail.this, "Contacto desbloqueado", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente.", Toast.LENGTH_LONG).show();
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente.", Toast.LENGTH_LONG).show();
+		}
+		dialog.dismiss();
+		
+	}
+	
+}
 
 }

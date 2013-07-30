@@ -409,7 +409,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			accountBackBtn = (Button) findViewById(R.id.personalFormBackBtn);
 			
 			dbAdapter = new AutoCompleteDbAdapter(this);
-			locationAdapter = new LocationAdapter(dbAdapter, this);
+			locationAdapter = new LocationAdapter(dbAdapter, this, "account");
 			personalFormLocationText.setAdapter(locationAdapter);
 			personalFormLocationText.setOnItemClickListener(locationAdapter);
 			 
@@ -1197,7 +1197,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
         boolean action = true;
-        if(title.equalsIgnoreCase("gente")) {
+        if(title.equalsIgnoreCase("inicio")) {
         	intent = new Intent(this, Dashboard.class);
         }
         if(title.equalsIgnoreCase("cercanos")) {

@@ -169,6 +169,8 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		 
         adapter = new MessageAdapter(this, messages, "list");
         list.setAdapter(adapter);
+        
+        final JSONArray blockInfo = contactsList;
  
         list.setOnItemClickListener(new OnItemClickListener() {
  
@@ -176,17 +178,20 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
             	Intent intent = new Intent(MessagesList.this, MessageDetail.class);
-            	intent.putExtra("id", ids[position]);
-            	startActivity(intent);
+            	try {
+					JSONObject blockObj = blockInfo.getJSONObject(position);
+					intent.putExtra("id", ids[position]);
+	            	intent.putExtra("blocked", blockObj.getBoolean("is_blocked"));
+	            	startActivity(intent);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
             }
         });
 	}
 	
-	public void showContact(String id) {
-		Log.d("contacto", id);
-		BlockContact blockContact = new BlockContact(this);
-		blockContact.execute(id);
-	}
 	
 	@Override
 	protected void onResume() {
@@ -290,7 +295,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
         boolean action = true;
-        if(title.equalsIgnoreCase("gente")) {
+        if(title.equalsIgnoreCase("inicio")) {
         	intent = new Intent(this, Dashboard.class);
         }
         if(title.equalsIgnoreCase("cercanos")) {
@@ -342,12 +347,8 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog = new ProgressDialog(activityRef);
-			dialog.setMessage("Bloqueando...");
-			dialog.show();
-			//dialog = ProgressDialog.show(MessagesList.this, "", "Cargando mensajes", true);
-			//mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-			mSharedPreferences = activityRef.getSharedPreferences("SupermanketPreferences", 0);
+			dialog = ProgressDialog.show(MessagesList.this, "", "Cargando mensajes", true);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
@@ -396,84 +397,6 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				dialog.dismiss();
 				activityRef.loadInbox(result);
 			}
-		}
-		
-	}
-	
-	public class BlockContact extends AsyncTask<String, Void, String> {
-		
-		MessagesList activityRef;
-		ProgressDialog dialog;
-		private String api_key;
-		private String api_secret;
-		private String signature;
-		private SharedPreferences mSharedPreferences;
-		private UtilityBelt utilityBelt = new UtilityBelt();
-		
-		public BlockContact(MessagesList activityRef) {
-			this.activityRef = activityRef;
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			dialog = ProgressDialog.show(MessagesList.this, "", "Bloqueando...", true);
-			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-			api_key = mSharedPreferences.getString("API_KEY", "");
-			api_secret = mSharedPreferences.getString("API_SECRET", "");
-			signature = utilityBelt.md5("app_key" + api_key + "page" + api_secret);
-		}
-		
-		@Override
-		protected String doInBackground(String... params) {
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/blocked.json?app_key="
-					+ api_key + "&page=" + "&signature=" + signature);
-            post.setHeader("content-type", "application/json");
-            
-            JSONObject blocked = new JSONObject();
-            JSONObject bloqueado = new JSONObject();
-
-            
-            try {
-				blocked.put("reason", "-");
-			} catch (JSONException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-
-            try {
-            	bloqueado.put("blocked", blocked);
-            } catch (JSONException e1) {
-				e1.printStackTrace();
-			}
-            
-            try {
-				StringEntity entity = new StringEntity(bloqueado.toString());
-				post.setEntity(entity);
-			} catch (UnsupportedEncodingException e1) {
-				e1.printStackTrace();
-			}
-            
-            
-            try {
-            	HttpResponse resp = client.execute(post);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
- 
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-			//dialog.dismiss();
-			GetContacts getContacts = new GetContacts(activityRef);
-			getContacts.execute();
-
 		}
 		
 	}

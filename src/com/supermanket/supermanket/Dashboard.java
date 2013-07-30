@@ -422,7 +422,7 @@ public class Dashboard extends SherlockActivity implements ISideNavigationCallba
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
         boolean action = true;
-        if(title.equalsIgnoreCase("gente")) {
+        if(title.equalsIgnoreCase("inicio")) {
         	action = false;
         	Dashboard.this.finish();
         	startActivity(getIntent());

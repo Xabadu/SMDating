@@ -12,11 +12,7 @@
 
     </ExpandableListView>
     
-    <com.supermanket.utilities.SideNavigationView
-        android:id="@+id/side_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
+    
 
     <TextView
         android:id="@+id/searchAgeText"
@@ -73,7 +69,7 @@
     <AutoCompleteTextView
         android:id="@+id/searchLocationFieldText"
         style="@style/PinkEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchLocationText"
         android:layout_marginLeft="10dp" />
@@ -83,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchLocationFieldText"
-        android:text="TextView" />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/searchBtn"
@@ -91,5 +87,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/searchLocationId"
         android:text="Buscar" />
+    
+    <com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
  
 </RelativeLayout>

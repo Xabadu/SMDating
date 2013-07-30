@@ -1,20 +1,44 @@
 package com.supermanket.supermanket;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,19 +46,29 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.supermanket.utilities.AlertDialogs;
 import com.supermanket.utilities.AutoCompleteDbAdapter;
 import com.supermanket.utilities.ISideNavigationCallback;
 import com.supermanket.utilities.LocationAdapter;
 import com.supermanket.utilities.SearchAdapter;
 import com.supermanket.utilities.SideNavigationView;
 import com.supermanket.utilities.SideNavigationView.Mode;
+import com.supermanket.utilities.UserAdapter;
+import com.supermanket.utilities.UtilityBelt;
 
 public class Search extends SherlockActivity implements ISideNavigationCallback {
 	
 	List<String> groupList;
     List<String> childList;
     Map<String, List<String>> paramCollection;
+    Button searchBtn;
+    Button searchAgainBtn;
     ExpandableListView expListView;
+    AutoCompleteTextView locationAutoCompleteField;
+    EditText ageFromField;
+    EditText ageToField;
+    static TextView searchLocationId;
     
     public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
@@ -45,6 +79,8 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     
     private static SharedPreferences mSharedPreferences;
     
+    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+    
     static TextView locationId;
     
     LocationAdapter locationAdapter;
@@ -53,6 +89,11 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	private static boolean[] flavorsFlags = new boolean[13];
 	private static boolean[] packageFlags = new boolean[16];
 	private static boolean[] bonusPackFlags = new boolean[11];
+	
+	private ArrayList<JSONArray> usersContainer = new ArrayList<JSONArray>();
+	private GridView mGridView;
+    private PullToRefreshGridView mPullRefreshGridView;
+    private UserAdapter uAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,33 +116,172 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		paramsScreen();
+		paramsScreen("create");
 	}
 	
-	private void paramsScreen() {
+	private void paramsScreen(String from) {
+		
+		if(from.equalsIgnoreCase("results")) {
+			setContentView(R.layout.activity_search);
+		}
 		
 		locationId = (TextView) findViewById(R.id.personalFormLocationId);
+		locationAutoCompleteField = (AutoCompleteTextView) findViewById(R.id.searchLocationFieldText);
+		searchLocationId = (TextView) findViewById(R.id.searchLocationId);
+		expListView = (ExpandableListView) findViewById(R.id.searchList);
+		searchBtn = (Button) findViewById(R.id.searchBtn);
+		ageFromField = (EditText) findViewById(R.id.searchAgeFromText);
+		ageToField = (EditText) findViewById(R.id.searchAgeToText);
 		
-		createGroupList();
-		 
-        createCollection();
- 
-        expListView = (ExpandableListView) findViewById(R.id.searchList);
-        final SearchAdapter expListAdapter = new SearchAdapter(
-                this, groupList, paramCollection);
-        expListView.setAdapter(expListAdapter);
-  
-        expListView.setOnChildClickListener(new OnChildClickListener() {
- 
-            public boolean onChildClick(ExpandableListView parent, View v,
-                    int groupPosition, int childPosition, long id) {
-                final String selected = (String) expListAdapter.getChild(
-                        groupPosition, childPosition);
-                Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
-                        .show();
-                return true;
-            }
-        });
+		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+			expListView.setVisibility(View.GONE);
+        } else {
+        	createGroupList();
+	        createCollection();
+	       
+	        final SearchAdapter expListAdapter = new SearchAdapter(
+	                this, groupList, paramCollection);
+	        expListView.setAdapter(expListAdapter);
+	  
+	        expListView.setOnChildClickListener(new OnChildClickListener() {
+	 
+	            public boolean onChildClick(ExpandableListView parent, View v,
+	                    int groupPosition, int childPosition, long id) {
+	                final String selected = (String) expListAdapter.getChild(
+	                        groupPosition, childPosition);
+	                Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
+	                        .show();
+	                return true;
+	            }
+	        });
+        }
+		
+        
+        dbAdapter = new AutoCompleteDbAdapter(this);
+		locationAdapter = new LocationAdapter(dbAdapter, this, "search");
+		locationAutoCompleteField.setAdapter(locationAdapter);
+		locationAutoCompleteField.setOnItemClickListener(locationAdapter);
+        
+		searchBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				SearchUsers search = new SearchUsers(Search.this);
+				search.execute();
+			}
+		});
+		
+	}
+	
+	public static void setId(int id) {
+		searchLocationId.setText(Integer.toString(id));
+	}
+	
+	public void fillGrid(String data) {
+		
+		setContentView(R.layout.activity_search_results);
+		searchAgainBtn = (Button) findViewById(R.id.searchAgainBtn);
+		
+		JSONObject resultObject;
+    	JSONArray usersInfo = null;
+		try {
+			resultObject = new JSONObject(data);
+			usersInfo = resultObject.getJSONArray("users");
+			usersContainer.add(usersInfo);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    	mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.searchResultsGrid);
+    	
+		mGridView = mPullRefreshGridView.getRefreshableView();
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+		int width = 0;
+		int height = 0;
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 width = 71;
+				 height = 71;
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 width = 95;
+				 height = 95;
+				 break;
+			
+			case DisplayMetrics.DENSITY_HIGH:
+				 width = 142;
+				 height = 142;
+				 break;
+			
+			case DisplayMetrics.DENSITY_XHIGH:
+				 width = 190;
+				 height = 190;
+				 break;
+		}
+		
+		uAdapter = new UserAdapter(Search.this, true, true, 4, 0, 4, 0, width, height, usersContainer);
+		mGridView.setAdapter(uAdapter);
+
+		uAdapter.notifyDataSetChanged();
+
+		mPullRefreshGridView.onRefreshComplete();
+
+		mGridView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+				int arrayNumber;
+
+				if(position < 16) {
+					arrayNumber = 0;
+				} else {
+					arrayNumber = (int) Math.floor(position/16);
+				}
+
+				JSONArray userArray = usersContainer.get(arrayNumber);
+				try {
+					JSONObject userPosition;
+					int userId;
+					String picURL;
+					String userName = null;
+					if(position < 16) {
+						userPosition = userArray.getJSONObject(position);
+						userId = userPosition.getInt("id");
+						picURL = userPosition.getString("avatar_medium");
+						userName = userPosition.getString("username");
+					} else {
+						Log.d("Position", Integer.toString(position));
+						Log.d("Array", Integer.toString(arrayNumber));
+						userPosition = userArray.getJSONObject(position-(16*arrayNumber));
+						userId = userPosition.getInt("id");
+						picURL = userPosition.getString("avatar_medium");
+						userName = userPosition.getString("username");
+					}
+					Intent intent = new Intent(Search.this, UserProfileSearch.class);
+					intent.putExtra("id", userId);
+					intent.putExtra("pic", picURL);
+					intent.putExtra("username", userName);
+					startActivity(intent);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+		
+		searchAgainBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				paramsScreen("results");
+			}
+		});
+		
 	}
 
 	private void createGroupList() {
@@ -220,27 +400,26 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         finish();
     }
     
-    public static void changeParam(int position, boolean value) {
-    	/*if(type.equalsIgnoreCase("flavor")) {
-    		if(value) {
-    			flavorsFlags[position] = true;
-    		} else {
-    			flavorsFlags[position] = false;
-    		}
-    	} else if(type.equalsIgnoreCase("package")) {
-    		if(value) {
-    			packageFlags[position] = true;
-    		} else {
-    			packageFlags[position] = false;
-    		}
-    	} else if(type.equalsIgnoreCase("bonuspack")) {
-    		if(value) {
-    			bonusPackFlags[position] = true;
-    		} else {
-    			bonusPackFlags[position] = false;
-    		}
-    	}*/
+    public static void changeParam(int position, boolean value, int group) {
+    	if(group == 0) {
+    		flavorsFlags[position] = value;
+    	} else if(group == 1) {
+    		packageFlags[position] = value;
+    	} else if(group == 2) {
+    		bonusPackFlags[position] = value;
+    	}
     	Log.d("Position", Integer.toString(position));
+    }
+    
+    public static boolean isChecked(int group, int position) {
+    	if(group == 0) {
+    		return flavorsFlags[position];
+    	} else if(group == 1) {
+    		return packageFlags[position];
+    	} else if(group == 2) {
+    		return bonusPackFlags[position];
+    	}
+    	return false;
     }
 
     @Override
@@ -253,7 +432,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     private void invokeActivity(String title, int resId) {
         Intent intent = null;
         boolean action = true;
-        if(title.equalsIgnoreCase("gente")) {
+        if(title.equalsIgnoreCase("inicio")) {
         	intent = new Intent(this, Dashboard.class);
         }
         if(title.equalsIgnoreCase("cercanos")) {
@@ -285,5 +464,166 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         }
         
     }
+    
+    private class SearchUsers extends AsyncTask<Void, Void, String> {
+
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private Search activityRef;
+		private UtilityBelt utilityBelt = new UtilityBelt();
+		String ageFrom;
+		String ageTo;
+		String location;
+		String flavors = "";
+		String packages = "";
+		String bonuspacks = "";
+
+		public SearchUsers(Search activityRef) {
+			this.activityRef = activityRef;
+		}
+
+		@Override
+		protected void onPreExecute() {
+
+			super.onPreExecute();
+
+			dialog = ProgressDialog.show(Search.this, "", "Buscando...", true);
+			
+			ageFrom = ageFromField.getText().toString();
+			ageTo = ageToField.getText().toString();
+			location = searchLocationId.getText().toString();
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+			if(ageFrom.equals("") || Integer.parseInt(ageFrom) < 18) {
+				ageFrom = "18";
+			}
+			
+			if(ageTo.equals("") || Integer.parseInt(ageTo) < 18) {
+				ageTo = "99";
+			}
+			
+			if(!mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+	        	
+				for(int i = 0; i < flavorsFlags.length; i++) {
+					if(flavorsFlags[i]) {
+						flavors += Integer.toString(i);
+						if(i < flavorsFlags.length - 1) {
+							flavors += ",";
+						}
+					}
+				}
+				
+				for(int i = 0; i < packageFlags.length; i++) {
+					if(packageFlags[i]) {
+						packages += Integer.toString(i);
+						if(i < packageFlags.length - 1) {
+							packages += ",";
+						}
+					}
+				}
+				
+				for(int i = 0; i < bonusPackFlags.length; i++) {
+					if(bonusPackFlags[i]) {
+						bonuspacks += Integer.toString(i);
+						if(i < bonusPackFlags.length - 1) {
+							bonuspacks += ",";
+						}
+					}
+				}
+				
+	        }
+
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+
+			HttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(SERVICE_BASE_URL + "search.json?app_key="
+					+ api_key + "&signature=" + signature);
+            post.setHeader("content-type", "application/json");
+            
+            JSONObject q = new JSONObject();
+            JSONObject query = new JSONObject();
+            
+            Log.d("age from", ageFrom);
+            Log.d("age to", ageTo);
+            Log.d("Location", location);
+            Log.d("Flavors", flavors);
+            Log.d("Packages", packages);
+            Log.d("Bonus Pack", bonuspacks);
+            
+            try {
+				q.put("age_gteq", ageFrom);
+				q.put("age_lteq", ageTo);
+				if(!flavors.equals("")) {
+					q.put("flavor_ids_eq", flavors);
+				}
+				if(!packages.equals("")) {
+					q.put("packaging_ids_eq", packages);
+				}
+				if(!bonuspacks.equals("")) {
+					q.put("bonus_pack_ids_eq", bonuspacks);
+				}
+				if(!location.equals("")) {
+					q.put("city_id", location);
+				}
+			} catch (JSONException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+            try {
+            	query.put("blocked", q);
+            } catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+            
+            try {
+				StringEntity entity = new StringEntity(query.toString());
+				post.setEntity(entity);
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+            
+            try {
+            	HttpResponse resp = client.execute(post);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			searchLocationId.setText("");
+			if(result == null) {
+				alert.showAlertDialog(Search.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				Log.d("Resultado", result);
+				activityRef.fillGrid(result);
+				dialog.dismiss();
+
+			}
+
+		}
+
+	}
 
 }

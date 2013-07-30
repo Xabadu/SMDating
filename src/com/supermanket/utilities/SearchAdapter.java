@@ -6,6 +6,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +52,18 @@ public class SearchAdapter extends BaseExpandableListAdapter {
  
         CheckBox item = (CheckBox) convertView.findViewById(R.id.searchCheckbox);
         item.setText(null);
+        item.setOnCheckedChangeListener(null);
+        if(Search.isChecked(groupPosition, childPosition)) {
+        	item.setChecked(true);
+        } else {
+        	item.setChecked(false);
+        }
                 
         item.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-				Search.changeParam(childPosition, arg1);
+				Search.changeParam(childPosition, arg1, groupPosition);
 			}
         	
         });

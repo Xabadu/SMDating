@@ -2,6 +2,7 @@ package com.supermanket.utilities;
 
 import com.supermanket.supermanket.Account;
 import com.supermanket.supermanket.R;
+import com.supermanket.supermanket.Search;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -19,11 +20,13 @@ public class LocationAdapter extends CursorAdapter
 	private AutoCompleteDbAdapter mDbHelper;
 	private Context context;
 	private TextView personalFormLocationId;
+	private String ref;
 	
-	public LocationAdapter(AutoCompleteDbAdapter mDbHelper, Context context) {
+	public LocationAdapter(AutoCompleteDbAdapter mDbHelper, Context context, String r) {
 		super(context, null);
 		this.mDbHelper = mDbHelper;
 		this.context = context;
+		ref = r;
 	}
 	
 	@Override
@@ -64,7 +67,11 @@ public class LocationAdapter extends CursorAdapter
     public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
         Cursor cursor = (Cursor) listView.getItemAtPosition(position);
         int idCiudad = cursor.getInt(cursor.getColumnIndexOrThrow("ciudad"));
-        Account.setId(idCiudad);
+        if(ref.equalsIgnoreCase("account")) {
+        	Account.setId(idCiudad);
+        } else if(ref.equalsIgnoreCase("search")) {
+        	Search.setId(idCiudad);
+        }
     }
 
 }

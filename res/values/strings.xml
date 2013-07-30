@@ -864,5 +864,11 @@
     <string name="lbl_search_age">Edad</string>
     <string name="lbl_search_nexus">hasta</string>
     <string name="lbl_search_location">Ubicación</string>
+    <string name="alert_block">¿Quieres bloquear? No seguirás recibiendo mensajes de esta persona.</string>
+    <string name="alert_unblock">¿Quieres desbloquear? Volverás a recibir mensajes de esta persona.</string>
+    <string name="alert_block_yes">Sí, bloquear</string>
+    <string name="alert_unblock_yes">Sí, desbloquear</string>
+    <string name="btn_search_again">Buscar de nuevo</string>
+    <string name="title_activity_user_profile_search">UserProfileSearch</string>
 
 </resources>
