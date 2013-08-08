@@ -3,12 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chat_bg"
     tools:context=".Search" >
+
+    <ImageView
+        android:id="@+id/searchHeaderImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_search_header" />
  
     <ExpandableListView
         android:id="@+id/searchList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchHeaderImage" >
 
     </ExpandableListView>
     

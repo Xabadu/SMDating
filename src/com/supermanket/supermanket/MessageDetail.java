@@ -57,7 +57,7 @@ public class MessageDetail extends Activity {
 	private static DiscussArrayAdapter adapter;
 	private static int contactId;
 	private static int currentPosition;
-	private Button sendMessageBtn;
+	private ImageButton sendMessageBtn;
 	private ImageButton blockBtn;
 	private ImageButton unblockBtn;
 	public EditText messageDetailTextField;
@@ -102,7 +102,7 @@ public class MessageDetail extends Activity {
 	public void showMessages(String data) {
 		setContentView(R.layout.activity_message_detail);
 
-		sendMessageBtn = (Button) findViewById(R.id.messageDetailSendButton);
+		sendMessageBtn = (ImageButton) findViewById(R.id.messageDetailSendButton);
 		messageDetailTextField = (EditText) findViewById(R.id.messageDetailTextField);
 		blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
 		unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);

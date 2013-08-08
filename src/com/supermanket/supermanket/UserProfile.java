@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -65,8 +66,8 @@ public class UserProfile extends Activity {
 			"Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};
 	
 	// UI Elements
-	Button userProfileOfferBtn;
-	Button userProfileSendMessageBtn;
+	ImageButton userProfileOfferBtn;
+	ImageButton userProfileSendMessageBtn;
 	Button userProfileUnblockInfoBtn;
 	ImageView userProfileUserImage;
 	TableRow flavorsRow;
@@ -175,8 +176,8 @@ public class UserProfile extends Activity {
 		
 		setContentView(R.layout.activity_user_profile);
 		
-		userProfileOfferBtn = (Button) findViewById(R.id.userProfileOfferBtn);
-		userProfileSendMessageBtn = (Button) findViewById(R.id.userProfileSendMessageBtn);
+		userProfileOfferBtn = (ImageButton) findViewById(R.id.userProfileOfferBtn);
+		userProfileSendMessageBtn = (ImageButton) findViewById(R.id.userProfileSendMessageBtn);
 		userProfileUnblockInfoBtn = (Button) findViewById(R.id.userProfileUnblockBtn);
 		userProfileUserImage = (ImageView) findViewById(R.id.userProfileUserImage);
 		userProfileNameText = (TextView) findViewById(R.id.userProfileNameText);
@@ -512,7 +513,7 @@ public class UserProfile extends Activity {
 				packagesRow.setVisibility(View.GONE);
 				bonusPackRow.setVisibility(View.GONE);
 			} else {
-				userProfileOfferBtn.setText(R.string.btn_buy);
+				userProfileOfferBtn.setImageResource(R.drawable.button_buy);
 				userProfileFlavorsText = (TextView) findViewById(R.id.userProfileFlavorsText);
 				userProfilePackagesText = (TextView) findViewById(R.id.userProfilePackagesText);
 				userProfileBonusPackText = (TextView) findViewById(R.id.userProfileBonusPackText);

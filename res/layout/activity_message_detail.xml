@@ -31,12 +31,14 @@
 
         </EditText>
 
-        <Button
+        <ImageButton
             android:id="@+id/messageDetailSendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/lbl_messages_send" />
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:src="@drawable/button_send_chat" />
 
         <ImageButton
             android:id="@+id/messageDetailBlockBtn"

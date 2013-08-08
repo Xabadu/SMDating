@@ -32,7 +32,7 @@
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="#040404"
-        android:textSize="15dip"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:typeface="sans" />
  
@@ -46,7 +46,7 @@
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="#343434"
-        android:textSize="10dip" />
+        android:textSize="14sp" />
  
     <!-- Rightend Duration -->
 

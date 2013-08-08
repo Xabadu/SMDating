@@ -29,7 +29,7 @@
         android:paddingLeft="@dimen/dashboard_footer_left_padding"
         android:paddingRight="@dimen/dashboard_footer_left_padding">
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/searchHeaderImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
