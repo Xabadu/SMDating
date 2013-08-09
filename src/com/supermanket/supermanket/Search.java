@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -39,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,8 +62,8 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	List<String> groupList;
     List<String> childList;
     Map<String, List<String>> paramCollection;
-    Button searchBtn;
-    Button searchAgainBtn;
+    ImageButton searchBtn;
+    ImageButton searchAgainBtn;
     ExpandableListView expListView;
     AutoCompleteTextView locationAutoCompleteField;
     EditText ageFromField;
@@ -129,7 +129,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		locationAutoCompleteField = (AutoCompleteTextView) findViewById(R.id.searchLocationFieldText);
 		searchLocationId = (TextView) findViewById(R.id.searchLocationId);
 		expListView = (ExpandableListView) findViewById(R.id.searchList);
-		searchBtn = (Button) findViewById(R.id.searchBtn);
+		searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 		ageFromField = (EditText) findViewById(R.id.searchAgeFromText);
 		ageToField = (EditText) findViewById(R.id.searchAgeToText);
 		
@@ -178,7 +178,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	public void fillGrid(String data) {
 		
 		setContentView(R.layout.activity_search_results);
-		searchAgainBtn = (Button) findViewById(R.id.searchAgainBtn);
+		searchAgainBtn = (ImageButton) findViewById(R.id.searchAgainBtn);
 		
 		JSONObject resultObject;
     	JSONArray usersInfo = null;

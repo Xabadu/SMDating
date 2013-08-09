@@ -40,9 +40,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -87,9 +86,9 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	JSONArray otherUsersArray = null;
 	ConectivityTools ct;
 	
-	Button mapDistance100Btn;
-	Button mapDistance1000Btn;
-	Button mapDistance3000Btn;
+	ImageButton mapDistance100Btn;
+	ImageButton mapDistance1000Btn;
+	ImageButton mapDistance3000Btn;
 	
 	private static SharedPreferences mSharedPreferences;
 	
@@ -150,9 +149,9 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				getNearUsers.execute(coordenadas);
 			}
 			
-			mapDistance100Btn = (Button) findViewById(R.id.mapDistance100Btn);
-			mapDistance1000Btn = (Button) findViewById(R.id.mapDistance1000Btn);
-			mapDistance3000Btn = (Button) findViewById(R.id.mapDistance3000btn);
+			mapDistance100Btn = (ImageButton) findViewById(R.id.mapDistance100Btn);
+			mapDistance1000Btn = (ImageButton) findViewById(R.id.mapDistance1000Btn);
+			mapDistance3000Btn = (ImageButton) findViewById(R.id.mapDistance3000btn);
 			
 			mapDistance100Btn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {

@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".UsersMap" >
 
@@ -17,31 +15,36 @@
         class="com.google.android.gms.maps.SupportMapFragment" />
     
     <LinearLayout
-              android:id="@+id/mapDistanceBtns"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentBottom="true" >
+        android:id="@+id/mapDistanceBtns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" >
 
-              <Button
+              <ImageButton
                   android:id="@+id/mapDistance100Btn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:text="@string/lbl_100_mts" />
+                  android:src="@drawable/button_100"
+                  android:background="@null" />
 
-              <Button
+              <ImageButton
                   android:id="@+id/mapDistance1000Btn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:text="@string/lbl_1000_mts" />
+                  android:layout_marginLeft="5dp"
+                  android:background="@null"
+                  android:src="@drawable/button_1000" />
 
-              <Button
+              <ImageButton
                   android:id="@+id/mapDistance3000btn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:text="@string/lbl_3000_mts" />
+                  android:layout_marginLeft="5dp"
+                  android:background="@null"
+                  android:src="@drawable/button_3000" />
+
           </LinearLayout>
     
     <com.supermanket.utilities.SideNavigationView

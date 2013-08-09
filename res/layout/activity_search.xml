@@ -12,16 +12,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:src="@drawable/img_search_header" />
- 
+
     <ExpandableListView
         android:id="@+id/searchList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchHeaderImage" >
-
+        android:layout_below="@+id/searchHeaderImage"
+        android:visibility="visible" >
     </ExpandableListView>
-    
-    
 
     <TextView
         android:id="@+id/searchAgeText"
@@ -33,43 +31,11 @@
         android:text="@string/lbl_search_age"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/searchAgeFromText"
-        style="@style/PinkEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchAgeText"
-        android:layout_marginLeft="10dp"
-        android:inputType="number"
-        android:maxLength="2" />
-
-
-    <EditText
-        android:id="@+id/searchAgeToText"
-        style="@style/PinkEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchAgeText"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/searchAgeNexusText"
-        android:inputType="number"
-        android:maxLength="2" />
-
-    <TextView
-        android:id="@+id/searchAgeNexusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/searchAgeFromText"
-        android:layout_alignBottom="@+id/searchAgeFromText"
-        android:layout_toRightOf="@+id/searchAgeText"
-        android:layout_marginLeft="30dp"
-        android:text="@string/lbl_search_nexus" />
-
     <TextView
         android:id="@+id/searchLocationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchAgeFromText"
+        android:layout_below="@+id/searchAgeLayout"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:text="@string/lbl_search_location"
@@ -90,17 +56,60 @@
         android:layout_below="@+id/searchLocationFieldText"
         android:visibility="invisible" />
 
-    <Button
+    <ImageButton
         android:id="@+id/searchBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchLocationId"
-        android:text="Buscar" />
-    
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:src="@drawable/button_search" />
+
+    <LinearLayout
+        android:id="@+id/searchAgeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeText" >
+
+        <EditText
+            android:id="@+id/searchAgeFromText"
+            style="@style/PinkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:hint="@string/lbl_eighteen"
+            android:inputType="number"
+            android:maxLength="2" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/searchAgeNexusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:text="@string/lbl_search_nexus" />
+
+        <EditText
+            android:id="@+id/searchAgeToText"
+            style="@style/PinkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:hint="@string/lbl_ninetynine"
+            android:inputType="number"
+            android:maxLength="2" />
+
+    </LinearLayout>
+
     <com.supermanket.utilities.SideNavigationView
         android:id="@+id/side_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
- 
+        android:layout_height="match_parent" >
+    </com.supermanket.utilities.SideNavigationView>
+
 </RelativeLayout>

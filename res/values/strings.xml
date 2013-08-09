@@ -870,5 +870,9 @@
     <string name="alert_unblock_yes">Sí, desbloquear</string>
     <string name="btn_search_again">Buscar de nuevo</string>
     <string name="title_activity_user_profile_search">UserProfileSearch</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="lbl_agefrom">Desde</string>
+    <string name="lbl_eighteen">18</string>
+    <string name="lbl_ninetynine">99</string>
 
 </resources>
