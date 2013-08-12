@@ -123,6 +123,23 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		
 		if(from.equalsIgnoreCase("results")) {
 			setContentView(R.layout.activity_search);
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			icon = (ImageView) findViewById(android.R.id.icon);
+	        sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
+	        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
+	        	sideNavigationView.setMenuItems(R.menu.side_navigation_male_menu);
+	        } else {
+	        	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+	        }
+	        sideNavigationView.setMenuClickCallback(this);
+	        if (getIntent().hasExtra(EXTRA_TITLE)) {
+	            String title = getIntent().getStringExtra(EXTRA_TITLE);
+	            setTitle(title);
+	            sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
+	            sideNavigationView.setMode(Mode.LEFT);
+	        }
+
+	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
 		locationId = (TextView) findViewById(R.id.personalFormLocationId);
@@ -508,6 +525,12 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 			
 			if(ageTo.equals("") || Integer.parseInt(ageTo) < 18) {
 				ageTo = "99";
+			}
+			
+			if(Integer.parseInt(ageTo) < Integer.parseInt(ageFrom)) {
+				String temp = ageFrom;
+				ageFrom = ageTo;
+				ageTo = temp;
 			}
 			
 			if(!mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {

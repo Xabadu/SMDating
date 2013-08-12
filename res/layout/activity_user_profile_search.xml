@@ -3,34 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".UserProfile" >
+
+    <ImageView
+        android:id="@+id/userProfilePersonalBgImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_bg_personal" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/img_bg_personal_name" />
 
     <ImageView
         android:id="@+id/userProfileUserImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/ic_content_picture" />
-
-    <TextView
-        android:id="@+id/userProfileWeightText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/userProfileUserImage"
-        android:layout_alignLeft="@+id/userProfileAgeText"
-        android:text="60Kg"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/userProfileAgeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/userProfileWeightText"
-        android:layout_alignLeft="@+id/userProfileNameText"
-        android:text="19 años"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <com.jess.ui.TwoWayGridView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,10 +34,10 @@
         android:id="@+id/userProfileImageGalleryGrid"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/userProfileUserImage"
         android:layout_below="@+id/userProfileUserImage"
+        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/img_bg_minigallery"
         app:cacheColorHint="#E8E8E8"
         app:columnWidth="50dp"
         app:horizontalSpacing="0dp"
@@ -62,7 +58,9 @@
         android:layout_alignLeft="@+id/linearLayout1"
         android:layout_alignRight="@+id/linearLayout1"
         android:layout_below="@+id/linearLayout1"
-        android:layout_marginTop="10dp" >
+        android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -967,11 +965,15 @@
                 </TableRow>
             </TableLayout>
 
-            <Button
+            <ImageButton
                 android:id="@+id/userProfileUnblockBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/userProfileEffectsTable"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@null"
+                android:src="@drawable/button_unblock"
                 android:text="@string/profile_unblock_btn" />
 
         </RelativeLayout>
@@ -983,40 +985,27 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/userProfileImageGalleryGrid"
-        android:layout_below="@+id/userProfileImageGalleryGrid" >
+        android:layout_below="@+id/userProfileImageGalleryGrid"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" >
 
-        <Button
+        <ImageButton
             android:id="@+id/userProfileOfferBtn"
-            style="@style/button_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/pink_button"
-            android:text="@string/btn_ofertar"
-            android:visibility="invisible" />
+            android:src="@drawable/button_offer"
+            android:background="@null" />
 
-        <Button
+        <ImageButton
             android:id="@+id/userProfileSendMessageBtn"
-            style="@style/button_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.23"
-            android:background="@drawable/orange_button"
-            android:text="@string/btn_send_message"
-            android:visibility="invisible" />
+            android:background="@null"
+            android:src="@drawable/button_send_message" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/userProfileNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/userProfileAgeText"
-        android:layout_alignTop="@+id/userProfileUserImage"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/userProfileUserImage"
-        android:text="Francisca A. Lopez"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/userProfileHeightText"
@@ -1037,6 +1026,36 @@
         android:layout_alignLeft="@+id/userProfileHeightText"
         android:layout_alignTop="@+id/userProfileWeightText"
         android:text="Chile"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/userProfileAgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userProfileNameText"
+        android:layout_below="@+id/userProfileNameText"
+        android:layout_marginTop="10dp"
+        android:text="19 años"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/userProfileNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/userProfileUserImage"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:text="Nombre y Apellido"
+        android:textColor="#FFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/userProfileWeightText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userProfileAgeText"
+        android:layout_below="@+id/userProfileAgeText"
+        android:text="60Kg"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
 </RelativeLayout>

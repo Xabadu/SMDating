@@ -88,8 +88,8 @@ public class Login extends Activity {
     ImageButton btnFacebookLogin;
     ImageButton loginFormLoginBtn;
     Button loginFormCancelBtn;
-    Button registerFormRegisterBtn;
-    Button registerFormCancelBtn;
+    ImageButton registerFormRegisterBtn;
+    ImageButton registerFormCancelBtn;
     Button registerFormChangeBirthdayBtn;
     EditText loginFormEmailField;
     EditText loginFormPasswordField;
@@ -439,8 +439,8 @@ public class Login extends Activity {
 
 		setContentView(R.layout.register_form);
 
-		registerFormRegisterBtn = (Button) findViewById(R.id.registerFormRegisterBtn);
-		registerFormCancelBtn = (Button) findViewById(R.id.registerFormCancelBtn);
+		registerFormRegisterBtn = (ImageButton) findViewById(R.id.registerFormRegisterBtn);
+		registerFormCancelBtn = (ImageButton) findViewById(R.id.registerFormCancelBtn);
 		registerFormChangeBirthdayBtn = (Button) findViewById(R.id.registerFormChangeBirthdayBtn);
 		registerFormUsernameField = (EditText) findViewById(R.id.registerFormUsernameField);
 		registerFormEmailField = (EditText) findViewById(R.id.registerFormEmailField);

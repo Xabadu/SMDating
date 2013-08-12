@@ -13,28 +13,32 @@
               android:id="@+id/userGalleryActions"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_alignParentBottom="true" >
+              android:layout_alignParentBottom="true"
+              android:layout_marginBottom="5dp" >
 
-              <Button
+              <ImageButton
                   android:id="@+id/userGalleryAddBtn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:text="+" />
+                  android:src="@drawable/button_add_image"
+                  android:background="@null" />
 
-              <Button
+              <ImageButton
                   android:id="@+id/userGalleryMainBtn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:text="Principal" />
+                  android:src="@drawable/button_main_image"
+                  android:background="@null" />
 
-              <Button
+              <ImageButton
                   android:id="@+id/userGalleryDeleteBtn"
-                  android:layout_width="0dp"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:text="x" />
+                  android:src="@drawable/button_delete_image"
+                  android:background="@null" />
           </LinearLayout>
  
 </RelativeLayout>

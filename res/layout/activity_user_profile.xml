@@ -7,28 +7,26 @@
     tools:context=".UserProfile" >
 
     <ImageView
+        android:id="@+id/userProfilePersonalBgImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_bg_personal" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/img_bg_personal_name" />
+
+    <ImageView
         android:id="@+id/userProfileUserImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/ic_content_picture" />
-
-    <TextView
-        android:id="@+id/userProfileWeightText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/userProfileUserImage"
-        android:layout_alignLeft="@+id/userProfileAgeText"
-        android:text="60Kg"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/userProfileAgeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/userProfileWeightText"
-        android:layout_alignLeft="@+id/userProfileNameText"
-        android:text="19 años"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <com.jess.ui.TwoWayGridView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +34,6 @@
         android:id="@+id/userProfileImageGalleryGrid"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/userProfileUserImage"
         android:layout_below="@+id/userProfileUserImage"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
@@ -973,8 +970,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/userProfileEffectsTable"
-                android:src="@drawable/button_unblock"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:background="@null"
+                android:src="@drawable/button_unblock"
                 android:text="@string/profile_unblock_btn" />
 
         </RelativeLayout>
@@ -1009,17 +1008,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/userProfileNameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/userProfileAgeText"
-        android:layout_alignTop="@+id/userProfileUserImage"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/userProfileUserImage"
-        android:text="Francisca A. Lopez"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/userProfileHeightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -1038,6 +1026,36 @@
         android:layout_alignLeft="@+id/userProfileHeightText"
         android:layout_alignTop="@+id/userProfileWeightText"
         android:text="Chile"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/userProfileAgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userProfileNameText"
+        android:layout_below="@+id/userProfileNameText"
+        android:layout_marginTop="10dp"
+        android:text="19 años"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/userProfileNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/userProfileUserImage"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:text="Nombre y Apellido"
+        android:textColor="#FFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/userProfileWeightText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/userProfileAgeText"
+        android:layout_below="@+id/userProfileAgeText"
+        android:text="60Kg"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
 </RelativeLayout>

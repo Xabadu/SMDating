@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -73,8 +74,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     private SideNavigationView sideNavigationView;
 	AutoCompleteTextView personalFormLocationText;
 	Button personalFormBirthdayBtn;
-	Button accountSaveBtn;
-	Button accountBackBtn;
+	ImageButton accountSaveBtn;
+	ImageButton accountBackBtn;
 	CheckBox flavors[] = new CheckBox[13];
 	static int flavorsIds[]={R.id.flavors1,R.id.flavors2,R.id.flavors3,R.id.flavors4,
 	    R.id.flavors5,R.id.flavors6,R.id.flavors7,R.id.flavors8,R.id.flavors9,R.id.flavors10, R.id.flavors11, 
@@ -405,8 +406,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			personalFormLocationText = (AutoCompleteTextView) findViewById(R.id.personalFormLocationText);
 			personalLocationId = (TextView) findViewById(R.id.personalFormLocationId);
 			personalFormBirthdayBtn = (Button) findViewById(R.id.personalFormBirthdayBtn);
-			accountSaveBtn = (Button) findViewById(R.id.personalFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.personalFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.personalFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.personalFormBackBtn);
 			
 			dbAdapter = new AutoCompleteDbAdapter(this);
 			locationAdapter = new LocationAdapter(dbAdapter, this, "account");
@@ -495,8 +496,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			aboutFormDescriptionText = (EditText) findViewById(R.id.aboutDescriptionText);
 			aboutFormCrazyText = (EditText) findViewById(R.id.aboutCrazyText);
 			
-			accountSaveBtn = (Button) findViewById(R.id.aboutFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.aboutFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.aboutFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.aboutFormBackBtn);
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
@@ -631,8 +632,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.nutritionalFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.nutritionalFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.nutritionalFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.nutritionalFormBackBtn);
 			
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
@@ -682,8 +683,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.flavorsFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.flavorsFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.flavorsFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.flavorsFormBackBtn);
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -712,8 +713,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.packagesFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.packagesFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.packagesFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.packagesFormBackBtn);
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -762,8 +763,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.bonusPackFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.bonusPackFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.bonusPackFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.bonusPackFormBackBtn);
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -861,8 +862,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			adapterPet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesPetSpinner.setAdapter(adapterPet);
 						
-			accountSaveBtn = (Button) findViewById(R.id.accessoriesFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.accessoriesFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.accessoriesFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.accessoriesFormBackBtn);
 			
 			try {
 				JSONObject resultObject = new JSONObject(data);
@@ -974,8 +975,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.effectsFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.effectsFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.effectsFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.effectsFormBackBtn);
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -1025,8 +1026,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				e.printStackTrace();
 			}
 			
-			accountSaveBtn = (Button) findViewById(R.id.accountInfoFormSaveBtn);
-			accountBackBtn = (Button) findViewById(R.id.accountInfoFormBackBtn);
+			accountSaveBtn = (ImageButton) findViewById(R.id.accountInfoFormSaveBtn);
+			accountBackBtn = (ImageButton) findViewById(R.id.accountInfoFormBackBtn);
 			
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {

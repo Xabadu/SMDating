@@ -3,6 +3,7 @@
 	    android:id="@+id/scrollView1"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+	    android:background="@drawable/chat_bg"
 	    android:paddingBottom="@dimen/activity_vertical_margin"
 	    android:paddingLeft="@dimen/activity_horizontal_margin"
 	    android:paddingRight="@dimen/activity_horizontal_margin"
@@ -18,23 +19,23 @@
 	        android:layout_below="@+id/personalFormLocationText"
 	        android:layout_centerHorizontal="true"
 	        android:layout_marginTop="24dp" >
+	        
+	        <ImageButton
+		            android:id="@+id/personalFormSaveBtn"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@null"
+		            android:src="@drawable/button_save" />
+		
+		        <ImageButton
+		            android:id="@+id/personalFormBackBtn"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@null"
+		            android:layout_marginLeft="5dp"
+		            android:src="@drawable/button_back" />
 	
-	        <Button
-	            android:id="@+id/personalFormSaveBtn"
-	            style="@style/button_text"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/light_blue_button"
-	            android:text="@string/btn_account_save" />
-	
-	        <Button
-	            android:id="@+id/personalFormBackBtn"
-	            style="@style/button_text"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1.71"
-	            android:background="@drawable/gray_button"
-	            android:text="@string/btn_account_back" />
+
 	
 	    </LinearLayout>
 	

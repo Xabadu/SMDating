@@ -68,7 +68,7 @@ public class UserProfileSearch extends Activity {
 	// UI Elements
 	ImageButton userProfileOfferBtn;
 	ImageButton userProfileSendMessageBtn;
-	Button userProfileUnblockInfoBtn;
+	ImageButton userProfileUnblockInfoBtn;
 	ImageView userProfileUserImage;
 	TableRow flavorsRow;
 	TableRow packagesRow;
@@ -178,7 +178,7 @@ public class UserProfileSearch extends Activity {
 		
 		userProfileOfferBtn = (ImageButton) findViewById(R.id.userProfileOfferBtn);
 		userProfileSendMessageBtn = (ImageButton) findViewById(R.id.userProfileSendMessageBtn);
-		userProfileUnblockInfoBtn = (Button) findViewById(R.id.userProfileUnblockBtn);
+		userProfileUnblockInfoBtn = (ImageButton) findViewById(R.id.userProfileUnblockBtn);
 		userProfileUserImage = (ImageView) findViewById(R.id.userProfileUserImage);
 		userProfileNameText = (TextView) findViewById(R.id.userProfileNameText);
 		userProfileAgeText = (TextView) findViewById(R.id.userProfileAgeText);
@@ -518,28 +518,30 @@ public class UserProfileSearch extends Activity {
 				userProfilePackagesText = (TextView) findViewById(R.id.userProfilePackagesText);
 				userProfileBonusPackText = (TextView) findViewById(R.id.userProfileBonusPackText);
 				
-				JSONArray elements;
 				if(!resultObject.isNull("flavor_ids")) {
-					elements = resultObject.getJSONArray("flavor_ids");
+					JSONArray elements = resultObject.getJSONArray("flavor_ids");
 					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
 						userProfileFlavorsText.setText(userProfileFlavorsText.getText().toString() 
-								+ flavorsList[elements.getInt(i)] + "  ");
+								+ flavorsList[val-1] + "  ");
 					}
 				}
 				
 				if(!resultObject.isNull("packaging_ids")) {
-					elements = resultObject.getJSONArray("packaging_ids");
+					JSONArray elements = resultObject.getJSONArray("packaging_ids");
 					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
 						userProfilePackagesText.setText(userProfilePackagesText.getText().toString() 
-								+ packagesList[elements.getInt(i)] + "  ");
+								+ packagesList[val-1] + "  ");
 					}
 				}
 				
 				if(!resultObject.isNull("bonus_pack_ids")) {
-					elements = resultObject.getJSONArray("bonus_pack_ids");
+					JSONArray elements = resultObject.getJSONArray("bonus_pack_ids");
 					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
 						userProfileBonusPackText.setText(userProfileBonusPackText.getText().toString()
-								+ bonusPackList[elements.getInt(i)] + "  ");
+								+ bonusPackList[val-1] + "  ");
 					}
 				}
 				
@@ -792,29 +794,29 @@ public class UserProfileSearch extends Activity {
 			case DisplayMetrics.DENSITY_LOW:
 				 width = 45;
 				 height = 45;
-				 avatarWidth = 71;
-				 avatarHeight = 71;
+				 avatarWidth = 90;
+				 avatarHeight = 90;
 				 break;
 			
 			case DisplayMetrics.DENSITY_MEDIUM:
 				 width = 60;
 				 height = 60;
-				 avatarWidth = 95;
-				 avatarHeight = 95;
+				 avatarWidth = 120;
+				 avatarHeight = 120;
 				 break;
 			
 			case DisplayMetrics.DENSITY_HIGH:
 				 width = 90;
 				 height = 90;
-				 avatarWidth = 142;
-				 avatarHeight = 142;
+				 avatarWidth = 180;
+				 avatarHeight = 180;
 				 break;
 			
 			case DisplayMetrics.DENSITY_XHIGH:
 				 width = 120;
 				 height = 120;
-				 avatarWidth = 190;
-				 avatarHeight = 190;
+				 avatarWidth = 240;
+				 avatarHeight = 240;
 				 break;
 		}
 		

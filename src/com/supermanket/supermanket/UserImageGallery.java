@@ -46,6 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -60,9 +61,9 @@ public class UserImageGallery extends Activity {
 	private String referral;
 	private int position = 0;
 	private LinearLayout layout;
-	private Button userGalleryAddBtn;
-	private Button userGalleryMainBtn;
-	private Button userGalleryDeleteBtn;
+	private ImageButton userGalleryAddBtn;
+	private ImageButton userGalleryMainBtn;
+	private ImageButton userGalleryDeleteBtn;
 	private static final int PICK_IMAGE = 1;
 	private static final int PICK_CAMERA_IMAGE = 2;
 	private Bitmap bitmap;
@@ -115,9 +116,9 @@ public class UserImageGallery extends Activity {
 	    viewPager.setAdapter(adapter);
 	    viewPager.setCurrentItem(position);
 	    
-	    userGalleryAddBtn = (Button) findViewById(R.id.userGalleryAddBtn);
-	    userGalleryMainBtn = (Button) findViewById(R.id.userGalleryMainBtn);
-	    userGalleryDeleteBtn = (Button) findViewById(R.id.userGalleryDeleteBtn);
+	    userGalleryAddBtn = (ImageButton) findViewById(R.id.userGalleryAddBtn);
+	    userGalleryMainBtn = (ImageButton) findViewById(R.id.userGalleryMainBtn);
+	    userGalleryDeleteBtn = (ImageButton) findViewById(R.id.userGalleryDeleteBtn);
 	    
 	    final CharSequence[] items = {"Cámara", "Galería"};
 	    

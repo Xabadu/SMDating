@@ -523,7 +523,7 @@ public class UserProfile extends Activity {
 					for(int i = 0; i < elements.length(); i++) {
 						int val = elements.getInt(i);
 						userProfileFlavorsText.setText(userProfileFlavorsText.getText().toString() 
-								+ flavorsList[val] + "  ");
+								+ flavorsList[val-1] + "  ");
 					}
 				}
 				
@@ -532,7 +532,7 @@ public class UserProfile extends Activity {
 					for(int i = 0; i < elements.length(); i++) {
 						int val = elements.getInt(i);
 						userProfilePackagesText.setText(userProfilePackagesText.getText().toString() 
-								+ packagesList[val] + "  ");
+								+ packagesList[val-1] + "  ");
 					}
 				}
 				
@@ -541,7 +541,7 @@ public class UserProfile extends Activity {
 					for(int i = 0; i < elements.length(); i++) {
 						int val = elements.getInt(i);
 						userProfileBonusPackText.setText(userProfileBonusPackText.getText().toString()
-								+ bonusPackList[val] + "  ");
+								+ bonusPackList[val-1] + "  ");
 					}
 				}
 				
@@ -794,29 +794,29 @@ public class UserProfile extends Activity {
 			case DisplayMetrics.DENSITY_LOW:
 				 width = 45;
 				 height = 45;
-				 avatarWidth = 71;
-				 avatarHeight = 71;
+				 avatarWidth = 90;
+				 avatarHeight = 90;
 				 break;
 			
 			case DisplayMetrics.DENSITY_MEDIUM:
 				 width = 60;
 				 height = 60;
-				 avatarWidth = 95;
-				 avatarHeight = 95;
+				 avatarWidth = 120;
+				 avatarHeight = 120;
 				 break;
 			
 			case DisplayMetrics.DENSITY_HIGH:
 				 width = 90;
 				 height = 90;
-				 avatarWidth = 142;
-				 avatarHeight = 142;
+				 avatarWidth = 180;
+				 avatarHeight = 180;
 				 break;
 			
 			case DisplayMetrics.DENSITY_XHIGH:
 				 width = 120;
 				 height = 120;
-				 avatarWidth = 190;
-				 avatarHeight = 190;
+				 avatarWidth = 240;
+				 avatarHeight = 240;
 				 break;
 		}
 		
