@@ -1,11 +1,6 @@
 package com.supermanket.supermanket;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -18,26 +13,38 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NavUtils;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jess.ui.TwoWayAdapterView;
 import com.jess.ui.TwoWayAdapterView.OnItemClickListener;
 import com.jess.ui.TwoWayGridView;
 import com.supermanket.utilities.AlertDialogs;
+import com.supermanket.utilities.ConectivityTools;
 import com.supermanket.utilities.ImageLoader;
 import com.supermanket.utilities.PictureAdapter;
 import com.supermanket.utilities.UtilityBelt;
@@ -51,15 +58,29 @@ public class UserProfile extends Activity {
 	private ImageLoader imageLoader;
 	private JSONArray resultImages = null;
 	private UtilityBelt utilityBelt = new UtilityBelt();
+	String[] flavorsList = {"Intelectual", "Ejecutivo", "Carretero", "Deportista", "Aventurero", "Artista",
+			"Tímido", "Geek", "Gamer", "Tuerca", "Tallero", "Hipster", "Fixero"};
+	String[] packagesList = {"Rockero", "Metalero", "Casual", "Uniformado", "Skater", "Hip-Hop", "Otaku", 
+			"Surfista", "Verde", "Gótico", "Motoquero", "Reggaetonero", "Zorrón", "Parrillero", "Lana", "Pokemón"};
+	String[] bonusPackList = {"Chef", "Vegetariano", "Six Pack", "Fumador", "No fumador", "Romántico", "Músico", 
+			"Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};
 	
 	// UI Elements
-	
+	ImageButton userProfileOfferBtn;
+	ImageButton userProfileSendMessageBtn;
+	ImageButton userProfileUnblockInfoBtn;
 	ImageView userProfileUserImage;
+	TableRow flavorsRow;
+	TableRow packagesRow;
+	TableRow bonusPackRow;
 	TextView userProfileNameText;
 	TextView userProfileAgeText;
 	TextView userProfileHeightText;
 	TextView userProfileWeightText;
 	TextView userProfileCountryText;
+	TextView userProfileFlavorsText;
+	TextView userProfilePackagesText;
+	TextView userProfileBonusPackText;
 	TextView userProfileAboutMeText;
 	TextView userProfileCrazyText;
 	TextView userProfileReligionText;
@@ -102,19 +123,45 @@ public class UserProfile extends Activity {
 	TextView userProfileSexualFantasyText;
 	TextView userProfileFetishesText;
 	
+	private static SharedPreferences mSharedPreferences;
+	ConectivityTools ct;
+	
+	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
 		Intent intent = getIntent();
 		int userId = intent.getIntExtra("id", 0);
-		
+		ct = new ConectivityTools(getApplicationContext());
 		currentUser[0] = userId;
-        userInfo = new UserInfo(this);
-        userInfo.execute(currentUser);
+		if (!ct.isConnectingToInternet()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage(R.string.alert_internet);
+			builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+    				startActivity(intent);
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+        } else {
+        	userInfo = new UserInfo(this);
+            userInfo.execute(currentUser);
+        }
+        
 		
 	}
 
@@ -129,6 +176,9 @@ public class UserProfile extends Activity {
 		
 		setContentView(R.layout.activity_user_profile);
 		
+		userProfileOfferBtn = (ImageButton) findViewById(R.id.userProfileOfferBtn);
+		userProfileSendMessageBtn = (ImageButton) findViewById(R.id.userProfileSendMessageBtn);
+		userProfileUnblockInfoBtn = (ImageButton) findViewById(R.id.userProfileUnblockBtn);
 		userProfileUserImage = (ImageView) findViewById(R.id.userProfileUserImage);
 		userProfileNameText = (TextView) findViewById(R.id.userProfileNameText);
 		userProfileAgeText = (TextView) findViewById(R.id.userProfileAgeText);
@@ -177,11 +227,256 @@ public class UserProfile extends Activity {
 		userProfileSexualFantasyText = (TextView) findViewById(R.id.userProfileSexualFantasyText);
 		userProfileFetishesText = (TextView) findViewById(R.id.userProfileFetishesText);
 		
+		flavorsRow = (TableRow) findViewById(R.id.flavorsRow);
+		packagesRow = (TableRow) findViewById(R.id.packagesRow);
+		bonusPackRow = (TableRow) findViewById(R.id.bonusPackRow);
+		
 		Intent intent = getIntent();
 		
 		try {
-			JSONObject resultObject = new JSONObject(result);
+			final JSONObject resultObject = new JSONObject(result);
 			resultImages = resultObject.getJSONArray("photos");
+			
+			/* Block buttons */
+			
+			if(resultObject.getBoolean("private_information_access")) {
+				userProfileUnblockInfoBtn.setVisibility(View.GONE);
+			} else {
+				if( (resultObject.isNull("sex_poses") || resultObject.getString("sex_poses").equalsIgnoreCase("")) &&
+					(resultObject.isNull("sex_toys") || resultObject.getString("sex_toys").equalsIgnoreCase("")) &&
+					(resultObject.isNull("guilty_pleasure") || resultObject.getString("guilty_pleasure").equalsIgnoreCase("")) &&
+					(resultObject.isNull("sexual_fantasy") || resultObject.getString("sexual_fantasy").equalsIgnoreCase("")) &&
+					(resultObject.isNull("fetishes") || resultObject.getString("fetishes").equalsIgnoreCase("")) ) {
+					userProfileUnblockInfoBtn.setVisibility(View.GONE);
+				} else {
+					userProfileUnblockInfoBtn.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							if (!ct.isConnectingToInternet()) {
+								AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+								builder.setTitle(R.string.alert_attention_title);
+								builder.setMessage(R.string.alert_internet);
+								builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+					    			@Override
+					    			public void onClick(DialogInterface dialog, int id) {
+					    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+					    				startActivity(intent);
+					    			}
+					    		});
+								builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+								AlertDialog alert = builder.create();
+								alert.show();
+					        } else {
+					        	UnblockInfo unblockInfo = new UnblockInfo(UserProfile.this);
+								try {
+									unblockInfo.execute(resultObject.getInt("id"));
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					        }
+							
+						}
+					});
+				}
+				
+			}
+			if(resultObject.getInt("contact") == 0) {
+				
+				userProfileSendMessageBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle(R.string.alert_oh_noes);
+						if(mSharedPreferences.getString("USER_SEX", "").equalsIgnoreCase("male")) {
+							builder.setMessage(R.string.alert_message_disabled_male);
+							builder.setPositiveButton(R.string.btn_ofertar, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	SendOffer sendOffer = new SendOffer();
+										try {
+											sendOffer.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
+				    			}
+				    		});
+						} else {
+							builder.setMessage(R.string.alert_message_disabled_female);
+							builder.setPositiveButton(R.string.btn_buy, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	BuyProduct buyProduct = new BuyProduct();
+										try {
+											buyProduct.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
+				    			}
+				    		});
+						}
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								Toast.makeText(UserProfile.this, "Cancelado", Toast.LENGTH_SHORT).show();
+							}
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
+					}
+				});
+				
+				userProfileOfferBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle(R.string.alert_attention_title);
+						if(mSharedPreferences.getString("USER_SEX", "").equalsIgnoreCase("male")) {
+							builder.setMessage(R.string.alert_credit_discount_offer);
+							builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				Toast.makeText(UserProfile.this, "Oferta cancelada", Toast.LENGTH_SHORT).show();
+				    			}
+				    		});
+							builder.setPositiveButton(R.string.btn_continue_text, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	SendOffer sendOffer = new SendOffer();
+										try {
+											sendOffer.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
+				    			}
+				    		});
+							AlertDialog alert = builder.create();
+							alert.show();
+							
+						} else {
+							builder.setMessage(R.string.alert_credit_discount_buy);
+							builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				Toast.makeText(UserProfile.this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+				    			}
+				    		});
+							builder.setPositiveButton(R.string.btn_continue_text, new DialogInterface.OnClickListener() {
+				    			@Override
+				    			public void onClick(DialogInterface dialog, int id) {
+				    				if (!ct.isConnectingToInternet()) {
+										AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+										builder.setTitle(R.string.alert_attention_title);
+										builder.setMessage(R.string.alert_internet);
+										builder.setPositiveButton(R.string.btn_settings, new DialogInterface.OnClickListener() {
+							    			@Override
+							    			public void onClick(DialogInterface dialog, int id) {
+							    				Intent intent = new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+							    				startActivity(intent);
+							    			}
+							    		});
+										builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+											@Override
+											public void onClick(DialogInterface dialog, int id) {
+											}
+										});
+										AlertDialog alert = builder.create();
+										alert.show();
+							        } else {
+							        	BuyProduct buyProduct = new BuyProduct();
+										try {
+											buyProduct.execute(resultObject.getInt("id"));
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+							        }
+				    				
+				    			}
+				    		});
+							AlertDialog alert = builder.create();
+							alert.show();
+							
+						}
+					}
+				});
+			} else {
+				userProfileSendMessageBtn.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						Intent intent = new Intent(UserProfile.this, MessageDetail.class);
+						try {
+							intent.putExtra("id", resultObject.getInt("contact"));
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						startActivity(intent);
+					}
+				});
+			}
 			
 			/* Personal info */
 			
@@ -192,6 +487,8 @@ public class UserProfile extends Activity {
 			}
 			if(!resultObject.getString("birthday").equals("") && !resultObject.isNull("birthday")) {
 				userProfileAgeText.setText(Integer.toString(utilityBelt.calculateAge(resultObject.getString("birthday"))) + " años");
+			} else {
+				userProfileAgeText.setText("-");
 			}
 			if(!resultObject.getString("height").equals("") && !resultObject.isNull("height")) {
 				userProfileHeightText.setText(resultObject.getString("height") + "mt");
@@ -211,6 +508,48 @@ public class UserProfile extends Activity {
 			
 			/* About me */
 			
+			if(!resultObject.getString("sex").equalsIgnoreCase("male")) {
+				flavorsRow.setVisibility(View.GONE);
+				packagesRow.setVisibility(View.GONE);
+				bonusPackRow.setVisibility(View.GONE);
+			} else {
+				userProfileOfferBtn.setImageResource(R.drawable.button_buy);
+				userProfileFlavorsText = (TextView) findViewById(R.id.userProfileFlavorsText);
+				userProfilePackagesText = (TextView) findViewById(R.id.userProfilePackagesText);
+				userProfileBonusPackText = (TextView) findViewById(R.id.userProfileBonusPackText);
+				
+				if(!resultObject.isNull("flavor_ids")) {
+					JSONArray elements = resultObject.getJSONArray("flavor_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
+						userProfileFlavorsText.setText(userProfileFlavorsText.getText().toString() 
+								+ flavorsList[val-1] + "  ");
+					}
+				}
+				
+				if(!resultObject.isNull("packaging_ids")) {
+					JSONArray elements = resultObject.getJSONArray("packaging_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
+						userProfilePackagesText.setText(userProfilePackagesText.getText().toString() 
+								+ packagesList[val-1] + "  ");
+					}
+				}
+				
+				if(!resultObject.isNull("bonus_pack_ids")) {
+					JSONArray elements = resultObject.getJSONArray("bonus_pack_ids");
+					for(int i = 0; i < elements.length(); i++) {
+						int val = elements.getInt(i);
+						userProfileBonusPackText.setText(userProfileBonusPackText.getText().toString()
+								+ bonusPackList[val-1] + "  ");
+					}
+				}
+				
+			}
+			
+			userProfileOfferBtn.setVisibility(View.VISIBLE);
+			userProfileSendMessageBtn.setVisibility(View.VISIBLE);
+			
 			if(!resultObject.getString("short_description").equals("") && !resultObject.isNull("short_description")) {
 				userProfileAboutMeText.setText(resultObject.getString("short_description") + "\n");
 			}
@@ -223,6 +562,7 @@ public class UserProfile extends Activity {
 			Spannable str = new SpannableString(userProfileCrazyText.getText().toString());
 			str.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, 28, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			userProfileCrazyText.setText(str);
+			
 			/* Info */
 			
 			if(!resultObject.getString("religion").equals("") && !resultObject.isNull("religion")) {
@@ -427,20 +767,65 @@ public class UserProfile extends Activity {
 				userProfileFetishesText.setText("-");
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			userProfileNameText.setText(intent.getStringExtra("username"));
+			userProfileAgeText.setText("-");
+			userProfileHeightText.setText("-");
+			userProfileWeightText.setText("-");
+			userProfileCountryText.setText("-");
 			e.printStackTrace();
 		}
 		
 		
 		imageLoader = new ImageLoader(this);
 		
-		userProfileUserImage.getLayoutParams().height = 95;
-		userProfileUserImage.getLayoutParams().width = 95;
+		mImageGrid = (TwoWayGridView) findViewById(R.id.userProfileImageGalleryGrid);
+		
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+		int width = 0;
+		int height = 0;
+		int avatarWidth = 0;
+		int avatarHeight = 0;
+		int density = displaymetrics.densityDpi;
+		
+		switch(density) {
+			
+			case DisplayMetrics.DENSITY_LOW:
+				 width = 45;
+				 height = 45;
+				 avatarWidth = 90;
+				 avatarHeight = 90;
+				 break;
+			
+			case DisplayMetrics.DENSITY_MEDIUM:
+				 width = 60;
+				 height = 60;
+				 avatarWidth = 120;
+				 avatarHeight = 120;
+				 break;
+			
+			case DisplayMetrics.DENSITY_HIGH:
+				 width = 90;
+				 height = 90;
+				 avatarWidth = 180;
+				 avatarHeight = 180;
+				 break;
+			
+			case DisplayMetrics.DENSITY_XHIGH:
+				 width = 120;
+				 height = 120;
+				 avatarWidth = 240;
+				 avatarHeight = 240;
+				 break;
+		}
+		
+		userProfileUserImage.getLayoutParams().height = avatarHeight;
+		userProfileUserImage.getLayoutParams().width = avatarWidth;
 		userProfileUserImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		imageLoader.DisplayImage(intent.getStringExtra("pic"), userProfileUserImage);
 		
-		mImageGrid = (TwoWayGridView) findViewById(R.id.userProfileImageGalleryGrid);
-		imageAdapter = new PictureAdapter(this, 0, 0, 0, 0, 60, 60, resultImages);
+		imageAdapter = new PictureAdapter(this, 0, 0, 0, 0, width, height, resultImages);
 		mImageGrid.setAdapter(imageAdapter);
 		
 		mImageGrid.setOnItemClickListener(new OnItemClickListener() {
@@ -451,29 +836,70 @@ public class UserProfile extends Activity {
 				intent.putExtra("from", "profile");
 				intent.putExtra("images", resultImages.toString());
 				intent.putExtra("position", position);
-				startActivity(intent);
-				
+				startActivity(intent);	
 			}
 		});
 		
 	}
-
+	
+	@Override
+	protected void onResume() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+	           GcmBroadcastReceiver.currentActivity = this;
+		}
+		super.onResume();
+	}
+		
+	@Override
+	protected void onPause() {
+		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
+			GcmBroadcastReceiver.currentActivity = null;
+	    }
+	    super.onPause();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.user_profile, menu);
+		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+            	NavUtils.navigateUpFromSameTask(this);
+    			return true;
+            case R.id.logout:
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_attention_title);
+				builder.setMessage(R.string.alert_logout);
+				builder.setPositiveButton(R.string.btn_logout, new DialogInterface.OnClickListener() {
+	    			@Override
+	    			public void onClick(DialogInterface dialog, int id) {
+	    				Editor e = mSharedPreferences.edit();
+	                	e.remove("LOGGED_IN");
+	                    e.commit();
+	                	Intent intent = new Intent(UserProfile.this, Login.class);
+	                	startActivity(intent);
+	                	UserProfile.this.finish();
+	    			}
+	    		});
+				builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+            	
+            	break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 	
 	private class UserInfo extends AsyncTask<Integer, Integer, String> {
 		
@@ -507,7 +933,7 @@ public class UserProfile extends Activity {
 		protected String doInBackground(Integer... params) {
 		    
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://demosmartphone.supermanket.cl/apim/users/" + Integer.toString(currentUser[0]) + ".json?app_key="
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "users/" + Integer.toString(currentUser[0]) + ".json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
             
@@ -541,6 +967,301 @@ public class UserProfile extends Activity {
 			
 		}
 		
+	}
+	
+	private class UnblockInfo extends AsyncTask<Integer, Void, String> {
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		private UserProfile activityRef;
+		
+		public UnblockInfo(UserProfile activityRef) {
+			this.activityRef = activityRef;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+		
+			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(UserProfile.this, "", "Desbloqueando...", true);
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "access/unlocked/" + Integer.toString(params[0]) + ".json?app_key="
+									+ api_key + "&signature=" + signature);
+            get.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(get);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserProfile.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				Log.d("Resultado", result);
+				try {
+					JSONObject resultObject = new JSONObject(result);
+					if(resultObject.has("errors")) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle("Oh noes!");
+						builder.setMessage(resultObject.getString("errors"));
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Toast.makeText(UserProfile.this, "Desbloqueo cancelado", Toast.LENGTH_SHORT).show();
+			    			}
+			    		});
+						builder.setPositiveButton(R.string.btn_buy_credits, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				String url = "http://www.supermanket.com/credit_packs";
+			    				Intent intent = new Intent(Intent.ACTION_VIEW);
+			    				intent.setData(Uri.parse(url));
+			    				startActivity(intent);
+			    			}
+			    		});
+						AlertDialog alert = builder.create();
+						dialog.dismiss();
+						alert.show();
+					} else  {
+						activityRef.profileLoad(result);
+						dialog.dismiss();
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+				
+
+			}
+			
+		}
+	}
+	
+	private class SendOffer extends AsyncTask<Integer, Void, String> {
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		
+		@Override
+		protected void onPreExecute() {
+		
+			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(UserProfile.this, "", "Enviando oferta...", true);
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "offers/client/" + Integer.toString(params[0]) + ".json?app_key="
+									+ api_key + "&signature=" + signature);
+            get.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(get);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserProfile.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				try {
+					JSONObject resultObject = new JSONObject(result);
+					if(resultObject.has("errors")) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle("Oh noes!");
+						builder.setMessage(resultObject.getString("errors"));
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Toast.makeText(UserProfile.this, "Oferta cancelada", Toast.LENGTH_SHORT).show();
+			    			}
+			    		});
+						builder.setPositiveButton(R.string.btn_buy_credits, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				String url = "http://www.supermanket.com/credit_packs";
+			    				Intent intent = new Intent(Intent.ACTION_VIEW);
+			    				intent.setData(Uri.parse(url));
+			    				startActivity(intent);
+			    			}
+			    		});
+						AlertDialog alert = builder.create();
+						alert.show();
+					} else if(resultObject.has("notice")){
+						alert.showAlertDialog(UserProfile.this, "Hey!", resultObject.getString("notice"), false);
+					} else if(resultObject.has("error")) {
+						JSONObject errorObject = resultObject.getJSONObject("error");
+						JSONArray errorArray = errorObject.getJSONArray("client_id");
+						String errorMsg = "";
+						if(errorArray.length() > 1) {
+							for(int i = 0; i < errorArray.length(); i++) {
+								errorMsg = errorMsg + errorArray.getString(i) + "\n";
+							}
+						} else {
+							errorMsg = errorArray.getString(0);
+						}
+						
+						alert.showAlertDialog(UserProfile.this, "Oh noes!", errorMsg, false);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d("Resultado", result);	
+				dialog.dismiss();
+			}
+			
+		}
+	}
+	
+	private class BuyProduct extends AsyncTask<Integer, Void, String> {
+		private ProgressDialog dialog;
+		private AlertDialogs alert = new AlertDialogs();
+		private String api_key;
+		private String api_secret;
+		private String signature;
+		private SharedPreferences mSharedPreferences;
+		
+		@Override
+		protected void onPreExecute() {
+		
+			super.onPreExecute();
+			
+			dialog = ProgressDialog.show(UserProfile.this, "", "Comprando producto...", true);
+			
+			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
+			api_key = mSharedPreferences.getString("API_KEY", "");
+			api_secret = mSharedPreferences.getString("API_SECRET", "");
+			signature = utilityBelt.md5("app_key" + api_key + api_secret);
+			
+		}
+		
+		@Override
+		protected String doInBackground(Integer... params) {
+		    
+			HttpClient client = new DefaultHttpClient();
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "orders/product/" + Integer.toString(params[0]) + ".json?app_key="
+									+ api_key + "&signature=" + signature);
+            get.setHeader("content-type", "application/json");
+            
+            try {
+            	HttpResponse resp = client.execute(get);
+				return EntityUtils.toString(resp.getEntity());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+ 
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			
+			if(result == null) {
+				alert.showAlertDialog(UserProfile.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				dialog.dismiss();
+			} else {
+				try {
+					JSONObject resultObject = new JSONObject(result);
+					if(resultObject.has("errors")) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+						builder.setTitle("Oh noes!");
+						builder.setMessage(resultObject.getString("errors"));
+						builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				Toast.makeText(UserProfile.this, "Oferta cancelada", Toast.LENGTH_SHORT).show();
+			    			}
+			    		});
+						builder.setPositiveButton(R.string.btn_buy_credits, new DialogInterface.OnClickListener() {
+			    			@Override
+			    			public void onClick(DialogInterface dialog, int id) {
+			    				String url = "http://www.supermanket.com/credit_packs";
+			    				Intent intent = new Intent(Intent.ACTION_VIEW);
+			    				intent.setData(Uri.parse(url));
+			    				startActivity(intent);
+			    			}
+			    		});
+						AlertDialog alert = builder.create();
+						alert.show();
+					} else if(resultObject.has("notice")){
+						alert.showAlertDialog(UserProfile.this, "Hey!", resultObject.getString("notice"), false);
+					} else if(resultObject.has("error")) {
+						JSONObject errorObject = resultObject.getJSONObject("error");
+						JSONArray errorArray = errorObject.getJSONArray("client_id");
+						String errorMsg = "";
+						if(errorArray.length() > 1) {
+							for(int i = 0; i < errorArray.length(); i++) {
+								errorMsg = errorMsg + errorArray.getString(i) + "\n";
+							}
+						} else {
+							errorMsg = errorArray.getString(0);
+						}
+						
+						alert.showAlertDialog(UserProfile.this, "Oh noes!", errorMsg, false);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d("Resultado", result);	
+				dialog.dismiss();
+			}
+			
+		}
 	}
 
 }

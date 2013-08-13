@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
- 
+    android:layout_height="fill_parent">
+
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/messageListList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"
-        android:listSelector="@drawable/list_selector" />
+        android:listSelector="@drawable/list_selector" >
+    </ListView>
+
+    <com.supermanket.utilities.SideNavigationView 
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.supermanket.utilities.SideNavigationView>
  
-</LinearLayout>
+</RelativeLayout>

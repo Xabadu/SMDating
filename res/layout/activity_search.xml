@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/searchBgLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/chat_bg"
+    tools:context=".Search" >
+	
+
+    
+    <ImageView
+        android:id="@+id/searchHeaderImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_search_header" />
+
+    <ExpandableListView
+        android:id="@+id/searchList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchHeaderImage"
+        android:visibility="visible" >
+    </ExpandableListView>
+
+    <TextView
+        android:id="@+id/searchAgeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchList"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/lbl_search_age"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/searchLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/lbl_search_location"
+        android:textStyle="bold" />
+
+    <AutoCompleteTextView
+        android:id="@+id/searchLocationFieldText"
+        style="@style/PinkEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchLocationText"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/searchLocationId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchLocationFieldText"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/searchBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchLocationId"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:src="@drawable/button_search" />
+
+    <LinearLayout
+        android:id="@+id/searchAgeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchAgeText" >
+
+        <EditText
+            android:id="@+id/searchAgeFromText"
+            style="@style/PinkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:hint="@string/lbl_eighteen"
+            android:inputType="number"
+            android:maxLength="2" >
+
+        </EditText>
+
+        <TextView
+            android:id="@+id/searchAgeNexusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:text="@string/lbl_search_nexus" />
+
+        <EditText
+            android:id="@+id/searchAgeToText"
+            style="@style/PinkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:hint="@string/lbl_ninetynine"
+            android:inputType="number"
+            android:maxLength="2" />
+
+    </LinearLayout>
+
+    <com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.supermanket.utilities.SideNavigationView>
+
+</RelativeLayout>

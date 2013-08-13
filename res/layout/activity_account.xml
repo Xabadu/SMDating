@@ -1,18 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/accountLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/chat_bg"
     tools:context=".Account" >
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/accountAvatarImage" >
+        android:layout_below="@+id/accountAvatarImage"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+   		android:paddingLeft="@dimen/activity_horizontal_margin"
+    	android:paddingRight="@dimen/activity_horizontal_margin" >
 
         <TableLayout
             android:id="@+id/accountDataTable"
@@ -72,7 +73,7 @@
                 android:padding="10dp" >
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/accountNutritionalInfoText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_account_information"
@@ -93,7 +94,7 @@
                 android:padding="10dp" >
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/userProfileBonusPackTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_account_flavors"
@@ -102,6 +103,7 @@
             </TableRow>
             
             <View
+                android:id="@+id/flavorsSeparator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="#aaaaaa" />
@@ -124,6 +126,7 @@
             </TableRow>
             
             <View
+                android:id="@+id/packagesSeparator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="#aaaaaa" />
@@ -146,6 +149,7 @@
             </TableRow>
             
             <View
+                android:id="@+id/bonusPackSeparator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="#aaaaaa" />
@@ -219,6 +223,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:contentDescription="@string/cd_account_avatar"  />
+        android:contentDescription="@string/cd_account_avatar"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+    	android:paddingRight="@dimen/activity_horizontal_margin"  />
+   
+    <com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
     
 </RelativeLayout>

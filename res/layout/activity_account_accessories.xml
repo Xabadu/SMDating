@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:background="@drawable/chat_bg"
 	    android:id="@+id/scrollView1"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
@@ -20,22 +21,21 @@
 		        android:layout_centerHorizontal="true"
 		        android:layout_marginTop="24dp" >
 		
-		        <Button
+		        <ImageButton
 		            android:id="@+id/accessoriesFormSaveBtn"
-		            style="@style/button_text"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:background="@drawable/light_blue_button"
-		            android:text="@string/btn_account_save" />
+		            android:background="@null"
+		            android:src="@drawable/button_save" />
 		
-		        <Button
+		        <ImageButton
 		            android:id="@+id/accessoriesFormBackBtn"
-		            style="@style/button_text"
-		            android:layout_width="0dp"
+		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:layout_weight="1.71"
-		            android:background="@drawable/gray_button"
-		            android:text="@string/btn_account_back" />
+		            android:background="@null"
+		            android:layout_marginLeft="5dp"
+		            android:src="@drawable/button_back" />
+
 		
 		    </LinearLayout>
 
@@ -74,7 +74,6 @@
                 android:hint="@string/lbl_accesories_femalechildren"
                 android:inputType="number" >
 
-                <requestFocus />
             </EditText>
 
             <TextView

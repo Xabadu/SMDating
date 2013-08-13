@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+	
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/searchResultsGrid"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:columnWidth="90dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        ptr:ptrMode="both"
+        ptr:ptrDrawable="@drawable/android" />
+
+    <RelativeLayout
+        android:id="@+id/searchResultsBottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:paddingLeft="@dimen/dashboard_footer_left_padding"
+        android:paddingRight="@dimen/dashboard_footer_left_padding">
+        <ImageView
+            android:id="@+id/searchHeaderImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:src="@drawable/img_dashboard_bottom_bg" />
+
+        <ImageButton
+            android:id="@+id/searchAgainBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/button_search"
+            android:background="@null" />
+
+    </RelativeLayout>
+ 
+	<com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+    
+</RelativeLayout>

@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import com.supermanket.supermanket.R;
 
 public class PictureAdapter extends BaseAdapter{
-	
+
 	private Context mContext;
 	private int imageWidth;
 	private int imageHeight;

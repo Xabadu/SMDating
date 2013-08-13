@@ -29,7 +29,8 @@ import android.widget.TextView;
  * 
  */
 public class SideNavigationView extends LinearLayout {
-    private static final String LOG_TAG = SideNavigationView.class.getSimpleName();
+    
+	private static final String LOG_TAG = SideNavigationView.class.getSimpleName();
 
     private LinearLayout navigationMenu;
     private ListView listView;
@@ -43,30 +44,18 @@ public class SideNavigationView extends LinearLayout {
         LEFT, RIGHT
     };
 
-    /**
-     * Constructor of {@link SideNavigationView}.
-     * 
-     * @param context
-     */
+    
     public SideNavigationView(Context context) {
         super(context);
         load();
     }
 
-    /**
-     * Constructor of {@link SideNavigationView}.
-     * 
-     * @param context
-     * @param attrs
-     */
+    
     public SideNavigationView(Context context, AttributeSet attrs) {
         super(context, attrs);
         load();
     }
 
-    /**
-     * Loading of side navigation view.
-     */
     private void load() {
         if (isInEditMode()) {
             return;
@@ -74,9 +63,7 @@ public class SideNavigationView extends LinearLayout {
         initView();
     }
 
-    /**
-     * Initialization layout of side menu.
-     */
+
     private void initView() {
         removeAllViews();
         int sideNavigationRes;
@@ -113,20 +100,12 @@ public class SideNavigationView extends LinearLayout {
         });
     }
 
-    /**
-     * Setup of {@link ISideNavigationCallback} for callback of item click.
-     * 
-     * @param callback
-     */
+
     public void setMenuClickCallback(ISideNavigationCallback callback) {
         this.callback = callback;
     }
 
-    /**
-     * Setup of side menu items.
-     * 
-     * @param menu - resource ID
-     */
+
     public void setMenuItems(int menu) {
         parseXml(menu);
         if (menuItems != null && menuItems.size() > 0) {
@@ -134,11 +113,7 @@ public class SideNavigationView extends LinearLayout {
         }
     }
 
-    /**
-     * Setup sliding mode of side menu ({@code Mode.LEFT} or {@code Mode.RIGHT}). {@code Mode.LEFT} by default.
-     * 
-     * @param mode Sliding mode
-     */
+
     public void setMode(Mode mode) {
         if (isShown()) {
             hideMenu();
@@ -151,25 +126,17 @@ public class SideNavigationView extends LinearLayout {
         }
     }
 
-    /**
-     * Getting current side menu mode ({@code Mode.LEFT} or {@code Mode.RIGHT}). {@code Mode.LEFT} by default.
-     * 
-     * @return side menu mode
-     */
+
     public Mode getMode() {
         return mMode;
     }
 
-    /**
-	 * 
-	 */
+
     public void setBackgroundResource(int resource) {
         listView.setBackgroundResource(resource);
     }
 
-    /**
-     * Show side navigation menu.
-     */
+
     public void showMenu() {
         outsideView.setVisibility(View.VISIBLE);
         outsideView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.side_navigation_fade_in));
@@ -191,9 +158,7 @@ public class SideNavigationView extends LinearLayout {
         navigationMenu.startAnimation(AnimationUtils.loadAnimation(getContext(), animRes));
     }
 
-    /**
-     * Hide side navigation menu.
-     */
+
     public void hideMenu() {
         outsideView.setVisibility(View.GONE);
         outsideView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.side_navigation_fade_out));
@@ -215,9 +180,7 @@ public class SideNavigationView extends LinearLayout {
         navigationMenu.startAnimation(AnimationUtils.loadAnimation(getContext(), animRes));
     }
 
-    /**
-     * Show/Hide side navigation menu depending on visibility.
-     */
+
     public void toggleMenu() {
         if (isShown()) {
             hideMenu();
@@ -231,11 +194,7 @@ public class SideNavigationView extends LinearLayout {
         return navigationMenu.isShown();
     }
 
-    /**
-     * Parse XML describe menu.
-     * 
-     * @param menu - resource ID
-     */
+
     private void parseXml(int menu) {
         menuItems = new ArrayList<SideNavigationItem>();
         try {
@@ -275,12 +234,7 @@ public class SideNavigationView extends LinearLayout {
         }
     }
 
-    /**
-     * Convert resource ID to String.
-     * 
-     * @param text
-     * @return
-     */
+
     private String resourceIdToString(String resId) {
         if (!resId.contains("@")) {
             return resId;
@@ -341,6 +295,6 @@ public class SideNavigationView extends LinearLayout {
             ImageView icon;
         }
 
-    }
+    } 
 
 }

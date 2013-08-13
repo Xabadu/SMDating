@@ -26,11 +26,12 @@
     <string name="profile_section3">Efectos</string>
     <string name="profile_section4">Fotos</string>
     <string name="title_activity_user_full_picture">UserFullPicture</string>
-    <string name="menu_title1">Gente</string>
+    <string name="menu_title1">Inicio</string>
     <string name="menu_title2">Cercanos</string>
     <string name="menu_title3">Mensajes</string>
     <string name="menu_title4">Perfil</string>
     <string name="menu_title5">Cerrar sesión</string>
+    <string name="menu_title6">Buscar gente</string>
     <string name="mode">Mode</string>
     <string name="mode_left">Left</string>
     <string name="mode_right">Right</string>
@@ -38,6 +39,7 @@
     <string name="lbl_confirm_password">Confirmar contraseña</string>
     <string name="title_activity_users_map">UsersMap</string>
     <string name="btn_ofertar">Ofertar</string>
+    <string name="btn_buy">Comprar</string>
     <string name="btn_send_message">Enviar mensaje</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
@@ -71,6 +73,7 @@
     <string name="lbl_profile_hasbike">Bicicleta:</string>
     <string name="lbl_profile_aboutme">Sobre mi</string>
     <string name="lbl_profile_information">Información Nutricional</string>
+    <string name="lbl_profile_information_female">Información de la clienta</string>
     <string name="lbl_profile_accessories">Accesorios</string>
     <string name="lbl_profile_effects">Efectos Secundarios</string>
     <string name="lbl_profile_defects">Mañas:</string>
@@ -103,716 +106,773 @@
     <string name="lbl_account_county">Comuna</string>
     <string name="btn_account_save">Guardar cambios</string>
     <string name="btn_account_back">Volver</string>
-	<string-array name="countries">
-	    <item>Argentina</item>
-	    <item>Brasil</item>
-	    <item>Chile</item>
-	    <item>Colombia</item>
-	    <item>España</item>
-	    <item>Mexico</item>
-	    <item>USA</item>
-	    <item>中国</item>
-	</string-array>
-	<string-array name="states">
-	    <item>Arica y Parinacota</item>
-		<item>Tarapacá</item>
-		<item>Antofagasta</item>
-		<item>Atacama</item>
-		<item>Coquimbo</item>
-		<item>Valparaíso</item>
-		<item>Bernardo OHiggins</item>
-		<item>Maule</item>
-		<item>Biobío</item>
-		<item>Araucanía</item>
-		<item>Los Ríos</item>
-		<item>Los Lagos</item>
-		<item>Aysén del General Carlos Ibáñez del Campo</item>
-		<item>Magallanes y de la Antártica Chilena</item>
-		<item>Metropolitana de Santiago</item>
-		<item>Buenos Aires</item>
-		<item>Catamarca</item>
-		<item>Chaco</item>
-		<item>Chubut</item>
-		<item>Cordoba</item>
-		<item>Corrientes</item>
-		<item>Distrito Federal</item>
-		<item>Entre Rios</item>
-		<item>Formosa</item>
-		<item>Jujuy</item>
-		<item>La Pampa</item>
-		<item>La Rioja</item>
-		<item>Mendoza</item>
-		<item>Misiones</item>
-		<item>Neuquen</item>
-		<item>Rio Negro</item>
-		<item>Salta</item>
-		<item>San Juan</item>
-		<item>San Luis</item>
-		<item>Santa Cruz</item>
-		<item>Santa Fe</item>
-		<item>Santiago del Estero</item>
-		<item>Tierra del Fuego</item>
-		<item>Tucuman</item>
-		<item>Amazonas</item>
-		<item>Antioquia</item>
-		<item>Arauca</item>
-		<item>Atlántico</item>
-		<item>Bolívar</item>
-		<item>Boyacá</item>
-		<item>Caldas</item>
-		<item>Caquetá</item>
-		<item>Casanare</item>
-		<item>Cauca</item>
-		<item>Cesar</item>
-		<item>Chocó</item>
-		<item>Córdoba</item>
-		<item>Cundinamarca</item>
-		<item>Guainía</item>
-		<item>Guaviare</item>
-		<item>Huila</item>
-		<item>La Guajira</item>
-		<item>Magdalena</item>
-		<item>Meta</item>
-		<item>Nariño</item>
-		<item>Norte de Santander</item>
-		<item>Putumayo</item>
-		<item>Quindío</item>
-		<item>Risaralda</item>
-		<item>San Andrés y Providencia</item>
-		<item>Santander</item>
-		<item>Sucre</item>
-		<item>Tolima</item>
-		<item>Valle del Cauca</item>
-		<item>Vaupés</item>
-		<item>Vichada</item>
-		<item>Distrito Federal</item>
-		<item>Amazonas</item>
-		<item>Anzoátegui</item>
-		<item>Apure</item>
-		<item>Aragua</item>
-		<item>Barinas</item>
-		<item>Bolívar</item>
-		<item>Carabobo</item>
-		<item>Cojedes</item>
-		<item>Delta Amacuro</item>
-		<item>Falcón</item>
-		<item>Guárico</item>
-		<item>Lara</item>
-		<item>Mérida</item>
-		<item>Miranda</item>
-		<item>Monagas</item>
-		<item>Nueva Esparta</item>
-		<item>Portuguesa</item>
-		<item>Sucre</item>
-		<item>Táchira</item>
-		<item>Trujillo</item>
-		<item>Vargas</item>
-		<item>Yaracuy</item>
-		<item>Zulia</item>
-		<item>Dependencias Federales</item>
-		<item>Badajoz</item>
-		<item>Cáceres</item>
-		<item>Ciudad Real</item>
-		<item>Zaragoza</item>
-		<item>Cuenca</item>
-		<item>Huesca</item>
-		<item>León</item>
-		<item>Toledo</item>
-		<item>Albacete</item>
-		<item>Teruel</item>
-		<item>Sevilla</item>
-		<item>Burgos</item>
-		<item>Córdoba</item>
-		<item>Jaén</item>
-		<item>Granada</item>
-		<item>Salamanca</item>
-		<item>Guadalajara</item>
-		<item>Lérida</item>
-		<item>Murcia</item>
-		<item>Valencia</item>
-		<item>Asturias</item>
-		<item>Zamora</item>
-		<item>Navarra</item>
-		<item>Soria</item>
-		<item>Huelva</item>
-		<item>Lugo</item>
-		<item>Almería</item>
-		<item>Valladolid</item>
-		<item>Palencia</item>
-		<item>Ávila</item>
-		<item>Madrid</item>
-		<item>La Coruña</item>
-		<item>Barcelona</item>
-		<item>Cádiz</item>
-		<item>Málaga</item>
-		<item>Orense</item>
-		<item>Segovia</item>
-		<item>Castellón</item>
-		<item>Tarragona</item>
-		<item>Gerona</item>
-		<item>Alicante</item>
-		<item>Cantabria</item>
-		<item>La Rioja</item>
-		<item>Islas Baleares</item>
-		<item>Pontevedra</item>
-		<item>Las Palmas</item>
-		<item>Santa Cruz de Tenerife</item>
-		<item>Álava</item>
-		<item>Vizcaya</item>
-		<item>Guipúzcoa</item>
-		<item>Ceuta</item>
-		<item>Melilla</item>
-	</string-array>
-	<string-array name="counties">
-	    <item>Arica</item>
-		<item>Camarones</item>
-		<item>Putre</item>
-		<item>General Lagos</item>
-		<item>Iquique</item>
-		<item>Alto Hospicio</item>
-		<item>Pozo Almonte</item>
-		<item>Camiña</item>
-		<item>Colchane</item>
-		<item>Huara</item>
-		<item>Pica</item>
-		<item>Antofagasta</item>
-		<item>Mejillones</item>
-		<item>Sierra Gorda</item>
-		<item>Taltal</item>
-		<item>Calama</item>
-		<item>Ollagüe</item>
-		<item>San Pedro de Atacama</item>
-		<item>Tocopilla</item>
-		<item>>María Elena</item>
-		<item>Copiapó</item>
-		<item>Caldera</item>
-		<item>Tierra Amarilla</item>
-		<item>Chañaral</item>
-		<item>Diego de Almagro</item>
-		<item>Vallenar</item>
-		<item>Alto del Carmen</item>
-		<item>Freirina</item>
-		<item>Huasco</item>
-		<item>La Serena</item>
-		<item>Coquimbo</item>
-		<item>Andacollo</item>
-		<item>La Higuera</item>
-		<item>Paiguano</item>
-		<item>Vicuña</item>
-		<item>Illapel</item>
-		<item>Canela</item>
-		<item>Los Vilos</item>
-		<item>Salamanca</item>
-		<item>Ovalle</item>
-		<item>Combarbalá</item>
-		<item>Monte Patria</item>
-		<item>Punitaqui</item>
-		<item>Río Hurtado</item>
-		<item>Valparaíso</item>
-		<item>Casablanca</item>
-		<item>Concón</item>
-		<item>Juan Fernández</item>
-		<item>Puchuncaví</item>
-		<item>Quilpué</item>
-		<item>Quintero</item>
-		<item>Villa Alemana</item>
-		<item>Viña del Mar</item>
-		<item>Isla de Pascua</item>
-		<item>Los Andes</item>
-		<item>Calle Larga</item>
-		<item>Rinconada</item>
-		<item>San Esteban</item>
-		<item>La Ligua</item>
-		<item>Cabildo</item>
-		<item>Papudo</item>
-		<item>Petorca</item>
-		<item>Zapallar</item>
-		<item>Quillota</item>
-		<item>Calera</item>
-		<item>Hijuelas</item>
-		<item>La Cruz</item>
-		<item>Limache</item>
-		<item>Nogales</item>
-		<item>Olmué</item>
-		<item>San Antonio</item>
-		<item>Algarrobo</item>
-		<item>Cartagena</item>
-		<item>El Quisco</item>
-		<item>El Tabo</item>
-		<item>Santo Domingo</item>
-		<item>San Felipe</item>
-		<item>Catemu</item>
-		<item>Llaillay</item>
-		<item>Panquehue</item>
-		<item>Putaendo</item>
-		<item>Santa María</item>
-		<item>Rancagua</item>
-		<item>Codegua</item>
-		<item>Coinco</item>
-		<item>Coltauco</item>
-		<item>Doñihue</item>
-		<item>Graneros</item>
-		<item>Las Cabras</item>
-		<item>Machalí</item>
-		<item>Malloa</item>
-		<item>Mostazal</item>
-		<item>Olivar</item>
-		<item>Peumo</item>
-		<item>Pichidegua</item>
-		<item>Quinta de Tilcoco</item>
-		<item>Rengo</item>
-		<item>Requínoa</item>
-		<item>San Vicente</item>
-		<item>Pichilemu</item>
-		<item>La Estrella</item>
-		<item>Litueche</item>
-		<item>Marchihue</item>
-		<item>Navidad</item>
-		<item>Paredones</item>
-		<item>San Fernando</item>
-		<item>Chépica</item>
-		<item>Chimbarongo</item>
-		<item>Lolol</item>
-		<item>Nancagua</item>
-		<item>Palmilla</item>
-		<item>Peralillo</item>
-		<item>Placilla</item>
-		<item>Pumanque</item>
-		<item>Santa Cruz</item>
-		<item>Talca</item>
-		<item>Constitución</item>
-		<item>Curepto</item>
-		<item>Empedrado</item>
-		<item>Maule</item>
-		<item>Pelarco</item>
-		<item>Pencahue</item>
-		<item>Río Claro</item>
-		<item>San Clemente</item>
-		<item>San Rafael</item>
-		<item>Cauquenes</item>
-		<item>Chanco</item>
-		<item>Pelluhue</item>
-		<item>Curicó</item>
-		<item>Hualañé</item>
-		<item>Licantén</item>
-		<item>Molina</item>
-		<item>Rauco</item>
-		<item>Romeral</item>
-		<item>Sagrada Familia</item>
-		<item>Teno</item>
-		<item>Vichuquén</item>
-		<item>Linares</item>
-		<item>Colbún</item>
-		<item>Longaví</item>
-		<item>Parral</item>
-		<item>Retiro</item>
-		<item>San Javier</item>
-		<item>Villa Alegre</item>
-		<item>Yerbas Buenas</item>
-		<item>Concepción</item>
-		<item>Coronel</item>
-		<item>Chiguayante</item>
-		<item>Florida</item>
-		<item>Hualqui</item>
-		<item>Lota</item>
-		<item>Penco</item>
-		<item>San Pedro de La Paz</item>
-		<item>Santa Juana</item>
-		<item>Talcahuano</item>
-		<item>Tomé</item>
-		<item>Hualpén</item>
-		<item>Lebu</item>
-		<item>Arauco</item>
-		<item>Cañete</item>
-		<item>Contulmo</item>
-		<item>Curanilahue</item>
-		<item>Los Álamos</item>
-		<item>Tirúa</item>
-		<item>Los Ángeles</item>
-		<item>Antuco</item>
-		<item>Cabrero</item>
-		<item>Laja</item>
-		<item>Mulchén</item>
-		<item>Nacimiento</item>
-		<item>Negrete</item>
-		<item>Quilaco</item>
-		<item>Quilleco</item>
-		<item>San Rosendo</item>
-		<item>Santa Bárbara</item>
-		<item>Tucapel</item>
-		<item>Yumbel</item>
-		<item>Alto Biobío</item>
-		<item>Chillán</item>
-		<item>Bulnes</item>
-		<item>Cobquecura</item>
-		<item>Coelemu</item>
-		<item>Coihueco</item>
-		<item>Chillán Viejo</item>
-		<item>El Carmen</item>
-		<item>Ninhue</item>
-		<item>Ñiquén</item>
-		<item>Pemuco</item>
-		<item>Pinto</item>
-		<item>Portezuelo</item>
-		<item>Quillón</item>
-		<item>Quirihue</item>
-		<item>Ránquil</item>
-		<item>San Carlos</item>
-		<item>>San Fabián</item>
-		<item>San Ignacio</item>
-		<item>San Nicolás</item>
-		<item>Treguaco</item>
-		<item>Yungay</item>
-		<item>Temuco</item>
-		<item>Carahue</item>
-		<item>Cunco</item>
-		<item>Curarrehue</item>
-		<item>Freire</item>
-		<item>Galvarino</item>
-		<item>Gorbea</item>
-		<item>Lautaro</item>
-		<item>Loncoche</item>
-		<item>Melipeuco</item>
-		<item>Nueva Imperial</item>
-		<item>Padre Las Casas</item>
-		<item>Perquenco</item>
-		<item>Pitrufquén</item>
-		<item>Pucón</item>
-		<item>Saavedra</item>
-		<item>Teodoro Schmidt</item>
-		<item>Toltén</item>
-		<item>Vilcún</item>
-		<item>Villarrica</item>
-		<item>Cholchol</item>
-		<item>Angol</item>
-		<item>Collipulli</item>
-		<item>Curacautín</item>
-		<item>Ercilla</item>
-		<item>Lonquimay</item>
-		<item>Los Sauces</item>
-		<item>Lumaco</item>
-		<item>Purén</item>
-		<item>Renaico</item>
-		<item>Traiguén</item>
-		<item>Victoria</item>
-		<item>Valdivia</item>
-		<item>Corral</item>
-		<item>Lanco</item>
-		<item>Los Lagos</item>
-		<item>Máfil</item>
-		<item>Mariquina</item>
-		<item>Paillaco</item>
-		<item>Panguipulli</item>
-		<item>La Unión</item>
-		<item>Futrono</item>
-		<item>Lago Ranco</item>
-		<item>Río Bueno</item>
-		<item>Puerto Montt</item>
-		<item>Calbuco</item>
-		<item>Cochamó</item>
-		<item>Fresia</item>
-		<item>Frutillar</item>
-		<item>Los Muermos</item>
-		<item>Llanquihue</item>
-		<item>Maullín</item>
-		<item>Puerto Varas</item>
-		<item>Castro</item>
-		<item>Ancud</item>
-		<item>Chonchi</item>
-		<item>Curaco de Vélez</item>
-		<item>Dalcahue</item>
-		<item>Puqueldón</item>
-		<item>Queilén</item>
-		<item>Quellón</item>
-		<item>Quemchi</item>
-		<item>Quinchao</item>
-		<item>Osorno</item>
-		<item>Puerto Octay</item>
-		<item>Purranque</item>
-		<item>Puyehue</item>
-		<item>Río Negro</item>
-		<item>San Juan de la Costa</item>
-		<item>San Pablo</item>
-		<item>Chaitén</item>
-		<item>Futaleufú</item>
-		<item>Hualaihué</item>
-		<item>Palena</item>
-		<item>Coihaique</item>
-		<item>Lago Verde</item>
-		<item>Aisén</item>
-		<item>Cisnes</item>
-		<item>Guaitecas</item>
-		<item>Cochrane</item>
-		<item>OHiggins</item>
-		<item>Tortel</item>
-		<item>Chile Chico</item>
-		<item>Río Ibáñez</item>
-		<item>Punta Arenas</item>
-		<item>Laguna Blanca</item>
-		<item>Río Verde</item>
-		<item>San Gregorio</item>
-		<item>Cabo de Hornos</item>
-		<item>Antártica</item>
-		<item>Porvenir</item>
-		<item>Primavera</item>
-		<item>Timaukel</item>
-		<item>Natales</item>
-		<item>Torres del Paine</item>
-		<item>Santiago</item>
-		<item>Cerrillos</item>
-		<item>Cerro Navia</item>
-		<item>Conchalí</item>
-		<item>El Bosque</item>
-		<item>Estación Central</item>
-		<item>Huechuraba</item>
-		<item>Independencia</item>
-		<item>La Cisterna</item>
-		<item>La Florida</item>
-		<item>La Granja</item>
-		<item>La Pintana</item>
-		<item>La Reina</item>
-		<item>Las Condes</item>
-		<item>Lo Barnechea</item>
-		<item>Lo Espejo</item>
-		<item>Lo Prado</item>
-		<item>Macul</item>
-		<item>Maipú</item>
-		<item>Ñuñoa</item>
-		<item>Pedro Aguirre Cerda</item>
-		<item>Peñalolén</item>
-		<item>Providencia</item>
-		<item>Pudahuel</item>
-		<item>Quilicura</item>
-		<item>Quinta Normal</item>
-		<item>Recoleta</item>
-		<item>Renca</item>
-		<item>San Joaquín</item>
-		<item>San Miguel</item>
-		<item>San Ramón</item>
-		<item>Vitacura</item>
-		<item>Puente Alto</item>
-		<item>Pirque</item>
-		<item>San José de Maipo</item>
-		<item>Colina</item>
-		<item>Lampa</item>
-		<item>Tiltil</item>
-		<item>San Bernardo</item>
-		<item>Buin</item>
-		<item>Calera de Tango</item>
-		<item>Paine</item>
-		<item>Melipilla</item>
-		<item>>Alhué</item>
-		<item>Curacaví</item>
-		<item>María Pinto</item>
-		<item>San Pedro</item>
-		<item>Talagante</item>
-		<item>El Monte</item>
-		<item>Isla de Maipo</item>
-		<item>Padre Hurtado</item>
-		<item>Peñaflor</item>
-	</string-array>
-	<string-array name="religions">
-	    <item>Agnóstico</item>
-	    <item>Ateo</item>
-	    <item>Católico</item>
-	    <item>Cristiano</item>
-	    <item>Evangélico</item>
-	    <item>Judío</item>
-	    <item>Mormón</item>
-	    <item>Musulmán</item>
-	    <item>Pastafari</item>
-	    <item>Protestante</item>
-	    <item>Rastafari</item>
-	</string-array>
-	<string-array name="occupation">
-	    <item>armé mi propia empresa</item>
-	    <item>Cesante</item>
-	    <item>estudio</item>
-	    <item>Macheteo por aquí y por allá</item>
-	    <item>soy independiente</item>
-	    <item>trabajo en una empresa</item>
-	</string-array>
-	<string-array name="politics">
-	    <item>Apolítico</item>
-	    <item>Centro</item>
-	    <item>Derecha</item>
-	    <item>Extrema derecha</item>
-	    <item>Extrema izquierda</item>
-	    <item>Independiente</item>
-	    <item>Izquierda</item>
-	</string-array>
-	<string-array name="zodiac">
-	    <item>Aries</item>
-	    <item>Tauro</item>
-	    <item>Cancer</item>
-	    <item>Géminis</item>
-	    <item>Leo</item>
-	    <item>Virgo</item>
-	    <item>Libra</item>
-	    <item>Escorpión</item>
-	    <item>Sagitario</item>
-	    <item>Capricornio</item>
-	    <item>Acuario</item>
-	    <item>Piscis</item>
-	</string-array>
-	<string-array name="liveswith">
-	    <item>con amigos</item>
-	    <item>con mi mamá</item>
-	    <item>con mi papá</item>
-	    <item>con mi pareja</item>
-	    <item>con mis padres</item>
-	    <item>en familia</item>
-	    <item>solo</item>
-	</string-array>
-	<string-array name="salary">
-	    <item>menos de 250.000</item>
-	    <item>entre 250.000 y 500.000</item>
-	    <item>entre 500.000 y 1.000.000</item>
-	    <item>entre 1.000.000 y 1.500.000</item>
-	    <item>entre 1.500.000 y 2.000.000</item>
-	    <item>más de 2.000.000</item>
-	</string-array>
-	<string-array name="housetype">
-	    <item>Arriendo casa</item>
-	    <item>Tengo casa</item>
-	    <item>Arriendo departamento</item>
-	    <item>Tengo departamento</item>
-	</string-array>
-	<string-array name="beachhouse">
-	    <item>Sí</item>
-	    <item>No</item>
-	    <item>Sí, departamento</item>
-	</string-array>
-	<string-array name="pool">
-	    <item>Sí</item>
-	    <item>No</item>
-	    <item>Sí, de plástico</item>
-	</string-array>
-	<string-array name="standardyesno">
-	    <item>Sí</item>
-	    <item>No</item>
-	</string-array>
-	<string-array name="pet">
-	    <item>no tengo</item>
-	    <item>tengo un perro</item>
-	    <item>tengo un gato</item>
-	    <item>tengo un hamster</item>
-	    <item>tengo un pavo real</item>
-	</string-array>
-	<string-array name="drinks">
-	    <item>Sí</item>
-	    <item>No</item>
-	    <item>Social</item>
-	    <item>Mucho</item>
-	    <item>Un poco</item>
-	</string-array>
-	<string-array name="smokes">
-	    <item>Sí</item>
-	    <item>No</item>
-	    <item>Social</item>
-	</string-array>
-	<string-array name="drugs">
-	    <item>Marihuana, hay que legalizarla</item>
-		<item>Marihuana, no es droga</item>
-		<item>Coca</item>
-		<item>Anfetaminas</item>
-		<item>LCD</item>
-		<item>Ácidos</item>
-		<item>Champiñones</item>
-		<item>No me drogo</item>
-		<item>Cualquiera</item>
-	</string-array>
-	    <string name="lbl_about_description">Descripción corta</string>
-	    <string name="lbl_about_crazy">Lo más loco que has hecho</string>
-	    <string name="lbl_nutritional_languages">Idiomas</string>
-	    <string name="lbl_nutritional_album">Disco favorito</string>
-	    <string name="lbl_nutritional_book">Mi libro favorito</string>
-	    <string name="lbl_nutritional_artist">Grupo o cantante que me gusta mucho</string>
-	    <string name="lbl_nutritional_movie">Mi película favorita</string>
-	    <string name="lbl_nutritional_joke">Un chiste</string>
-	    <string name="lbl_nutritional_drink">Un trago</string>
-	    <string name="lbl_nutritional_country">País favorito</string>
-	    <string name="lbl_nutritional_quote">Una frase</string>
-	    <string name="lbl_nutritional_hobby">Hobby</string>
-	    <string name="lbl_nutritional_date">Cita ideal</string>
-	    <string name="lbl_nutritional_sport">Deporte</string>
-	    <string name="lbl_nutritional_food">Comida favorita</string>
-	    <string name="lbl_accesories_malechildren">Hijos</string>
-	    <string name="lbl_accesories_femalechildren">Hijas</string>
-	    <string name="lbl_effects_defects">Mañas</string>
-	    <string name="lbl_effects_hates">Cosas que odias</string>
-	    <string name="lbl_accessories_liveswith">Vivo con</string>
-	    <string name="lbl_accessories_label">Sueldo</string>
-	    <string name="lbl_accessories_housetype">Casa</string>
-	    <string name="lbl_accessories_beach">Casa en la playa</string>
-	    <string name="lbl_accessories_pool">Piscina</string>
-	    <string name="lbl_accessories_jacuzzi">Jacuzzi</string>
-	    <string name="lbl_accessories_motorcycle">Moto</string>
-	    <string name="lbl_accessories_bike">Bicicleta</string>
-	    <string name="lbl_accessories_car">Auto</string>
-	    <string name="lbl_accessories_pet">Mascota</string>
-	    <string name="lbl_effects_drink">Bebe alcohol</string>
-	    <string name="lbl_effects_smokes">Fuma</string>
-	    <string name="lbl_favorite_drug">Droga favorita</string>
-	    <string name="lbl_effects_drugs">Droga favorita</string>
-	    <string name="lbl_effects_sexposes">Poses sexuales</string>
-	    <string name="lbl_effects_sextoys">Juguetes sexuales</string>
-	    <string name="lbl_effects_guilty">Placer culpable</string>
-	    <string name="lbl_effects_sexualfantasy">Fantasía Sexual</string>
-	    <string name="lbl_effects_fetishes">Fetiches</string>
-	    <string name="lbl_account_info">Información de la cuenta</string>
-	    <string name="lbl_accountinfo_username">Nombre de usuario</string>
-	    <string name="lbl_accountinfo_email">Email</string>
-	    <string name="lbl_accountinfo_password">Contraseña (deja en blanco si no deseas cambiar)</string>
-	    <string name="lbl_accountinfo_confirmpass">Repetir contraseña</string>
-	    <string name="lbl_nutritional_religion">Religión</string>
-	    <string name="lbl_nutritional_occupation">A qué te dedicas</string>
-	    <string name="lbl_nutritional_politics">Tendencia política</string>
-	    <string name="lbl_nutritional_zodiac">Signo del zodíaco</string>
-	    <string name="lbl_account_flavors">Sabor</string>
-	    <string name="lbl_account_package">Envase</string>
-	    <string name="lbl_account_bonuspack">Bonus Pack</string>
-	    <string name="lbl_flavor_intelectual">Intelectual</string>
-	    <string name="lbl_flavor_ejecutivo">Ejecutivo</string>
-	    <string name="lbl_flavor_carretero">Carretero</string>
-	    <string name="lbl_flavor_deportista">Deportista</string>
-	    <string name="lbl_flavor_aventurero">Aventurero</string>
-	    <string name="lbl_flavor_fixero">Fixero</string>
-	    <string name="lbl_flavor_hipster">Hipster</string>
-	    <string name="lbl_flavor_tallero">Tallero</string>
-	    <string name="lbl_flavor_tuerca">Tuerca</string>
-	    <string name="lbl_flavor_gamer">Gamer</string>
-	    <string name="lbl_flavor_geek">Geek</string>
-	    <string name="lbl_flavor_timido">Tímido</string>
-	    <string name="lbl_flavor_artista">Artista</string>
-	    <string name="lbl_packages_rockero">Rockero</string>
-	    <string name="lbl_package_metalero">Metalero</string>
-	    <string name="lbl_package_casual">Casual</string>
-	    <string name="lbl_package_uniformado">Uniformado</string>
-	    <string name="lbl_package_skater">Skater</string>
-	    <string name="lbl_package_hiphop">Hip-Hop</string>
-	    <string name="lbl_package_otaku">Otaku</string>
-	    <string name="lbl_package_surfista">Surfista</string>
-	    <string name="lbl_package_verde">Verde</string>
-	    <string name="lbl_package_gotico">Gótico</string>
-	    <string name="lbl_package_motoquero">Motoquero</string>
-	    <string name="lbl_package_reggaetonero">Reggaetonero</string>
-	    <string name="lbl_package_zorron">Zorrón</string>
-	    <string name="lbl_package_parrillero">Parrillero</string>
-	    <string name="lbl_package_lana">Lana</string>
-	    <string name="lbl_package_pokemon">Pokemón</string>
-	    <string name="lbl_bonuspack_chef">Chef</string>
-	    <string name="lbl_bonuspack_vegetariano">Vegetariano</string>
-	    <string name="lbl_bonuspack_sixpack">Six Pack</string>
-	    <string name="lbl_bonuspack_fumador">Fumador</string>
-	    <string name="lbl_bonuspack_nofumador">No fumador</string>
-	    <string name="lbl_bonuspack_romantico">Romántico</string>
-	    <string name="lbl_bonuspack_musico">Músico</string>
-	    <string name="lbl_bonuspack_musculoso">Musculoso</string>
-	    <string name="lbl_bonuspack_millonario">Millonario y muriendo</string>
-	    <string name="lbl_bonuspack_cantante">Cantante</string>
-	    <string name="lbl_bonuspack_maestro">Maestro chasquilla</string>
-	    <string name="btn_gallery_camera">Tomar foto</string>
-	    <string name="btn_gallery_select">Seleccionar desde galería</string>
-	    <string name="btn_gallery_close">Cerrar</string>
+
+    <string-array name="countries">
+        <item>Argentina</item>
+        <item>Brasil</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+        <item>España</item>
+        <item>Mexico</item>
+        <item>USA</item>
+        <item>中国</item>
+    </string-array>
+    <string-array name="states">
+        <item>Arica y Parinacota</item>
+        <item>Tarapacá</item>
+        <item>Antofagasta</item>
+        <item>Atacama</item>
+        <item>Coquimbo</item>
+        <item>Valparaíso</item>
+        <item>Bernardo OHiggins</item>
+        <item>Maule</item>
+        <item>Biobío</item>
+        <item>Araucanía</item>
+        <item>Los Ríos</item>
+        <item>Los Lagos</item>
+        <item>Aysén del General Carlos Ibáñez del Campo</item>
+        <item>Magallanes y de la Antártica Chilena</item>
+        <item>Metropolitana de Santiago</item>
+        <item>Buenos Aires</item>
+        <item>Catamarca</item>
+        <item>Chaco</item>
+        <item>Chubut</item>
+        <item>Cordoba</item>
+        <item>Corrientes</item>
+        <item>Distrito Federal</item>
+        <item>Entre Rios</item>
+        <item>Formosa</item>
+        <item>Jujuy</item>
+        <item>La Pampa</item>
+        <item>La Rioja</item>
+        <item>Mendoza</item>
+        <item>Misiones</item>
+        <item>Neuquen</item>
+        <item>Rio Negro</item>
+        <item>Salta</item>
+        <item>San Juan</item>
+        <item>San Luis</item>
+        <item>Santa Cruz</item>
+        <item>Santa Fe</item>
+        <item>Santiago del Estero</item>
+        <item>Tierra del Fuego</item>
+        <item>Tucuman</item>
+        <item>Amazonas</item>
+        <item>Antioquia</item>
+        <item>Arauca</item>
+        <item>Atlántico</item>
+        <item>Bolívar</item>
+        <item>Boyacá</item>
+        <item>Caldas</item>
+        <item>Caquetá</item>
+        <item>Casanare</item>
+        <item>Cauca</item>
+        <item>Cesar</item>
+        <item>Chocó</item>
+        <item>Córdoba</item>
+        <item>Cundinamarca</item>
+        <item>Guainía</item>
+        <item>Guaviare</item>
+        <item>Huila</item>
+        <item>La Guajira</item>
+        <item>Magdalena</item>
+        <item>Meta</item>
+        <item>Nariño</item>
+        <item>Norte de Santander</item>
+        <item>Putumayo</item>
+        <item>Quindío</item>
+        <item>Risaralda</item>
+        <item>San Andrés y Providencia</item>
+        <item>Santander</item>
+        <item>Sucre</item>
+        <item>Tolima</item>
+        <item>Valle del Cauca</item>
+        <item>Vaupés</item>
+        <item>Vichada</item>
+        <item>Distrito Federal</item>
+        <item>Amazonas</item>
+        <item>Anzoátegui</item>
+        <item>Apure</item>
+        <item>Aragua</item>
+        <item>Barinas</item>
+        <item>Bolívar</item>
+        <item>Carabobo</item>
+        <item>Cojedes</item>
+        <item>Delta Amacuro</item>
+        <item>Falcón</item>
+        <item>Guárico</item>
+        <item>Lara</item>
+        <item>Mérida</item>
+        <item>Miranda</item>
+        <item>Monagas</item>
+        <item>Nueva Esparta</item>
+        <item>Portuguesa</item>
+        <item>Sucre</item>
+        <item>Táchira</item>
+        <item>Trujillo</item>
+        <item>Vargas</item>
+        <item>Yaracuy</item>
+        <item>Zulia</item>
+        <item>Dependencias Federales</item>
+        <item>Badajoz</item>
+        <item>Cáceres</item>
+        <item>Ciudad Real</item>
+        <item>Zaragoza</item>
+        <item>Cuenca</item>
+        <item>Huesca</item>
+        <item>León</item>
+        <item>Toledo</item>
+        <item>Albacete</item>
+        <item>Teruel</item>
+        <item>Sevilla</item>
+        <item>Burgos</item>
+        <item>Córdoba</item>
+        <item>Jaén</item>
+        <item>Granada</item>
+        <item>Salamanca</item>
+        <item>Guadalajara</item>
+        <item>Lérida</item>
+        <item>Murcia</item>
+        <item>Valencia</item>
+        <item>Asturias</item>
+        <item>Zamora</item>
+        <item>Navarra</item>
+        <item>Soria</item>
+        <item>Huelva</item>
+        <item>Lugo</item>
+        <item>Almería</item>
+        <item>Valladolid</item>
+        <item>Palencia</item>
+        <item>Ávila</item>
+        <item>Madrid</item>
+        <item>La Coruña</item>
+        <item>Barcelona</item>
+        <item>Cádiz</item>
+        <item>Málaga</item>
+        <item>Orense</item>
+        <item>Segovia</item>
+        <item>Castellón</item>
+        <item>Tarragona</item>
+        <item>Gerona</item>
+        <item>Alicante</item>
+        <item>Cantabria</item>
+        <item>La Rioja</item>
+        <item>Islas Baleares</item>
+        <item>Pontevedra</item>
+        <item>Las Palmas</item>
+        <item>Santa Cruz de Tenerife</item>
+        <item>Álava</item>
+        <item>Vizcaya</item>
+        <item>Guipúzcoa</item>
+        <item>Ceuta</item>
+        <item>Melilla</item>
+    </string-array>
+    <string-array name="counties">
+        <item>Arica</item>
+        <item>Camarones</item>
+        <item>Putre</item>
+        <item>General Lagos</item>
+        <item>Iquique</item>
+        <item>Alto Hospicio</item>
+        <item>Pozo Almonte</item>
+        <item>Camiña</item>
+        <item>Colchane</item>
+        <item>Huara</item>
+        <item>Pica</item>
+        <item>Antofagasta</item>
+        <item>Mejillones</item>
+        <item>Sierra Gorda</item>
+        <item>Taltal</item>
+        <item>Calama</item>
+        <item>Ollagüe</item>
+        <item>San Pedro de Atacama</item>
+        <item>Tocopilla</item>
+        <item>>María Elena</item>
+        <item>Copiapó</item>
+        <item>Caldera</item>
+        <item>Tierra Amarilla</item>
+        <item>Chañaral</item>
+        <item>Diego de Almagro</item>
+        <item>Vallenar</item>
+        <item>Alto del Carmen</item>
+        <item>Freirina</item>
+        <item>Huasco</item>
+        <item>La Serena</item>
+        <item>Coquimbo</item>
+        <item>Andacollo</item>
+        <item>La Higuera</item>
+        <item>Paiguano</item>
+        <item>Vicuña</item>
+        <item>Illapel</item>
+        <item>Canela</item>
+        <item>Los Vilos</item>
+        <item>Salamanca</item>
+        <item>Ovalle</item>
+        <item>Combarbalá</item>
+        <item>Monte Patria</item>
+        <item>Punitaqui</item>
+        <item>Río Hurtado</item>
+        <item>Valparaíso</item>
+        <item>Casablanca</item>
+        <item>Concón</item>
+        <item>Juan Fernández</item>
+        <item>Puchuncaví</item>
+        <item>Quilpué</item>
+        <item>Quintero</item>
+        <item>Villa Alemana</item>
+        <item>Viña del Mar</item>
+        <item>Isla de Pascua</item>
+        <item>Los Andes</item>
+        <item>Calle Larga</item>
+        <item>Rinconada</item>
+        <item>San Esteban</item>
+        <item>La Ligua</item>
+        <item>Cabildo</item>
+        <item>Papudo</item>
+        <item>Petorca</item>
+        <item>Zapallar</item>
+        <item>Quillota</item>
+        <item>Calera</item>
+        <item>Hijuelas</item>
+        <item>La Cruz</item>
+        <item>Limache</item>
+        <item>Nogales</item>
+        <item>Olmué</item>
+        <item>San Antonio</item>
+        <item>Algarrobo</item>
+        <item>Cartagena</item>
+        <item>El Quisco</item>
+        <item>El Tabo</item>
+        <item>Santo Domingo</item>
+        <item>San Felipe</item>
+        <item>Catemu</item>
+        <item>Llaillay</item>
+        <item>Panquehue</item>
+        <item>Putaendo</item>
+        <item>Santa María</item>
+        <item>Rancagua</item>
+        <item>Codegua</item>
+        <item>Coinco</item>
+        <item>Coltauco</item>
+        <item>Doñihue</item>
+        <item>Graneros</item>
+        <item>Las Cabras</item>
+        <item>Machalí</item>
+        <item>Malloa</item>
+        <item>Mostazal</item>
+        <item>Olivar</item>
+        <item>Peumo</item>
+        <item>Pichidegua</item>
+        <item>Quinta de Tilcoco</item>
+        <item>Rengo</item>
+        <item>Requínoa</item>
+        <item>San Vicente</item>
+        <item>Pichilemu</item>
+        <item>La Estrella</item>
+        <item>Litueche</item>
+        <item>Marchihue</item>
+        <item>Navidad</item>
+        <item>Paredones</item>
+        <item>San Fernando</item>
+        <item>Chépica</item>
+        <item>Chimbarongo</item>
+        <item>Lolol</item>
+        <item>Nancagua</item>
+        <item>Palmilla</item>
+        <item>Peralillo</item>
+        <item>Placilla</item>
+        <item>Pumanque</item>
+        <item>Santa Cruz</item>
+        <item>Talca</item>
+        <item>Constitución</item>
+        <item>Curepto</item>
+        <item>Empedrado</item>
+        <item>Maule</item>
+        <item>Pelarco</item>
+        <item>Pencahue</item>
+        <item>Río Claro</item>
+        <item>San Clemente</item>
+        <item>San Rafael</item>
+        <item>Cauquenes</item>
+        <item>Chanco</item>
+        <item>Pelluhue</item>
+        <item>Curicó</item>
+        <item>Hualañé</item>
+        <item>Licantén</item>
+        <item>Molina</item>
+        <item>Rauco</item>
+        <item>Romeral</item>
+        <item>Sagrada Familia</item>
+        <item>Teno</item>
+        <item>Vichuquén</item>
+        <item>Linares</item>
+        <item>Colbún</item>
+        <item>Longaví</item>
+        <item>Parral</item>
+        <item>Retiro</item>
+        <item>San Javier</item>
+        <item>Villa Alegre</item>
+        <item>Yerbas Buenas</item>
+        <item>Concepción</item>
+        <item>Coronel</item>
+        <item>Chiguayante</item>
+        <item>Florida</item>
+        <item>Hualqui</item>
+        <item>Lota</item>
+        <item>Penco</item>
+        <item>San Pedro de La Paz</item>
+        <item>Santa Juana</item>
+        <item>Talcahuano</item>
+        <item>Tomé</item>
+        <item>Hualpén</item>
+        <item>Lebu</item>
+        <item>Arauco</item>
+        <item>Cañete</item>
+        <item>Contulmo</item>
+        <item>Curanilahue</item>
+        <item>Los Álamos</item>
+        <item>Tirúa</item>
+        <item>Los Ángeles</item>
+        <item>Antuco</item>
+        <item>Cabrero</item>
+        <item>Laja</item>
+        <item>Mulchén</item>
+        <item>Nacimiento</item>
+        <item>Negrete</item>
+        <item>Quilaco</item>
+        <item>Quilleco</item>
+        <item>San Rosendo</item>
+        <item>Santa Bárbara</item>
+        <item>Tucapel</item>
+        <item>Yumbel</item>
+        <item>Alto Biobío</item>
+        <item>Chillán</item>
+        <item>Bulnes</item>
+        <item>Cobquecura</item>
+        <item>Coelemu</item>
+        <item>Coihueco</item>
+        <item>Chillán Viejo</item>
+        <item>El Carmen</item>
+        <item>Ninhue</item>
+        <item>Ñiquén</item>
+        <item>Pemuco</item>
+        <item>Pinto</item>
+        <item>Portezuelo</item>
+        <item>Quillón</item>
+        <item>Quirihue</item>
+        <item>Ránquil</item>
+        <item>San Carlos</item>
+        <item>>San Fabián</item>
+        <item>San Ignacio</item>
+        <item>San Nicolás</item>
+        <item>Treguaco</item>
+        <item>Yungay</item>
+        <item>Temuco</item>
+        <item>Carahue</item>
+        <item>Cunco</item>
+        <item>Curarrehue</item>
+        <item>Freire</item>
+        <item>Galvarino</item>
+        <item>Gorbea</item>
+        <item>Lautaro</item>
+        <item>Loncoche</item>
+        <item>Melipeuco</item>
+        <item>Nueva Imperial</item>
+        <item>Padre Las Casas</item>
+        <item>Perquenco</item>
+        <item>Pitrufquén</item>
+        <item>Pucón</item>
+        <item>Saavedra</item>
+        <item>Teodoro Schmidt</item>
+        <item>Toltén</item>
+        <item>Vilcún</item>
+        <item>Villarrica</item>
+        <item>Cholchol</item>
+        <item>Angol</item>
+        <item>Collipulli</item>
+        <item>Curacautín</item>
+        <item>Ercilla</item>
+        <item>Lonquimay</item>
+        <item>Los Sauces</item>
+        <item>Lumaco</item>
+        <item>Purén</item>
+        <item>Renaico</item>
+        <item>Traiguén</item>
+        <item>Victoria</item>
+        <item>Valdivia</item>
+        <item>Corral</item>
+        <item>Lanco</item>
+        <item>Los Lagos</item>
+        <item>Máfil</item>
+        <item>Mariquina</item>
+        <item>Paillaco</item>
+        <item>Panguipulli</item>
+        <item>La Unión</item>
+        <item>Futrono</item>
+        <item>Lago Ranco</item>
+        <item>Río Bueno</item>
+        <item>Puerto Montt</item>
+        <item>Calbuco</item>
+        <item>Cochamó</item>
+        <item>Fresia</item>
+        <item>Frutillar</item>
+        <item>Los Muermos</item>
+        <item>Llanquihue</item>
+        <item>Maullín</item>
+        <item>Puerto Varas</item>
+        <item>Castro</item>
+        <item>Ancud</item>
+        <item>Chonchi</item>
+        <item>Curaco de Vélez</item>
+        <item>Dalcahue</item>
+        <item>Puqueldón</item>
+        <item>Queilén</item>
+        <item>Quellón</item>
+        <item>Quemchi</item>
+        <item>Quinchao</item>
+        <item>Osorno</item>
+        <item>Puerto Octay</item>
+        <item>Purranque</item>
+        <item>Puyehue</item>
+        <item>Río Negro</item>
+        <item>San Juan de la Costa</item>
+        <item>San Pablo</item>
+        <item>Chaitén</item>
+        <item>Futaleufú</item>
+        <item>Hualaihué</item>
+        <item>Palena</item>
+        <item>Coihaique</item>
+        <item>Lago Verde</item>
+        <item>Aisén</item>
+        <item>Cisnes</item>
+        <item>Guaitecas</item>
+        <item>Cochrane</item>
+        <item>OHiggins</item>
+        <item>Tortel</item>
+        <item>Chile Chico</item>
+        <item>Río Ibáñez</item>
+        <item>Punta Arenas</item>
+        <item>Laguna Blanca</item>
+        <item>Río Verde</item>
+        <item>San Gregorio</item>
+        <item>Cabo de Hornos</item>
+        <item>Antártica</item>
+        <item>Porvenir</item>
+        <item>Primavera</item>
+        <item>Timaukel</item>
+        <item>Natales</item>
+        <item>Torres del Paine</item>
+        <item>Santiago</item>
+        <item>Cerrillos</item>
+        <item>Cerro Navia</item>
+        <item>Conchalí</item>
+        <item>El Bosque</item>
+        <item>Estación Central</item>
+        <item>Huechuraba</item>
+        <item>Independencia</item>
+        <item>La Cisterna</item>
+        <item>La Florida</item>
+        <item>La Granja</item>
+        <item>La Pintana</item>
+        <item>La Reina</item>
+        <item>Las Condes</item>
+        <item>Lo Barnechea</item>
+        <item>Lo Espejo</item>
+        <item>Lo Prado</item>
+        <item>Macul</item>
+        <item>Maipú</item>
+        <item>Ñuñoa</item>
+        <item>Pedro Aguirre Cerda</item>
+        <item>Peñalolén</item>
+        <item>Providencia</item>
+        <item>Pudahuel</item>
+        <item>Quilicura</item>
+        <item>Quinta Normal</item>
+        <item>Recoleta</item>
+        <item>Renca</item>
+        <item>San Joaquín</item>
+        <item>San Miguel</item>
+        <item>San Ramón</item>
+        <item>Vitacura</item>
+        <item>Puente Alto</item>
+        <item>Pirque</item>
+        <item>San José de Maipo</item>
+        <item>Colina</item>
+        <item>Lampa</item>
+        <item>Tiltil</item>
+        <item>San Bernardo</item>
+        <item>Buin</item>
+        <item>Calera de Tango</item>
+        <item>Paine</item>
+        <item>Melipilla</item>
+        <item>>Alhué</item>
+        <item>Curacaví</item>
+        <item>María Pinto</item>
+        <item>San Pedro</item>
+        <item>Talagante</item>
+        <item>El Monte</item>
+        <item>Isla de Maipo</item>
+        <item>Padre Hurtado</item>
+        <item>Peñaflor</item>
+    </string-array>
+    <string-array name="religions">
+        <item>Selecciona</item>
+        <item>Agnóstico</item>
+        <item>Ateo</item>
+        <item>Católico</item>
+        <item>Cristiano</item>
+        <item>Evangélico</item>
+        <item>Judío</item>
+        <item>Mormón</item>
+        <item>Musulmán</item>
+        <item>Pastafari</item>
+        <item>Protestante</item>
+        <item>Rastafari</item>
+    </string-array>
+    <string-array name="occupation">
+        <item>Selecciona</item>
+        <item>armé mi propia empresa</item>
+        <item>Cesante</item>
+        <item>estudio</item>
+        <item>Macheteo por aquí y por allá</item>
+        <item>soy independiente</item>
+        <item>trabajo en una empresa</item>
+    </string-array>
+    <string-array name="politics">
+        <item>Selecciona</item>
+        <item>Apolítico</item>
+        <item>Centro</item>
+        <item>Derecha</item>
+        <item>Extrema derecha</item>
+        <item>Extrema izquierda</item>
+        <item>Independiente</item>
+        <item>Izquierda</item>
+    </string-array>
+    <string-array name="zodiac">
+        <item>Selecciona</item>
+        <item>Aries</item>
+        <item>Tauro</item>
+        <item>Cancer</item>
+        <item>Géminis</item>
+        <item>Leo</item>
+        <item>Virgo</item>
+        <item>Libra</item>
+        <item>Escorpión</item>
+        <item>Sagitario</item>
+        <item>Capricornio</item>
+        <item>Acuario</item>
+        <item>Piscis</item>
+    </string-array>
+    <string-array name="liveswith">
+        <item>Selecciona</item>
+        <item>con amigos</item>
+        <item>con mi mamá</item>
+        <item>con mi papá</item>
+        <item>con mi pareja</item>
+        <item>con mis padres</item>
+        <item>en familia</item>
+        <item>solo</item>
+    </string-array>
+    <string-array name="salary">
+        <item>Selecciona</item>
+        <item>menos de 250.000</item>
+        <item>entre 250.000 y 500.000</item>
+        <item>entre 500.000 y 1.000.000</item>
+        <item>entre 1.000.000 y 1.500.000</item>
+        <item>entre 1.500.000 y 2.000.000</item>
+        <item>más de 2.000.000</item>
+    </string-array>
+    <string-array name="housetype">
+        <item>Selecciona</item>
+        <item>Arriendo casa</item>
+        <item>Tengo casa</item>
+        <item>Arriendo departamento</item>
+        <item>Tengo departamento</item>
+    </string-array>
+    <string-array name="beachhouse">
+        <item>Selecciona</item>
+        <item>Sí</item>
+        <item>No</item>
+        <item>Sí, departamento</item>
+    </string-array>
+    <string-array name="pool">
+        <item>Selecciona</item>
+        <item>Sí</item>
+        <item>No</item>
+        <item>Sí, de plástico</item>
+    </string-array>
+    <string-array name="standardyesno">
+        <item>Selecciona</item>
+        <item>Sí</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="pet">
+        <item>Selecciona</item>
+        <item>no tengo</item>
+        <item>tengo un perro</item>
+        <item>tengo un gato</item>
+        <item>tengo un hamster</item>
+        <item>tengo un pavo real</item>
+    </string-array>
+    <string-array name="drinks">
+        <item>Selecciona</item>
+        <item>Sí</item>
+        <item>No</item>
+        <item>Social</item>
+        <item>Mucho</item>
+        <item>Un poco</item>
+    </string-array>
+    <string-array name="smokes">
+        <item>Selecciona</item>
+        <item>Sí</item>
+        <item>No</item>
+        <item>Social</item>
+    </string-array>
+    <string-array name="drugs">
+        <item>Selecciona</item>
+        <item>Marihuana, hay que legalizarla</item>
+        <item>Marihuana, no es droga</item>
+        <item>Coca</item>
+        <item>Anfetaminas</item>
+        <item>LCD</item>
+        <item>Ácidos</item>
+        <item>Champiñones</item>
+        <item>No me drogo</item>
+        <item>Cualquiera</item>
+    </string-array>
+
+    <string name="lbl_about_description">Descripción corta</string>
+    <string name="lbl_about_crazy">Lo más loco que has hecho</string>
+    <string name="lbl_nutritional_languages">Idiomas</string>
+    <string name="lbl_nutritional_album">Disco favorito</string>
+    <string name="lbl_nutritional_book">Mi libro favorito</string>
+    <string name="lbl_nutritional_artist">Grupo o cantante que me gusta mucho</string>
+    <string name="lbl_nutritional_movie">Mi película favorita</string>
+    <string name="lbl_nutritional_joke">Un chiste</string>
+    <string name="lbl_nutritional_drink">Un trago</string>
+    <string name="lbl_nutritional_country">País favorito</string>
+    <string name="lbl_nutritional_quote">Una frase</string>
+    <string name="lbl_nutritional_hobby">Hobby</string>
+    <string name="lbl_nutritional_date">Cita ideal</string>
+    <string name="lbl_nutritional_sport">Deporte</string>
+    <string name="lbl_nutritional_food">Comida favorita</string>
+    <string name="lbl_accesories_malechildren">Hijos</string>
+    <string name="lbl_accesories_femalechildren">Hijas</string>
+    <string name="lbl_effects_defects">Mañas</string>
+    <string name="lbl_effects_hates">Cosas que odias</string>
+    <string name="lbl_accessories_liveswith">Vivo con</string>
+    <string name="lbl_accessories_label">Sueldo</string>
+    <string name="lbl_accessories_housetype">Casa</string>
+    <string name="lbl_accessories_beach">Casa en la playa</string>
+    <string name="lbl_accessories_pool">Piscina</string>
+    <string name="lbl_accessories_jacuzzi">Jacuzzi</string>
+    <string name="lbl_accessories_motorcycle">Moto</string>
+    <string name="lbl_accessories_bike">Bicicleta</string>
+    <string name="lbl_accessories_car">Auto</string>
+    <string name="lbl_accessories_pet">Mascota</string>
+    <string name="lbl_effects_drink">Bebe alcohol</string>
+    <string name="lbl_effects_smokes">Fuma</string>
+    <string name="lbl_favorite_drug">Droga favorita</string>
+    <string name="lbl_effects_drugs">Droga favorita</string>
+    <string name="lbl_effects_sexposes">Poses sexuales</string>
+    <string name="lbl_effects_sextoys">Juguetes sexuales</string>
+    <string name="lbl_effects_guilty">Placer culpable</string>
+    <string name="lbl_effects_sexualfantasy">Fantasía Sexual</string>
+    <string name="lbl_effects_fetishes">Fetiches</string>
+    <string name="lbl_account_info">Información de la cuenta</string>
+    <string name="lbl_accountinfo_username">Nombre de usuario</string>
+    <string name="lbl_accountinfo_email">Email</string>
+    <string name="lbl_accountinfo_password">Contraseña (deja en blanco si no deseas cambiar)</string>
+    <string name="lbl_accountinfo_confirmpass">Repetir contraseña</string>
+    <string name="lbl_nutritional_religion">Religión</string>
+    <string name="lbl_nutritional_occupation">A qué te dedicas</string>
+    <string name="lbl_nutritional_politics">Tendencia política</string>
+    <string name="lbl_nutritional_zodiac">Signo del zodíaco</string>
+    <string name="lbl_account_flavors">Sabor</string>
+    <string name="lbl_account_package">Envase</string>
+    <string name="lbl_account_bonuspack">Bonus Pack</string>
+    <string name="lbl_flavor_intelectual">Intelectual</string>
+    <string name="lbl_flavor_ejecutivo">Ejecutivo</string>
+    <string name="lbl_flavor_carretero">Carretero</string>
+    <string name="lbl_flavor_deportista">Deportista</string>
+    <string name="lbl_flavor_aventurero">Aventurero</string>
+    <string name="lbl_flavor_fixero">Fixero</string>
+    <string name="lbl_flavor_hipster">Hipster</string>
+    <string name="lbl_flavor_tallero">Tallero</string>
+    <string name="lbl_flavor_tuerca">Tuerca</string>
+    <string name="lbl_flavor_gamer">Gamer</string>
+    <string name="lbl_flavor_geek">Geek</string>
+    <string name="lbl_flavor_timido">Tímido</string>
+    <string name="lbl_flavor_artista">Artista</string>
+    <string name="lbl_packages_rockero">Rockero</string>
+    <string name="lbl_package_metalero">Metalero</string>
+    <string name="lbl_package_casual">Casual</string>
+    <string name="lbl_package_uniformado">Uniformado</string>
+    <string name="lbl_package_skater">Skater</string>
+    <string name="lbl_package_hiphop">Hip-Hop</string>
+    <string name="lbl_package_otaku">Otaku</string>
+    <string name="lbl_package_surfista">Surfista</string>
+    <string name="lbl_package_verde">Verde</string>
+    <string name="lbl_package_gotico">Gótico</string>
+    <string name="lbl_package_motoquero">Motoquero</string>
+    <string name="lbl_package_reggaetonero">Reggaetonero</string>
+    <string name="lbl_package_zorron">Zorrón</string>
+    <string name="lbl_package_parrillero">Parrillero</string>
+    <string name="lbl_package_lana">Lana</string>
+    <string name="lbl_package_pokemon">Pokemón</string>
+    <string name="lbl_bonuspack_chef">Chef</string>
+    <string name="lbl_bonuspack_vegetariano">Vegetariano</string>
+    <string name="lbl_bonuspack_sixpack">Six Pack</string>
+    <string name="lbl_bonuspack_fumador">Fumador</string>
+    <string name="lbl_bonuspack_nofumador">No fumador</string>
+    <string name="lbl_bonuspack_romantico">Romántico</string>
+    <string name="lbl_bonuspack_musico">Músico</string>
+    <string name="lbl_bonuspack_musculoso">Musculoso</string>
+    <string name="lbl_bonuspack_millonario">Millonario y muriendo</string>
+    <string name="lbl_bonuspack_cantante">Cantante</string>
+    <string name="lbl_bonuspack_maestro">Maestro chasquilla</string>
+    <string name="btn_gallery_camera">Tomar foto</string>
+    <string name="btn_gallery_select">Seleccionar desde galería</string>
+    <string name="btn_gallery_close">Cerrar</string>
+    <string name="lbl_messages_send">Enviar</string>
+    <string name="lbl_profile_flavors">Sabores:</string>
+    <string name="lbl_profile_bonuspack">Bonus Pack:</string>
+    <string name="lbl_profile_packages">Envases:</string>
+    <string name="lbl_map_changeradius">Ajustar radio de búsqueda:</string>
+    <string name="delete_image_msg">¿Quieres eliminar la foto?</string>
+    <string name="logout_icon">Salir</string>
+    <string name="profile_unblock_btn">Desbloquear información (1 crédito)</string>
+    <string name="btn_buy_credits">Comprar créditos</string>
+    <string name="alert_attention_title">Atención</string>
+    <string name="alert_credit_discount_buy">Vas a comprar este producto, ¿Segura?.</string>
+    <string name="alert_credit_discount_offer">Ofrecerte a esta clienta descontará 1 crédito de tu cuenta.</string>
+    <string name="btn_continue_text">Continuar</string>
+    <string name="alert_message_disabled_male">Esta clienta no es contacto tuyo. ¡Intenta ofertar para que te compre!</string>
+    <string name="alert_message_disabled_female">Este producto aún no es tuyo. ¡Cómpralo para enviarle mensajes!</string>
+    <string name="alert_oh_noes">¡Oh noes!</string>
+    <string name="toast_new_message">Has recibido un nuevo mensaje de: </string>
+    <string name="alert_logout">¿Quieres salir de Supermanket?</string>
+    <string name="btn_logout">Salir</string>
+    <string name="title_activity_devices">Devices</string>
+    <string name="alert_internet">Tu dispositivo no está conectado a Internet en estos momentos. ¿Quieres revisar tus ajustes?</string>
+    <string name="btn_settings">Ir a Ajustes</string>
+    <string name="lbl_100_mts">100 mts</string>
+    <string name="lbl_1000_mts">1000 mts</string>
+    <string name="lbl_3000_mts">3000 mts</string>
+    <string name="lbl_account_location">Ubicación</string>
+    <string name="title_activity_search">Search</string>
+    <string name="lbl_search_age">Edad</string>
+    <string name="lbl_search_nexus">hasta</string>
+    <string name="lbl_search_location">Ubicación</string>
+    <string name="alert_block">¿Quieres bloquear? No seguirás recibiendo mensajes de esta persona.</string>
+    <string name="alert_unblock">¿Quieres desbloquear? Volverás a recibir mensajes de esta persona.</string>
+    <string name="alert_block_yes">Sí, bloquear</string>
+    <string name="alert_unblock_yes">Sí, desbloquear</string>
+    <string name="btn_search_again">Buscar de nuevo</string>
+    <string name="title_activity_user_profile_search">UserProfileSearch</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="lbl_agefrom">Desde</string>
+    <string name="lbl_eighteen">18</string>
+    <string name="lbl_ninetynine">99</string>
+
 </resources>

@@ -16,28 +16,33 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         android:paddingTop="10dp"
-        android:paddingBottom="50dp"
+        android:paddingBottom="10dp"
         ptr:ptrMode="both"
         ptr:ptrDrawable="@drawable/android" />
 
     <RelativeLayout
+        android:id="@+id/dashboardBottomLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#cccccc"
-        android:paddingBottom="@dimen/dashboard_footer_top_margin"
+        android:visibility="visible"
         android:paddingLeft="@dimen/dashboard_footer_left_padding"
-        android:paddingRight="@dimen/dashboard_footer_left_padding"
-        android:paddingTop="@dimen/dashboard_footer_top_margin" >
+        android:paddingRight="@dimen/dashboard_footer_left_padding">
+        <ImageView
+            android:id="@+id/searchHeaderImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:src="@drawable/img_dashboard_bottom_bg" />
 
-        <Button
+        <ImageButton
             android:id="@+id/dashboardNearByUsersBtn"
-            style="@style/button_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/orange_button"
-            android:text="@string/dashboard_near_users_btn" />
+            android:background="@null"
+            android:src="@drawable/button_dashboard" />
 
     </RelativeLayout>
  

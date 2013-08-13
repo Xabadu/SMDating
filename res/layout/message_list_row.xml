@@ -19,7 +19,7 @@
             android:id="@+id/messageListUserImage"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/green_lantern" />
+            android:src="@drawable/ic_content_picture" />
  
     </LinearLayout>
  
@@ -32,7 +32,7 @@
         android:layout_alignTop="@+id/thumbnail"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="#040404"
-        android:textSize="15dip"
+        android:textSize="17sp"
         android:textStyle="bold"
         android:typeface="sans" />
  
@@ -46,7 +46,7 @@
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
         android:textColor="#343434"
-        android:textSize="10dip" />
+        android:textSize="14sp" />
  
     <!-- Rightend Duration -->
 
@@ -63,12 +63,14 @@
         android:textStyle="bold" />
  
      <!-- Rightend Arrow -->
-     <ImageView 
-       	android:id="@+id/messageListArrowImage"
-       	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+
+     <ImageView
+         android:id="@+id/messageListArrow"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_centerVertical="true"
+         android:src="@drawable/arrow"
+         android:background="@null" />
  
 </RelativeLayout>
