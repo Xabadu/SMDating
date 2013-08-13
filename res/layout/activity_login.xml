@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/loginLayout"
     android:background="@drawable/login_bg"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/img_login_bgshape" />
+        android:src="@drawable/img_login_bgshape"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/searchHeaderImage"
@@ -49,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/loginButtonsLayout"
         android:ems="10"
+        
         android:hint="@string/lbl_password"
         android:inputType="textPassword" />
 

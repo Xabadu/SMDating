@@ -194,7 +194,24 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			
 			
 		} else {
-			Toast.makeText(this, "Error detectando ubicación. Verifica que tu dispositivo esté bien configurado."
+			AlertDialog.Builder builder = new AlertDialog.Builder(UsersMap.this);
+			builder.setTitle(R.string.alert_attention_title);
+			builder.setMessage("Error detectando ubicaci—n. Verifica que tu dispositivo estŽ bien configurado.");
+			builder.setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
+    			@Override
+    			public void onClick(DialogInterface dialog, int id) {
+    				UsersMap.this.finish();
+    	        	startActivity(getIntent());
+    			}
+    		});
+			builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+			Toast.makeText(this, "Error detectando ubicaci—n. Verifica que tu dispositivo estŽ bien configurado."
 					, Toast.LENGTH_LONG).show();
 		}
 		

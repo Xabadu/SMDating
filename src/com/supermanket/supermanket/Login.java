@@ -48,12 +48,14 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.facebook.Request;
@@ -99,6 +101,7 @@ public class Login extends Activity {
     EditText registerFormConfirmPasswordField;
     ImageView loginLogoImage;
     RadioGroup registerFormGenreGroup;
+    RelativeLayout loginLayout;
     
     // Facebook elements
     private static final List<String> READ_PERMISSIONS = Arrays.asList("email", "user_birthday", "user_hometown");
@@ -328,6 +331,13 @@ public class Login extends Activity {
     	loginFormEmailField = (EditText) findViewById(R.id.loginEmailField);
     	loginFormPasswordField = (EditText) findViewById(R.id.loginPasswordField);
     	loginLogoImage = (ImageView) findViewById(R.id.loginLogo);
+    	loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
+    	
+    	loginLayout.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				hideSoftKeyboard(Login.this);
+			}
+        });
     	
     	DisplayMetrics displaymetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -362,6 +372,7 @@ public class Login extends Activity {
     	
     	btnLogin.setOnClickListener(new OnClickListener() {
     		public void onClick(View v) {
+    			hideSoftKeyboard(Login.this);
 				if(loginFormEmailField.getText().toString().equals("") || loginFormPasswordField.getText().toString().equals("")) {
 					alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar tus datos.", false);
 				} else {
@@ -460,6 +471,7 @@ public class Login extends Activity {
 
 		registerFormRegisterBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				hideSoftKeyboard(Login.this);
 				if(registerFormUsernameField.getText().toString().equals("") 
 						|| registerFormEmailField.getText().toString().equals("") 
 						|| registerFormPasswordField.getText().toString().equals("")
@@ -507,6 +519,11 @@ public class Login extends Activity {
 			}
 		});
 
+	}
+	
+	public static void hideSoftKeyboard(Activity activity) {
+	    InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+	    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 	}
 
 	public void loginFacebook() {
