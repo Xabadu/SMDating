@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -99,7 +100,7 @@ public class MessageDetail extends Activity {
 		
 	}
 	
-	public void showMessages(String data) {
+	public void showMessages(String data, boolean reload) {
 		setContentView(R.layout.activity_message_detail);
 
 		sendMessageBtn = (ImageButton) findViewById(R.id.messageDetailSendButton);
@@ -144,6 +145,12 @@ public class MessageDetail extends Activity {
         adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
         list.setAdapter(adapter);
         list.setSelection(currentPosition - 1);
+        
+        if(reload) {
+        	if(messageDetailTextField.requestFocus()) {
+        	    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        	}
+        }
 		
         list.setOnItemClickListener(new OnItemClickListener() {
         	
@@ -363,7 +370,7 @@ public class MessageDetail extends Activity {
 				dialog.dismiss();
     		} else {
     			Log.d("Result", result);
-    			activityRef.showMessages(result);
+    			activityRef.showMessages(result, false);
     	        dialog.dismiss();
     		}
 			
@@ -441,7 +448,7 @@ public class MessageDetail extends Activity {
     			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
 				dialog.dismiss();
     		} else {
-    			activityRef.showMessages(result);
+    			activityRef.showMessages(result, true);
     			dialog.dismiss();
     		}
     	}

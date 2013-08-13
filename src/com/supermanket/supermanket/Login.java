@@ -372,7 +372,6 @@ public class Login extends Activity {
     	
     	btnLogin.setOnClickListener(new OnClickListener() {
     		public void onClick(View v) {
-    			hideSoftKeyboard(Login.this);
 				if(loginFormEmailField.getText().toString().equals("") || loginFormPasswordField.getText().toString().equals("")) {
 					alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar tus datos.", false);
 				} else {
@@ -471,7 +470,6 @@ public class Login extends Activity {
 
 		registerFormRegisterBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				hideSoftKeyboard(Login.this);
 				if(registerFormUsernameField.getText().toString().equals("") 
 						|| registerFormEmailField.getText().toString().equals("") 
 						|| registerFormPasswordField.getText().toString().equals("")
