@@ -76,14 +76,14 @@ public class Login extends Activity {
 
 	// Progress dialog
     ProgressDialog pDialog;
- 
+
     // Shared Preferences
     private static SharedPreferences mSharedPreferences;
-    
+
     // Custom utilities
     private ConectivityTools ct;
     private AlertDialogs alert = new AlertDialogs();
-    
+
     // UI Elements
     ImageButton btnLogin;
     ImageButton btnRegister;
@@ -102,37 +102,37 @@ public class Login extends Activity {
     ImageView loginLogoImage;
     RadioGroup registerFormGenreGroup;
     RelativeLayout loginLayout;
-    
+
     // Facebook elements
     private static final List<String> READ_PERMISSIONS = Arrays.asList("email", "user_birthday", "user_hometown");
-    
+
     // Other
     private int day;
     private int month;
     private int year;
     String respStr = null;
     final Calendar c = Calendar.getInstance();
-    
+
     static final int DATE_DIALOG_ID = 999;
-    
+
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String PROPERTY_ON_SERVER_EXPIRATION_TIME = "onServerExpirationTimeMs"; 
-    
+    private static final String PROPERTY_ON_SERVER_EXPIRATION_TIME = "onServerExpirationTimeMs";
+
     public static final long REGISTRATION_EXPIRY_TIME_MS = 1000 * 3600 * 24 * 7;
-    
+
     String SENDER_ID = "924830394291";
-    
+
     static final String TAG = "GCMDemo";
-    
+
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     Context context;
     String regid;
-    
-    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-    
+
+    static final String SERVICE_BASE_URL = "";
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
 	@Override
@@ -141,12 +141,12 @@ public class Login extends Activity {
 
 		ct = new ConectivityTools(getApplicationContext());
 
-        
+
 
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-		
+
 		regid = getRegistrationId(this);
-		
+
 		if(!isLoggedInAlready()) {
 			loginScreen();
 		} else {
@@ -159,7 +159,7 @@ public class Login extends Activity {
 		}
 
 	}
-	
+
 	private void registerDevice(ProgressDialog dialog) {
 		context = getApplicationContext();
 		regid = getRegistrationId(context);
@@ -186,7 +186,7 @@ public class Login extends Activity {
 	        } else {
 	        	registerBackground(dialog);
 	        }
-			
+
 		} else {
 			gcm = GoogleCloudMessaging.getInstance(this);
 			Intent intent = new Intent(this, Dashboard.class);
@@ -323,7 +323,7 @@ public class Login extends Activity {
 
 		setContentView(R.layout.activity_login);
 
-		
+
 
 		btnLogin = (ImageButton) findViewById(R.id.loginLoginBtn);
     	btnRegister = (ImageButton) findViewById(R.id.loginRegisterBtn);
@@ -332,32 +332,32 @@ public class Login extends Activity {
     	loginFormPasswordField = (EditText) findViewById(R.id.loginPasswordField);
     	loginLogoImage = (ImageView) findViewById(R.id.loginLogo);
     	loginLayout = (RelativeLayout) findViewById(R.id.loginLayout);
-    	
+
     	loginLayout.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				hideSoftKeyboard(Login.this);
 			}
         });
-    	
+
     	DisplayMetrics displaymetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
 		int density = displaymetrics.densityDpi;
-		
+
 		switch(density) {
-			
+
 			case DisplayMetrics.DENSITY_LOW:
 				 loginLogoImage.setVisibility(View.INVISIBLE);
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_MEDIUM:
 				 loginLogoImage.setVisibility(View.INVISIBLE);
 				 break;
 		}
-    	
+
     	try {
 		    PackageInfo info = getPackageManager().getPackageInfo(
-		            "com.supermanket.supermanket", 
+		            "com.supermanket.supermanket",
 		            PackageManager.GET_SIGNATURES);
 		    for (Signature signature : info.signatures) {
 		        MessageDigest md = MessageDigest.getInstance("SHA");
@@ -369,7 +369,7 @@ public class Login extends Activity {
 		} catch (NoSuchAlgorithmException e) {
 
 		}
-    	
+
     	btnLogin.setOnClickListener(new OnClickListener() {
     		public void onClick(View v) {
     			hideSoftKeyboard(Login.this);
@@ -398,22 +398,22 @@ public class Login extends Activity {
 				        } else {
 				        	new LoginSupermanket(Login.this).execute();
 				        }
-						
+
 					} else {
-						alert.showAlertDialog(Login.this, "Oh noes!", "Email no válido", false);
+						alert.showAlertDialog(Login.this, "Oh noes!", "Email no vï¿½lido", false);
 					}
 
 				}
 			}
 	    });
-    	
+
     	btnRegister.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				pDialog = ProgressDialog.show(Login.this, "", "Cargando...", true);
 				createAccount();
 			}
 	    });
-    	
+
     	btnFacebookLogin.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (!ct.isConnectingToInternet()) {
@@ -438,7 +438,7 @@ public class Login extends Activity {
 		        	pDialog = ProgressDialog.show(Login.this, "", "Cargando...", true);
 					loginFacebook();
 		        }
-				
+
 			}
 	    });
 
@@ -472,15 +472,15 @@ public class Login extends Activity {
 		registerFormRegisterBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				hideSoftKeyboard(Login.this);
-				if(registerFormUsernameField.getText().toString().equals("") 
-						|| registerFormEmailField.getText().toString().equals("") 
+				if(registerFormUsernameField.getText().toString().equals("")
+						|| registerFormEmailField.getText().toString().equals("")
 						|| registerFormPasswordField.getText().toString().equals("")
 						|| registerFormConfirmPasswordField.getText().toString().equals("")
 						|| registerFormChangeBirthdayBtn.getText().toString().equals("")) {
 					alert.showAlertDialog(Login.this, "Oh noes!", "Debes completar todos los datos.", false);
 				} else {
 					if(!isEmailValid(registerFormEmailField.getText().toString())) {
-						alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar un correo válido.", false);
+						alert.showAlertDialog(Login.this, "Oh noes!", "Debes ingresar un correo vï¿½lido.", false);
 					} else {
 						if(registerFormPasswordField.getText().toString().equals(registerFormConfirmPasswordField.getText().toString())) {
 							if (!ct.isConnectingToInternet()) {
@@ -504,9 +504,9 @@ public class Login extends Activity {
 					        } else {
 					        	new RegisterUser(Login.this).execute();
 					        }
-							
+
 						} else {
-							alert.showAlertDialog(Login.this, "Oh noes!", "Las contraseñas no coinciden.", false);
+							alert.showAlertDialog(Login.this, "Oh noes!", "Las contraseï¿½as no coinciden.", false);
 						}
 					}
 				}
@@ -520,7 +520,7 @@ public class Login extends Activity {
 		});
 
 	}
-	
+
 	public static void hideSoftKeyboard(Activity activity) {
 	    InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
 	    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
@@ -528,7 +528,7 @@ public class Login extends Activity {
 
 	public void loginFacebook() {
 
-		
+
 		openActiveSession(Login.this, true, new Session.StatusCallback() {
 
 			@Override
@@ -567,13 +567,13 @@ public class Login extends Activity {
 						        	LoginFb loginFb = new LoginFb(Login.this);
 									loginFb.execute(sesion.getAccessToken());
 						        }
-								
-							} 
+
+							}
 						}
 					});
 				}
 				if(state.isClosed()) {
-					Toast.makeText(Login.this, "Autentificación cancelada", Toast.LENGTH_SHORT).show();
+					Toast.makeText(Login.this, "Autentificaciï¿½n cancelada", Toast.LENGTH_SHORT).show();
 					loginScreen();
 				}
 			}
@@ -609,7 +609,7 @@ public class Login extends Activity {
 		switch (id) {
 		case DATE_DIALOG_ID:
 		   // set date picker as current date
-		   return new DatePickerDialog(this, datePickerListener, 
+		   return new DatePickerDialog(this, datePickerListener,
                          year-18, month,day);
 		}
 		return null;
@@ -626,7 +626,7 @@ public class Login extends Activity {
 		}
 	};
 
-	public boolean isEmailValid(String email) { 
+	public boolean isEmailValid(String email) {
 		Pattern pattern;
 		Matcher matcher;
 		String regExpn =
@@ -656,11 +656,11 @@ public class Login extends Activity {
 		EditText emailField;
 		EditText passwordField;
 		Login activityRef;
-		
+
 		public LoginSupermanket(Login activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 
@@ -678,10 +678,10 @@ public class Login extends Activity {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "session.json");
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject usuario = new JSONObject();
             JSONObject user = new JSONObject();
-            
+
             try {
 				user.put("username", emailField.getText().toString().trim());
 				user.put("password", passwordField.getText().toString().trim());
@@ -695,15 +695,15 @@ public class Login extends Activity {
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(usuario.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
 				return EntityUtils.toString(resp.getEntity());
@@ -714,7 +714,7 @@ public class Login extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
 
@@ -723,7 +723,7 @@ public class Login extends Activity {
 			super.onPostExecute(result);
 
 			if(result == null) {
-				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);
@@ -756,7 +756,7 @@ public class Login extends Activity {
 					dialog.dismiss();
 				}
 
-				
+
 
 			}
 
@@ -767,7 +767,7 @@ public class Login extends Activity {
 
 		ProgressDialog dialog;
 		Login activityRef;
-		
+
 		public LoginFb(Login activityRef) {
 			this.activityRef = activityRef;
 		}
@@ -784,10 +784,10 @@ public class Login extends Activity {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "session/facebook.json");
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject usuario = new JSONObject();
             JSONObject user = new JSONObject();
-            
+
             try {
 				user.put("token", params[0]);
 			} catch (JSONException e2) {
@@ -800,15 +800,15 @@ public class Login extends Activity {
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(usuario.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
 				return EntityUtils.toString(resp.getEntity());
@@ -819,7 +819,7 @@ public class Login extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
 
@@ -828,9 +828,9 @@ public class Login extends Activity {
 			super.onPostExecute(result);
 
 			if(result == null) {
-				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
-			} else {				
+			} else {
 				try {
 					JSONObject response = new JSONObject(result);
 					JSONObject status = response.getJSONObject("user");
@@ -859,7 +859,7 @@ public class Login extends Activity {
 					dialog.dismiss();
 				}
 
-				
+
 
 			}
 
@@ -878,11 +878,11 @@ public class Login extends Activity {
 		RadioGroup genreGroup;
 		String[] birthdayText;
 		Login activityRef;
-		
+
 		public RegisterUser(Login activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 
@@ -913,10 +913,10 @@ public class Login extends Activity {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "users.json");
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject usuario = new JSONObject();
             JSONObject user = new JSONObject();
-            
+
             try {
 				user.put("username", usernameField.getText().toString());
 				user.put("email", emailField.getText().toString());
@@ -929,22 +929,22 @@ public class Login extends Activity {
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				usuario.put("user", user);
 			} catch (JSONException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(usuario.toString(), HTTP.UTF_8);
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
 				return EntityUtils.toString(resp.getEntity());
@@ -955,7 +955,7 @@ public class Login extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
 
@@ -964,7 +964,7 @@ public class Login extends Activity {
 			super.onPostExecute(result);
 
 			if(result == null) {
-				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Login.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);
@@ -1012,7 +1012,7 @@ public class Login extends Activity {
 					dialog.dismiss();
 				}
 
-				
+
 
 			}
 

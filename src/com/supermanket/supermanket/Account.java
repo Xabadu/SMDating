@@ -66,7 +66,7 @@ import com.supermanket.utilities.UtilityBelt;
 import com.supermanket.utilities.SideNavigationView.Mode;
 
 public class Account extends SherlockActivity implements ISideNavigationCallback {
-	
+
 	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
     public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
@@ -78,10 +78,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	ImageButton accountBackBtn;
 	CheckBox flavors[] = new CheckBox[13];
 	static int flavorsIds[]={R.id.flavors1,R.id.flavors2,R.id.flavors3,R.id.flavors4,
-	    R.id.flavors5,R.id.flavors6,R.id.flavors7,R.id.flavors8,R.id.flavors9,R.id.flavors10, R.id.flavors11, 
+	    R.id.flavors5,R.id.flavors6,R.id.flavors7,R.id.flavors8,R.id.flavors9,R.id.flavors10, R.id.flavors11,
 	    R.id.flavors12,R.id.flavors13};
 	static int packagesIds[]={R.id.packages1,R.id.packages2,R.id.packages3,R.id.packages4,
-	    R.id.packages5,R.id.packages6,R.id.packages7,R.id.packages8,R.id.packages9,R.id.packages10,R.id.packages11, 
+	    R.id.packages5,R.id.packages6,R.id.packages7,R.id.packages8,R.id.packages9,R.id.packages10,R.id.packages11,
 	    R.id.packages12,R.id.packages13,R.id.packages14,R.id.packages15,R.id.packages16};
 	CheckBox bonusPack[] = new CheckBox[11];
 	static int bonusPackIds[]={R.id.bonusPack1,R.id.bonusPack2,R.id.bonusPack3,R.id.bonusPack4,
@@ -151,9 +151,9 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	View flavorsSeparator;
 	View packagesSeparator;
 	View bonusPackSeparator;
-	
+
 	ImageLoader imageLoader = ImageLoader.getInstance();
-	
+
 	private int day;
 	private int month;
 	private int year;
@@ -163,22 +163,22 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	String imagesList;
 	ProgressDialog pDialog;
 	ConectivityTools ct;
-	
+
 	UserData userData;
-	
+
 	private static SharedPreferences mSharedPreferences;
-	
-	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-	
+
+	static final String SERVICE_BASE_URL = "";
+
 	LocationAdapter locationAdapter;
 	AutoCompleteDbAdapter dbAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState); 
+		super.onCreate(savedInstanceState);
 		initView();
 	}
-	
+
 	public void initView() {
 		setContentView(R.layout.activity_account);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
@@ -190,12 +190,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
         }
 	    sideNavigationView.setMenuClickCallback(this);
-	    
+
 	    accountLayout = (RelativeLayout) findViewById(R.id.accountLayout);
 	    accountLayout.setVisibility(View.INVISIBLE);
-	    
+
 	    ct = new ConectivityTools(getApplicationContext());
-	    
+
 	    if (getIntent().hasExtra(EXTRA_TITLE)) {
 	    	String title = getIntent().getStringExtra(EXTRA_TITLE);
 	        setTitle(title);
@@ -226,13 +226,13 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         	userData = new UserData(this);
     		userData.execute();
         }
-		
+
 	}
-	
+
 	public void loadProfile(final String[] result) {
-			    
-		pDialog = ProgressDialog.show(this, "", "Cargando imágenes");
-		
+
+		pDialog = ProgressDialog.show(this, "", "Cargando imï¿½genes");
+
 		accountUserAvatar = (ImageView) findViewById(R.id.accountAvatarImage);
 		accountPersonalInfoRow = (TableRow) findViewById(R.id.accountPersonalInfoRow);
 		accountAboutMeRow = (TableRow) findViewById(R.id.accountAboutMeRow);
@@ -244,12 +244,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		accountPackagesRow = (TableRow) findViewById(R.id.accountPackagesRow);
 		accountBonusPackRow = (TableRow) findViewById(R.id.accountBonusPackRow);
 		accountNutritionalInfoRowText = (TextView) findViewById(R.id.accountNutritionalInfoText);
-		
+
 		JSONObject resultObj;
 		String url = null;
 		try {
 			resultObj = new JSONObject(result[0]);
-			JSONArray photos = resultObj.getJSONArray("photos"); 
+			JSONArray photos = resultObj.getJSONArray("photos");
 			if(!resultObj.getString("sex").equalsIgnoreCase("male")) {
 				accountFlavorsRow.setVisibility(View.GONE);
 				accountPackagesRow.setVisibility(View.GONE);
@@ -272,8 +272,8 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 		DisplayImageOptions options = new DisplayImageOptions.Builder().build();
 		imageLoader.displayImage(url, accountUserAvatar, options, new ImageLoadingListener() {
 	        @Override
@@ -282,54 +282,54 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 	        }
 
 			@Override
-			public void onLoadingCancelled(String arg0, View arg1) {				
+			public void onLoadingCancelled(String arg0, View arg1) {
 			}
 
 			@Override
 			public void onLoadingFailed(String arg0, View arg1,
-					FailReason arg2) {				
+					FailReason arg2) {
 			}
 
 			@Override
 			public void onLoadingStarted(String arg0, View arg1) {
 			}
 	    });
-		
+
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		
+
 		int avatarWidth = 0;
 		int avatarHeight = 0;
 		int density = displaymetrics.densityDpi;
-		
+
 		switch(density) {
-			
+
 			case DisplayMetrics.DENSITY_LOW:
 				 avatarWidth = 113;
 				 avatarHeight = 113;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_MEDIUM:
 				 avatarWidth = 150;
 				 avatarHeight = 150;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_HIGH:
 				 avatarWidth = 225;
 				 avatarHeight = 225;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_XHIGH:
 				 avatarWidth = 300;
 				 avatarHeight = 300;
 				 break;
 		}
-		
+
 		accountUserAvatar.getLayoutParams().height = avatarWidth;
 		accountUserAvatar.getLayoutParams().width = avatarHeight;
 		accountUserAvatar.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		accountUserAvatar.setVisibility(View.VISIBLE);
-		
+
 		accountUserAvatar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(Account.this, UserImageGallery.class);
@@ -338,68 +338,68 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				startActivity(intent);
 			}
 		});
-		
+
 		accountPersonalInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("personal", result[0]);
 			}
 		});
-		
+
 		accountAboutMeRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("about", result[0]);
 			}
 		});
-		
+
 		accountNutritionalInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("nutritional", result[0]);
 			}
 		});
-		
+
 		accountFlavorsRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("flavors", result[0]);
 			}
 		});
-		
+
 		accountPackagesRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("packages", result[0]);
 			}
 		});
-		
+
 		accountBonusPackRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("bonuspack", result[0]);
 			}
 		});
-		
+
 		accountAccessoriesRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("accessories", result[0]);
 			}
 		});
-		
+
 		accountSideEffectsRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("effects", result[0]);
 			}
 		});
-		
+
 		accountInfoRow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				editUserData("info", result[0]);
 			}
 		});
 	}
-	
+
 	public void editUserData(String type, final String data) {
-		
+
 		if(type.equalsIgnoreCase("personal")) {
-			
+
 			setContentView(R.layout.activity_account_personal);
-						
+
 			personalFormNameText = (EditText) findViewById(R.id.personalFormNameText);
 			personalFormWeightText = (EditText) findViewById(R.id.personalFormWeightText);
 			personalFormHeightText = (EditText) findViewById(R.id.personalFormHeightText);
@@ -408,12 +408,12 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			personalFormBirthdayBtn = (Button) findViewById(R.id.personalFormBirthdayBtn);
 			accountSaveBtn = (ImageButton) findViewById(R.id.personalFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.personalFormBackBtn);
-			
+
 			dbAdapter = new AutoCompleteDbAdapter(this);
 			locationAdapter = new LocationAdapter(dbAdapter, this, "account");
 			personalFormLocationText.setAdapter(locationAdapter);
 			personalFormLocationText.setOnItemClickListener(locationAdapter);
-			 
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				if(!resultObject.isNull("name")) {
@@ -436,7 +436,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			if(!localBday[2].equals("")){
 				day = Integer.parseInt(localBday[2]);
 			} else {
@@ -452,14 +452,14 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} else {
 				year = c.get(Calendar.YEAR);
 			}
-			
+
 			personalFormBirthdayBtn.setOnClickListener(new OnClickListener() {
 				@SuppressWarnings("deprecation")
 				public void onClick(View v) {
 					showDialog(DATE_DIALOG_ID);
 				}
 			});
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -484,21 +484,21 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        	UpdateAccount account = new UpdateAccount("personal");
 						account.execute();
 			        }
-					
+
 				}
 			});
-			
+
 		}
-		
+
 		if(type.equalsIgnoreCase("about")) {
 			setContentView(R.layout.activity_account_about);
-			
+
 			aboutFormDescriptionText = (EditText) findViewById(R.id.aboutDescriptionText);
 			aboutFormCrazyText = (EditText) findViewById(R.id.aboutCrazyText);
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.aboutFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.aboutFormBackBtn);
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				if(!resultObject.isNull("short_description")) {
@@ -510,7 +510,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -539,10 +539,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			});
 
 		}
-		
+
 		if(type.equalsIgnoreCase("nutritional")) {
 			setContentView(R.layout.activity_account_nutritional);
-			
+
 			nutritionalFormLanguagesText = (EditText) findViewById(R.id.nutritionalLanguagesText);
 			nutritionalFormFavoriteAlbumText = (EditText) findViewById(R.id.nutritionalFavoriteAlbumText);
 			nutritionalFormFavoriteBookText = (EditText) findViewById(R.id.nutritionalFavoriteBookText);
@@ -560,28 +560,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			nutritionalFormOccupationSpinner = (Spinner) findViewById(R.id.nutritionalOccupationSpinner);
 			nutritionalFormPoliticsSpinner = (Spinner) findViewById(R.id.nutritionalPoliticsSpinner);
 			nutritionalFormZodiacSignSpinner = (Spinner) findViewById(R.id.nutritionalZodiacSignSpinner);
-			
+
 			ArrayAdapter<CharSequence> adapterReligion = ArrayAdapter.createFromResource(this,
 			        R.array.religions, android.R.layout.simple_spinner_item);
 			adapterReligion.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			nutritionalFormReligionSpinner.setAdapter(adapterReligion);
-			
+
 			ArrayAdapter<CharSequence> adapterOccupation = ArrayAdapter.createFromResource(this,
 			        R.array.occupation, android.R.layout.simple_spinner_item);
 			adapterOccupation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			nutritionalFormOccupationSpinner.setAdapter(adapterOccupation);
-			
+
 			ArrayAdapter<CharSequence> adapterPolitics = ArrayAdapter.createFromResource(this,
 			        R.array.politics, android.R.layout.simple_spinner_item);
 			adapterPolitics.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			nutritionalFormPoliticsSpinner.setAdapter(adapterPolitics);
-			
+
 			ArrayAdapter<CharSequence> adapterZodiacSign = ArrayAdapter.createFromResource(this,
 			        R.array.zodiac, android.R.layout.simple_spinner_item);
 			adapterZodiacSign.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			nutritionalFormZodiacSignSpinner.setAdapter(adapterZodiacSign);
-			
-			
+
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				nutritionalFormReligionSpinner.setSelection(adapterReligion.getPosition(resultObject.getString("religion")));
@@ -627,15 +627,15 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				if(!resultObject.isNull("favorite_food")) {
 					nutritionalFormFavoriteFoodText.setText(resultObject.getString("favorite_food"));
 				}
-				
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.nutritionalFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.nutritionalFormBackBtn);
-			
-			
+
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -662,16 +662,16 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        }
 				}
 			});
-			
+
 		}
-		
+
 		if(type.equalsIgnoreCase("flavors")) {
 			setContentView(R.layout.activity_account_flavors);
-			
+
 			for(int i = 0; i < flavors.length ; i++) {
 				flavors[i] = (CheckBox) findViewById(flavorsIds[i]);
 			}
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				JSONArray flavorData = resultObject.getJSONArray("flavor_ids");
@@ -682,10 +682,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.flavorsFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.flavorsFormBackBtn);
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					UpdateAccount account = new UpdateAccount("flavors");
@@ -693,15 +693,15 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				}
 			});
 		}
-		
+
 		if(type.equalsIgnoreCase("packages")) {
 			setContentView(R.layout.activity_account_packages);
-			
-			
+
+
 			for(int i = 0; i < packages.length ; i++) {
 				packages[i] = (CheckBox) findViewById(packagesIds[i]);
 			}
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				JSONArray packageData = resultObject.getJSONArray("packaging_ids");
@@ -712,10 +712,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.packagesFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.packagesFormBackBtn);
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -742,16 +742,16 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        }
 				}
 			});
-			
+
 		}
-		
+
 		if(type.equalsIgnoreCase("bonuspack")) {
 			setContentView(R.layout.activity_account_bonuspack);
-			
+
 			for(int i = 0; i < bonusPack.length ; i++) {
 				bonusPack[i] = (CheckBox) findViewById(bonusPackIds[i]);
 			}
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				JSONArray bonusPackData = resultObject.getJSONArray("bonus_pack_ids");
@@ -762,10 +762,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.bonusPackFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.bonusPackFormBackBtn);
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -792,13 +792,13 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        }
 				}
 			});
-			
+
 		}
-		
-		
+
+
 		if(type.equalsIgnoreCase("accessories")) {
 			setContentView(R.layout.activity_account_accessories);
-			
+
 			accessoriesMaleChildrenText = (EditText) findViewById(R.id.accesoriesMaleChildrenText);
 			accessoriesFemaleChildrenText = (EditText) findViewById(R.id.accesoriesFemaleChildrenText);
 			accessoriesLivesWithSpinner = (Spinner) findViewById(R.id.accessoriesLivesWithSpinner);
@@ -811,60 +811,60 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			accessoriesBikeSpinner = (Spinner) findViewById(R.id.accessoriesBikeSpinner);
 			accessoriesCarSpinner = (Spinner) findViewById(R.id.accessoriesCarSpinner);
 			accessoriesPetSpinner = (Spinner) findViewById(R.id.accessoriesPetSpinner);
-			
+
 			ArrayAdapter<CharSequence> adapterLivesWith = ArrayAdapter.createFromResource(this,
 			        R.array.liveswith, android.R.layout.simple_spinner_item);
 			adapterLivesWith.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesLivesWithSpinner.setAdapter(adapterLivesWith);
-			
+
 			ArrayAdapter<CharSequence> adapterSalary = ArrayAdapter.createFromResource(this,
 			        R.array.salary, android.R.layout.simple_spinner_item);
 			adapterSalary.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesSalarySpinner.setAdapter(adapterSalary);
-			
+
 			ArrayAdapter<CharSequence> adapterHomeType = ArrayAdapter.createFromResource(this,
 			        R.array.housetype, android.R.layout.simple_spinner_item);
 			adapterHomeType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesHomeTypeSpinner.setAdapter(adapterHomeType);
-			
+
 			ArrayAdapter<CharSequence> adapterBeachHouse = ArrayAdapter.createFromResource(this,
 			        R.array.beachhouse, android.R.layout.simple_spinner_item);
 			adapterBeachHouse.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesBeachHouseSpinner.setAdapter(adapterBeachHouse);
-			
+
 			ArrayAdapter<CharSequence> adapterPool = ArrayAdapter.createFromResource(this,
 			        R.array.pool, android.R.layout.simple_spinner_item);
 			adapterPool.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesPoolSpinner.setAdapter(adapterPool);
-			
+
 			ArrayAdapter<CharSequence> adapterJacuzzi = ArrayAdapter.createFromResource(this,
 			        R.array.standardyesno, android.R.layout.simple_spinner_item);
 			adapterJacuzzi.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesJacuzziSpinner.setAdapter(adapterJacuzzi);
-			
+
 			ArrayAdapter<CharSequence> adapterMotorcycle = ArrayAdapter.createFromResource(this,
 			        R.array.standardyesno, android.R.layout.simple_spinner_item);
 			adapterMotorcycle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesMotorcycleSpinner.setAdapter(adapterMotorcycle);
-			
+
 			ArrayAdapter<CharSequence> adapterBike = ArrayAdapter.createFromResource(this,
 			        R.array.standardyesno, android.R.layout.simple_spinner_item);
 			adapterBike.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesBikeSpinner.setAdapter(adapterBike);
-			
+
 			ArrayAdapter<CharSequence> adapterCar = ArrayAdapter.createFromResource(this,
 			        R.array.standardyesno, android.R.layout.simple_spinner_item);
 			adapterCar.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesCarSpinner.setAdapter(adapterCar);
-			
+
 			ArrayAdapter<CharSequence> adapterPet = ArrayAdapter.createFromResource(this,
 			        R.array.pet, android.R.layout.simple_spinner_item);
 			adapterPet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			accessoriesPetSpinner.setAdapter(adapterPet);
-						
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.accessoriesFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.accessoriesFormBackBtn);
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				if(!resultObject.isNull("male_childs")) {
@@ -886,7 +886,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -918,7 +918,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 
 		if(type.equalsIgnoreCase("effects")) {
 			setContentView(R.layout.activity_account_effect);
-			
+
 			effectsDefectsText = (EditText) findViewById(R.id.effectsDefectText);
 			effectsHatesText = (EditText) findViewById(R.id.effectsHatesText);
 			effectsSexPosesText = (EditText) findViewById(R.id.effectsSexPosesText);
@@ -929,22 +929,22 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			effectsDrinksSpinner = (Spinner) findViewById(R.id.effectsDrinksSpinner);
 			effectsSmokesSpinner = (Spinner) findViewById(R.id.effectsSmokesSpinner);
 			effectsFavoriteDrugSpinner = (Spinner) findViewById(R.id.effectsFavoriteDrugSpinner);
-			
+
 			ArrayAdapter<CharSequence> adapterDrinks = ArrayAdapter.createFromResource(this,
 			        R.array.drinks, android.R.layout.simple_spinner_item);
 			adapterDrinks.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			effectsDrinksSpinner.setAdapter(adapterDrinks);
-			
+
 			ArrayAdapter<CharSequence> adapterSmokes = ArrayAdapter.createFromResource(this,
 			        R.array.smokes, android.R.layout.simple_spinner_item);
 			adapterSmokes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			effectsSmokesSpinner.setAdapter(adapterSmokes);
-			
+
 			ArrayAdapter<CharSequence> adapterDrugs = ArrayAdapter.createFromResource(this,
 			        R.array.drugs, android.R.layout.simple_spinner_item);
 			adapterDrugs.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			effectsFavoriteDrugSpinner.setAdapter(adapterDrugs);
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				if(!resultObject.isNull("defect")) {
@@ -974,10 +974,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.effectsFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.effectsFormBackBtn);
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -1004,16 +1004,16 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        }
 				}
 			});
-			
+
 		}
 		if(type.equalsIgnoreCase("info")) {
 			setContentView(R.layout.activity_account_information);
-			
+
 			accountInfoUsernameText = (EditText) findViewById(R.id.accountInfoUsernameText);
 			accountInfoEmailText = (EditText) findViewById(R.id.accountInfoEmailText);
 			accountInfoPasswordText = (EditText) findViewById(R.id.accountInfoPasswordText);
 			accountInfoConfirmPasswordText = (EditText) findViewById(R.id.accountInfoConfirmPasswordText);
-			
+
 			try {
 				JSONObject resultObject = new JSONObject(data);
 				if(!resultObject.isNull("username")) {
@@ -1025,10 +1025,10 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			accountSaveBtn = (ImageButton) findViewById(R.id.accountInfoFormSaveBtn);
 			accountBackBtn = (ImageButton) findViewById(R.id.accountInfoFormBackBtn);
-			
+
 			accountSaveBtn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					if (!ct.isConnectingToInternet()) {
@@ -1055,33 +1055,33 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			        }
 				}
 			});
-			
+
 		}
-		
+
 		accountBackBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				initView();
 			}
 		});
-		
+
 	}
-	
+
 	public static void setId(int id) {
 		personalLocationId.setText(Integer.toString(id));
 	}
-	
+
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
 		   // set date picker as current date
-		   return new DatePickerDialog(this, datePickerListener, 
+		   return new DatePickerDialog(this, datePickerListener,
                          year, month,day);
 		}
 		return null;
 	}
-	
+
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
 		public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
@@ -1091,7 +1091,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			personalFormBirthdayBtn.setText(Integer.toString(day) + "/" + Integer.toString(month+1) + "/" + Integer.toString(year));
 		}
 	};
-	
+
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
@@ -1126,7 +1126,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				});
 				AlertDialog alert = builder.create();
 				alert.show();
-            	
+
             	break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1152,11 +1152,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
-            
+
             case R.id.side_navigation_menu_item6:
             	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
             	break;
-                
+
             default:
                 return;
         }
@@ -1170,7 +1170,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             sideNavigationView.hideMenu();
         }
     }
-    
+
     @Override
     protected void onRestart() {
     	super.onRestart();
@@ -1178,7 +1178,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
     	accountUserAvatar.setVisibility(View.INVISIBLE);
     	initView();
     }
-    
+
     @Override
 	protected void onResume() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -1186,7 +1186,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		}
 		super.onResume();
 	}
-	
+
 	@Override
     protected void onPause() {
         synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -1211,15 +1211,15 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
         	action = false;
         	Account.this.finish();
         	startActivity(getIntent());
-        	
+
         }
         if(title.equalsIgnoreCase("buscar gente")) {
         	intent = new Intent(this, Search.class);
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
-        	
+
         }
-        
+
         if(action) {
         	intent.putExtra(EXTRA_TITLE, title);
             intent.putExtra(EXTRA_RESOURCE_ID, resId);
@@ -1229,11 +1229,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
             startActivity(intent);
             overridePendingTransition(0, 0);
         }
-        
+
     }
-	
+
 	private class UserData extends AsyncTask<Integer, Integer, String[]> {
-		
+
 		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -1243,32 +1243,32 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		private Account activityRef;
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private String[] responses = new String[2];
-		
+
 		public UserData(Account activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-			
-			dialog = ProgressDialog.show(Account.this, "", "Cargando información personal...", true);
-			
+
+			dialog = ProgressDialog.show(Account.this, "", "Cargando informaciï¿½n personal...", true);
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 		}
-		
+
 		@Override
 		protected String[] doInBackground(Integer... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(get);
 				responses[0] = EntityUtils.toString(resp.getEntity());
@@ -1277,11 +1277,11 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-            
+
 			HttpGet getImages = new HttpGet(SERVICE_BASE_URL + "photos.json?app_key="
 									+ api_key + "&signature=" + signature);
             getImages.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(getImages);
 				responses[1] = EntityUtils.toString(resp.getEntity());
@@ -1290,29 +1290,29 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
- 
+
 			return responses;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String[] result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
-				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				activityRef.loadProfile(result);
 				dialog.dismiss();
 
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	private class UpdateAccount extends AsyncTask<Integer, Integer, String> {
-		
+
 		private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -1324,22 +1324,22 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 		private String[] birthdayText;
 		JSONObject user = new JSONObject();
 		JSONObject usuario = new JSONObject();
-		
+
 		public UpdateAccount(String ref) {
 			reference = ref;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-			
+
 			dialog = ProgressDialog.show(Account.this, "", "Actualizando datos...", true);
-						
+
 			if(reference.equalsIgnoreCase("personal")) {
-								
+
 				birthdayText = personalFormBirthdayBtn.getText().toString().split("/");
-				
+
 				try {
 					user.put("name", personalFormNameText.getText().toString());
 					user.put("weight", personalFormWeightText.getText().toString());
@@ -1351,18 +1351,18 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else if(reference.equalsIgnoreCase("about")) {
-				
+
 				try {
 					user.put("short_description", aboutFormDescriptionText.getText().toString());
 					user.put("crazy_experience", aboutFormCrazyText.getText().toString());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else if(reference.equalsIgnoreCase("nutritional")) {
-				
+
 				try {
 					user.put("languages", nutritionalFormLanguagesText.getText().toString());
 					user.put("favorite_album", nutritionalFormFavoriteAlbumText.getText().toString());
@@ -1384,7 +1384,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else if(reference.equalsIgnoreCase("flavors")) {
 				String flavorsChecked = "";
 				for(int i = 0; i < flavors.length ; i++) {
@@ -1447,7 +1447,7 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					user.put("has_pet", accessoriesPetSpinner.getSelectedItem().toString());
 				} catch (JSONException e) {
 					e.printStackTrace();
-				}				
+				}
 			} else if(reference.equalsIgnoreCase("effects")) {
 				try {
 					user.put("defect", effectsDefectsText.getText().toString());
@@ -1475,28 +1475,28 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 					e.printStackTrace();
 				}
 			}
-			
+
 			try {
 				usuario.put("user", user);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 		}
-		
+
 		@Override
 		protected String doInBackground(Integer... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPut put = new HttpPut(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             put.setHeader("content-type", "application/json");
-            
+
             try {
             	StringEntity entity = new StringEntity(usuario.toString(), HTTP.UTF_8);
             	put.setEntity(entity);
@@ -1507,25 +1507,25 @@ public class Account extends SherlockActivity implements ISideNavigationCallback
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
-				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Account.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);
 				dialog.dismiss();
 			}
-			
+
 		}
-		
+
 	}
-	
-	
+
+
 }

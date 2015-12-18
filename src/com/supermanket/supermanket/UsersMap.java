@@ -70,7 +70,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 										GooglePlayServicesClient.ConnectionCallbacks,
 										GooglePlayServicesClient.OnConnectionFailedListener {
 
-	
+
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	private GoogleMap map;
 	private Marker customMarker;
@@ -85,14 +85,14 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	ImageLoader imageLoader = ImageLoader.getInstance();
 	JSONArray otherUsersArray = null;
 	ConectivityTools ct;
-	
+
 	ImageButton mapDistance100Btn;
 	ImageButton mapDistance1000Btn;
 	ImageButton mapDistance3000Btn;
-	
+
 	private static SharedPreferences mSharedPreferences;
-	
-	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+
+	static final String SERVICE_BASE_URL = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,9 +122,9 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
         } else {
         	mLocationClient = new LocationClient(this, this, this);
         }
-		
+
 	}
-	
+
 	public void loadMap(String result) {
 		setContentView(R.layout.activity_users_map);
 		mCurrentLocation = mLocationClient.getLastLocation();
@@ -143,16 +143,16 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				mapSettings.setCompassEnabled(false);
 				mapSettings.setZoomControlsEnabled(false);
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(CURRENT_POSITION, 16));
-				map.addMarker(new MarkerOptions().position(CURRENT_POSITION).title("Tú"));
-				
+				map.addMarker(new MarkerOptions().position(CURRENT_POSITION).title("Tï¿½"));
+
 				getNearUsers = new GetNearUsers();
 				getNearUsers.execute(coordenadas);
 			}
-			
+
 			mapDistance100Btn = (ImageButton) findViewById(R.id.mapDistance100Btn);
 			mapDistance1000Btn = (ImageButton) findViewById(R.id.mapDistance1000Btn);
 			mapDistance3000Btn = (ImageButton) findViewById(R.id.mapDistance3000btn);
-			
+
 			mapDistance100Btn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Double[] coordenadas = new Double[3];
@@ -165,7 +165,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					getNearUsers.execute(coordenadas);
 				}
 			});
-			
+
 			mapDistance1000Btn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Double[] coordenadas = new Double[3];
@@ -178,7 +178,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					getNearUsers.execute(coordenadas);
 				}
 			});
-			
+
 			mapDistance3000Btn.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Double[] coordenadas = new Double[3];
@@ -191,12 +191,12 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					getNearUsers.execute(coordenadas);
 				}
 			});
-			
-			
+
+
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(UsersMap.this);
 			builder.setTitle(R.string.alert_attention_title);
-			builder.setMessage("Error detectando ubicaci—n. Verifica que tu dispositivo estŽ bien configurado.");
+			builder.setMessage("Error detectando ubicaciï¿½n. Verifica que tu dispositivo estï¿½ bien configurado.");
 			builder.setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
     			@Override
     			public void onClick(DialogInterface dialog, int id) {
@@ -211,12 +211,12 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			});
 			AlertDialog alert = builder.create();
 			alert.show();
-			Toast.makeText(this, "Error detectando ubicaci—n. Verifica que tu dispositivo estŽ bien configurado."
+			Toast.makeText(this, "Error detectando ubicaciï¿½n. Verifica que tu dispositivo estï¿½ bien configurado."
 					, Toast.LENGTH_LONG).show();
 		}
-		
+
 	}
-	
+
 	public static Bitmap createDrawableFromView(Context context, View view) {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		((UsersMap) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -225,28 +225,28 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
 		view.buildDrawingCache();
 		Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
- 
+
 		Canvas canvas = new Canvas(bitmap);
 		view.draw(canvas);
- 
+
 		return bitmap;
 	}
-	
+
 	@Override
     protected void onStart() {
         super.onStart();
         // Connect the client.
         mLocationClient.connect();
     }
-	
-	
+
+
 
     @Override
     protected void onStop() {
         mLocationClient.disconnect();
         super.onStop();
     }
-    
+
     @Override
 	protected void onResume() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -254,7 +254,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		}
 		super.onResume();
 	}
-		
+
 	@Override
 	protected void onPause() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -262,14 +262,14 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	    }
 	    super.onPause();
 	}
-	
+
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-		if(marker.getTitle().equalsIgnoreCase("Tú")) {
-			Toast.makeText(this, "Aquí estás ahora :)", Toast.LENGTH_SHORT).show();
+		if(marker.getTitle().equalsIgnoreCase("Tï¿½")) {
+			Toast.makeText(this, "Aquï¿½ estï¿½s ahora :)", Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	@Override
 	public void onDisconnected() {
 		// Display the connection status
@@ -318,17 +318,17 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 	        	userData = new UserData(this);
 				userData.execute();
 	        }
-				
+
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
-	
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -357,16 +357,16 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				});
 				AlertDialog alert = builder.create();
 				alert.show();
-            	
+
             	break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
     }
-	
+
 	private class UserData extends AsyncTask<Integer, Integer, String> {
-		
+
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
@@ -375,33 +375,33 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		private UsersMap activityRef;
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private ProgressDialog dialog;
-		
+
 		public UserData(UsersMap activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-			
+
 			dialog = ProgressDialog.show(UsersMap.this, "", "Cargando...", true);
-			
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 		}
-		
+
 		@Override
 		protected String doInBackground(Integer... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(get);
 				return EntityUtils.toString(resp.getEntity());
@@ -412,29 +412,29 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
-				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);
 				activityRef.loadMap(result);
 				dialog.dismiss();
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	private class SaveLocation extends AsyncTask<Double, Integer, String> {
-		
+
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
@@ -442,29 +442,29 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private ProgressDialog dialog;
-		
+
 		@Override
 		protected void onPreExecute() {
-		
+
 			super.onPreExecute();
-			
-			dialog = ProgressDialog.show(UsersMap.this, "", "Enviando ubicación...", true);
-			
+
+			dialog = ProgressDialog.show(UsersMap.this, "", "Enviando ubicaciï¿½n...", true);
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 		}
-		
+
 		@Override
 		protected String doInBackground(Double... params) {
-		    
+
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "point.json?app_key="
 									+ api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             try {
             	JSONObject point = new JSONObject();
             	JSONObject ubicacion = new JSONObject();
@@ -484,12 +484,12 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	
+
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            
+
             try {
             	HttpResponse resp = client.execute(post);
 				return EntityUtils.toString(resp.getEntity());
@@ -500,31 +500,31 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			
+
 			if(result == null) {
-				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado 2do", result);
 				dialog.dismiss();
-			} 
-			
-			
-			
+			}
+
+
+
 		}
-		
+
 	}
-	
+
 	private class GetNearUsers extends AsyncTask<Double, Integer, String> implements OnInfoWindowClickListener{
-		
+
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
 		private String api_secret;
@@ -542,14 +542,14 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 		}
-		
+
 		@Override
 		protected String doInBackground(Double... params) {
 			signature = utilityBelt.md5("app_key" + api_key + "page1" + api_secret);
 			radius = params[2].intValue();
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(SERVICE_BASE_URL + "near_people/"
-									+ Double.toString(params[0]) + "/" + Double.toString(params[1]) + 
+									+ Double.toString(params[0]) + "/" + Double.toString(params[1]) +
 									"/" + Integer.toString(radius) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
             get.setHeader("content-type", "application/json");
             try {
@@ -564,12 +564,12 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			}
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			if(result == null) {
-				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(UsersMap.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				try {
@@ -584,8 +584,8 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					    DisplayImageOptions options = new DisplayImageOptions.Builder().build();
 					    final String username = singleUserData.getString("username");
 					    String avatar = singleUserData.getString("avatar_medium");
-					   
-					    imageLoader.displayImage(avatar, 
+
+					    imageLoader.displayImage(avatar,
 					    			userImage, options, new ImageLoadingListener() {
 					        @Override
 					        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -598,23 +598,23 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 							@Override
 							public void onLoadingCancelled(String arg0, View arg1) {
 								// TODO Auto-generated method stub
-								
+
 							}
 
 							@Override
 							public void onLoadingFailed(String arg0, View arg1,
 									FailReason arg2) {
 								// TODO Auto-generated method stub
-								
+
 							}
 
 							@Override
 							public void onLoadingStarted(String arg0, View arg1) {
 								// TODO Auto-generated method stub
-								
+
 							}
 					    });
-					    
+
 						map.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
 					    map.setOnInfoWindowClickListener(this);
 					    dialog.dismiss();
@@ -626,11 +626,11 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				}
 			}
 		}
-		
+
 		@Override
 		public void onInfoWindowClick(Marker marker) {
 			String user = marker.getTitle();
-			if(!user.equalsIgnoreCase("Tú")) {
+			if(!user.equalsIgnoreCase("Tï¿½")) {
 				try {
 					for(int i = 0; i < otherUsersArray.length(); i++) {
 						JSONObject single = otherUsersArray.getJSONObject(i);
@@ -645,10 +645,10 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 				} catch(JSONException e) {
 					e.printStackTrace();
 				}
-			}			
+			}
 		}
-		
+
 	}
 
-	
+
 }

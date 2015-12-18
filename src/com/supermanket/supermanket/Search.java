@@ -62,7 +62,7 @@ import com.supermanket.utilities.UserAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
 public class Search extends SherlockActivity implements ISideNavigationCallback {
-	
+
 	List<String> groupList;
     List<String> childList;
     Map<String, List<String>> paramCollection;
@@ -74,32 +74,32 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     EditText ageToField;
     static TextView searchLocationId;
     RelativeLayout searchLayout;
-    
+
     public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
     public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
 
     private ImageView icon;
     private SideNavigationView sideNavigationView;
-    
+
     private static SharedPreferences mSharedPreferences;
-    
-    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-    
+
+    static final String SERVICE_BASE_URL = "";
+
     static TextView locationId;
-    
+
     LocationAdapter locationAdapter;
 	AutoCompleteDbAdapter dbAdapter;
-	
+
 	private static boolean[] flavorsFlags = new boolean[13];
 	private static boolean[] packageFlags = new boolean[16];
 	private static boolean[] bonusPackFlags = new boolean[11];
-	
+
 	private ArrayList<JSONArray> usersContainer = new ArrayList<JSONArray>();
 	private GridView mGridView;
     private PullToRefreshGridView mPullRefreshGridView;
     private UserAdapter uAdapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -129,14 +129,14 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		paramsScreen("create");
 	}
-	
+
 	public static void hideSoftKeyboard(Activity activity) {
 	    InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
 	    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 	}
-	
+
 	private void paramsScreen(String from) {
-		
+
 		if(from.equalsIgnoreCase("results")) {
 			setContentView(R.layout.activity_search);
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
@@ -157,7 +157,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		
+
 		locationId = (TextView) findViewById(R.id.personalFormLocationId);
 		locationAutoCompleteField = (AutoCompleteTextView) findViewById(R.id.searchLocationFieldText);
 		searchLocationId = (TextView) findViewById(R.id.searchLocationId);
@@ -165,19 +165,19 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 		ageFromField = (EditText) findViewById(R.id.searchAgeFromText);
 		ageToField = (EditText) findViewById(R.id.searchAgeToText);
-		
+
 		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
 			expListView.setVisibility(View.GONE);
         } else {
         	createGroupList();
 	        createCollection();
-	       
+
 	        final SearchAdapter expListAdapter = new SearchAdapter(
 	                this, groupList, paramCollection);
 	        expListView.setAdapter(expListAdapter);
-	  
+
 	        expListView.setOnChildClickListener(new OnChildClickListener() {
-	 
+
 	            public boolean onChildClick(ExpandableListView parent, View v,
 	                    int groupPosition, int childPosition, long id) {
 	                final String selected = (String) expListAdapter.getChild(
@@ -188,13 +188,13 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	            }
 	        });
         }
-		
-        
+
+
         dbAdapter = new AutoCompleteDbAdapter(this);
 		locationAdapter = new LocationAdapter(dbAdapter, this, "search");
 		locationAutoCompleteField.setAdapter(locationAdapter);
 		locationAutoCompleteField.setOnItemClickListener(locationAdapter);
-        
+
 		searchBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				hideSoftKeyboard(Search.this);
@@ -202,18 +202,18 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 				search.execute();
 			}
 		});
-		
+
 	}
-	
+
 	public static void setId(int id) {
 		searchLocationId.setText(Integer.toString(id));
 	}
-	
+
 	public void fillGrid(String data) {
-		
+
 		setContentView(R.layout.activity_search_results);
 		searchAgainBtn = (ImageButton) findViewById(R.id.searchAgainBtn);
-		
+
 		JSONObject resultObject;
     	JSONArray usersInfo = null;
 		try {
@@ -224,42 +224,42 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
+
+
     	mPullRefreshGridView = (PullToRefreshGridView) findViewById(R.id.searchResultsGrid);
-    	
+
 		mGridView = mPullRefreshGridView.getRefreshableView();
-		
+
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		
+
 		int width = 0;
 		int height = 0;
 		int density = displaymetrics.densityDpi;
-		
+
 		switch(density) {
-			
+
 			case DisplayMetrics.DENSITY_LOW:
 				 width = 71;
 				 height = 71;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_MEDIUM:
 				 width = 95;
 				 height = 95;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_HIGH:
 				 width = 142;
 				 height = 142;
 				 break;
-			
+
 			case DisplayMetrics.DENSITY_XHIGH:
 				 width = 190;
 				 height = 190;
 				 break;
 		}
-		
+
 		uAdapter = new UserAdapter(Search.this, true, true, 4, 0, 4, 0, width, height, usersContainer);
 		mGridView.setAdapter(uAdapter);
 
@@ -309,13 +309,13 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 
 			}
 		});
-		
+
 		searchAgainBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				paramsScreen("results");
 			}
 		});
-		
+
 	}
 
 	private void createGroupList() {
@@ -324,18 +324,18 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         groupList.add("Envases");
         groupList.add("Bonus Pack");
     }
- 
+
     private void createCollection() {
         String[] sabores = { "Intelectual", "Ejecutivo", "Carretero", "Deportista", "Aventurero",
-        		"Artista", "Tímido", "Geek", "Gamer", "Tuerca", "Tallero", "Hipster", "Fixero"};
+        		"Artista", "Tï¿½mido", "Geek", "Gamer", "Tuerca", "Tallero", "Hipster", "Fixero"};
         String[] envases = { "Rockero", "Metalero", "Casual", "Uniformado", "Skater",
-        		"Hip-Hop", "Otaku", "Surfista", "Verde", "Gótico", "Motoquero", "Reggaetonero", 
-        		"Zorrón", "Parrillero", "Lana", "Pokemón"};
-        String[] bonusPack = { "Chef", "Vegetariano", "Six Pack", "Fumador", "No fumador",  "Romántico",
-        		"Músico", "Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};        
- 
+        		"Hip-Hop", "Otaku", "Surfista", "Verde", "Gï¿½tico", "Motoquero", "Reggaetonero",
+        		"Zorrï¿½n", "Parrillero", "Lana", "Pokemï¿½n"};
+        String[] bonusPack = { "Chef", "Vegetariano", "Six Pack", "Fumador", "No fumador",  "Romï¿½ntico",
+        		"Mï¿½sico", "Musculoso", "Millonario y muriendo", "Cantante", "Maestro chasquilla"};
+
         paramCollection = new LinkedHashMap<String, List<String>>();
- 
+
         for (String param : groupList) {
             if (param.equals("Sabores")) {
                 loadChild(sabores);
@@ -343,17 +343,17 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
                 loadChild(envases);
             else
                 loadChild(bonusPack);
- 
+
             paramCollection.put(param, childList);
         }
     }
- 
+
     private void loadChild(String[] laptopModels) {
         childList = new ArrayList<String>();
         for (String model : laptopModels)
             childList.add(model);
     }
- 
+
     // Convert pixel to dip
     public int getDipsFromPixel(float pixels) {
         // Get the screen's density scale
@@ -361,7 +361,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         // Convert the dps to pixels, based on density scale
         return (int) (pixels * scale + 0.5f);
     }
- 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
@@ -374,7 +374,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
             case android.R.id.home:
                 sideNavigationView.toggleMenu();
                 break;
-            
+
             case R.id.logout:
             	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(R.string.alert_attention_title);
@@ -397,7 +397,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 				});
 				AlertDialog alert = builder.create();
 				alert.show();
-            	
+
             	break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -423,7 +423,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
-            
+
             case R.id.side_navigation_menu_item6:
             	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
             	break;
@@ -433,7 +433,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         }
         finish();
     }
-    
+
     public static void changeParam(int position, boolean value, int group) {
     	if(group == 0) {
     		flavorsFlags[position] = value;
@@ -444,7 +444,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     	}
     	Log.d("Position", Integer.toString(position));
     }
-    
+
     public static boolean isChecked(int group, int position) {
     	if(group == 0) {
     		return flavorsFlags[position];
@@ -484,9 +484,9 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         	startActivity(getIntent());
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
-        	
+
         }
-        
+
         if(action) {
         	intent.putExtra(EXTRA_TITLE, title);
             intent.putExtra(EXTRA_RESOURCE_ID, resId);
@@ -496,9 +496,9 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
             startActivity(intent);
             overridePendingTransition(0, 0);
         }
-        
+
     }
-    
+
     private class SearchUsers extends AsyncTask<Void, Void, String> {
 
 		private ProgressDialog dialog;
@@ -526,32 +526,32 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 			super.onPreExecute();
 
 			dialog = ProgressDialog.show(Search.this, "", "Buscando...", true);
-			
+
 			ageFrom = ageFromField.getText().toString();
 			ageTo = ageToField.getText().toString();
 			location = searchLocationId.getText().toString();
-			
+
 			mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 			if(ageFrom.equals("") || Integer.parseInt(ageFrom) < 18) {
 				ageFrom = "18";
 			}
-			
+
 			if(ageTo.equals("") || Integer.parseInt(ageTo) < 18) {
 				ageTo = "99";
 			}
-			
+
 			if(Integer.parseInt(ageTo) < Integer.parseInt(ageFrom)) {
 				String temp = ageFrom;
 				ageFrom = ageTo;
 				ageTo = temp;
 			}
-			
+
 			if(!mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
-	        	
+
 				for(int i = 0; i < flavorsFlags.length; i++) {
 					if(flavorsFlags[i]) {
 						flavors += Integer.toString(i);
@@ -560,7 +560,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 						}
 					}
 				}
-				
+
 				for(int i = 0; i < packageFlags.length; i++) {
 					if(packageFlags[i]) {
 						packages += Integer.toString(i);
@@ -569,7 +569,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 						}
 					}
 				}
-				
+
 				for(int i = 0; i < bonusPackFlags.length; i++) {
 					if(bonusPackFlags[i]) {
 						bonuspacks += Integer.toString(i);
@@ -578,7 +578,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 						}
 					}
 				}
-				
+
 	        }
 
 		}
@@ -590,17 +590,17 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "search.json?app_key="
 					+ api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject q = new JSONObject();
             JSONObject query = new JSONObject();
-            
+
             Log.d("age from", ageFrom);
             Log.d("age to", ageTo);
             Log.d("Location", location);
             Log.d("Flavors", flavors);
             Log.d("Packages", packages);
             Log.d("Bonus Pack", bonuspacks);
-            
+
             try {
 				q.put("age_gteq", ageFrom);
 				q.put("age_lteq", ageTo);
@@ -626,14 +626,14 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(query.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
             	HttpResponse resp = client.execute(post);
 				return EntityUtils.toString(resp.getEntity());
@@ -644,7 +644,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
 
@@ -653,7 +653,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 			super.onPostExecute(result);
 			searchLocationId.setText("");
 			if(result == null) {
-				alert.showAlertDialog(Search.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(Search.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);

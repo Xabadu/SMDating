@@ -51,7 +51,7 @@ import com.supermanket.utilities.DiscussArrayAdapter;
 import com.supermanket.utilities.UtilityBelt;
 
 public class MessageDetail extends Activity {
-	
+
 	private ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 	private static ListView list;
 	private static DiscussArrayAdapter adapter;
@@ -62,11 +62,11 @@ public class MessageDetail extends Activity {
 	private ImageButton unblockBtn;
 	public EditText messageDetailTextField;
 	ConectivityTools ct;
-	
+
 	private static SharedPreferences mSharedPreferences;
-	
-	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-	
+
+	static final String SERVICE_BASE_URL = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,9 +96,9 @@ public class MessageDetail extends Activity {
         	GetMessages getMessages = new GetMessages(this);
     		getMessages.execute(contactId);
         }
-		
+
 	}
-	
+
 	public void showMessages(String data) {
 		setContentView(R.layout.activity_message_detail);
 
@@ -114,7 +114,7 @@ public class MessageDetail extends Activity {
 			unblockBtn.setVisibility(View.INVISIBLE);
 			Log.d("Val", "false");
 		}
-		
+
 		JSONArray allMessages = null;
 		try {
 			allMessages = new JSONArray(data);
@@ -133,20 +133,20 @@ public class MessageDetail extends Activity {
 				} else {
 					msgInfo.put("read", "false");
 				}
-				
+
 				messages.add(msgInfo);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		list = (ListView) findViewById(R.id.messageDetailList);
-		currentPosition = allMessages.length(); 	
+		currentPosition = allMessages.length();
         adapter = new DiscussArrayAdapter(MessageDetail.this, messages);
         list.setAdapter(adapter);
         list.setSelection(currentPosition - 1);
-		
+
         list.setOnItemClickListener(new OnItemClickListener() {
-        	
+
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
@@ -155,9 +155,9 @@ public class MessageDetail extends Activity {
       			imm.hideSoftInputFromWindow(messageDetailTextField.getWindowToken(), 0);
 			}
         });
-		
-		
-		
+
+
+
 		blockBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
@@ -179,7 +179,7 @@ public class MessageDetail extends Activity {
 				alert.show();
 			}
 		});
-		
+
 		unblockBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(MessageDetail.this);
@@ -201,7 +201,7 @@ public class MessageDetail extends Activity {
 				alert.show();
 			}
 		});
-		
+
 		sendMessageBtn.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
         		if(!messageDetailTextField.getText().toString().equalsIgnoreCase("")) {
@@ -227,29 +227,29 @@ public class MessageDetail extends Activity {
         	        	SendMessage message = new SendMessage(MessageDetail.this);
             			message.execute(Integer.toString(intent.getIntExtra("id", 0)));
         	        }
-        			
+
         		}
         	}
         });
-		
+
 	}
-	
+
 	public static DiscussArrayAdapter getAdapter() {
 		return adapter;
 	}
-	
+
 	public static ListView getList() {
 		return list;
 	}
-	
+
 	public static int getContact() {
 		return contactId;
 	}
-	
+
 	public static int getCurrentPosition() {
 		return currentPosition;
 	}
-	
+
 	@Override
 	protected void onResume() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -257,7 +257,7 @@ public class MessageDetail extends Activity {
 		}
 		super.onResume();
 	}
-		
+
 	@Override
 	protected void onPause() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -265,14 +265,14 @@ public class MessageDetail extends Activity {
 	    }
 	    super.onPause();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
-	
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -301,14 +301,14 @@ public class MessageDetail extends Activity {
 				});
 				AlertDialog alert = builder.create();
 				alert.show();
-            	
+
             	break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
     }
-    
+
     private class GetMessages extends AsyncTask<Integer, Void, String> {
     	private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
@@ -318,31 +318,31 @@ public class MessageDetail extends Activity {
 		private SharedPreferences mSharedPreferences;
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private MessageDetail activityRef;
-		
+
 		public GetMessages(MessageDetail activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			
+
 			dialog = ProgressDialog.show(MessageDetail.this, "", "Cargando mensajes...", true);
     		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 		}
-		
+
 		@Override
 		protected String doInBackground(Integer... params) {
-			
+
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contact/" + Integer.toString(params[0]) + "/messages.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(get);
 				return EntityUtils.toString(resp.getEntity());
@@ -351,28 +351,28 @@ public class MessageDetail extends Activity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			return null;
 		}
-		
-		@Override 
+
+		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			if(result == null) {
-    			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+    			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
     		} else {
     			Log.d("Result", result);
     			activityRef.showMessages(result);
     	        dialog.dismiss();
     		}
-			
+
 		}
-		
+
     }
-    
+
     private class SendMessage extends AsyncTask<String, Void, String> {
-    	
+
     	private ProgressDialog dialog;
 		private AlertDialogs alert = new AlertDialogs();
 		private String api_key;
@@ -384,11 +384,11 @@ public class MessageDetail extends Activity {
 		private JSONObject mensaje = new JSONObject();
 		private JSONArray allMessages;
 		private MessageDetail activityRef;
-    	
+
 		public SendMessage(MessageDetail activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
     	@Override
     	protected void onPreExecute() {
     		super.onPreExecute();
@@ -397,29 +397,29 @@ public class MessageDetail extends Activity {
 			api_key = mSharedPreferences.getString("API_KEY", "");
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
-			
+
 			try {
 				message.put("content", messageDetailTextField.getText().toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				mensaje.put("message", message);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
+
     	}
-    	
+
     	@Override
     	protected String doInBackground(String... params) {
-    		
+
     		HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contact/" + params[0] + "/messages.json?app_key="
 									+ api_key + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             try {
             	StringEntity entity = new StringEntity(mensaje.toString(), HTTP.UTF_8);
             	post.setEntity(entity);
@@ -430,26 +430,26 @@ public class MessageDetail extends Activity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-    		
+
     		return null;
     	}
-    	
+
     	@Override
     	protected void onPostExecute(String result) {
     		super.onPostExecute(result);
     		if(result == null) {
-    			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+    			alert.showAlertDialog(MessageDetail.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
     		} else {
     			activityRef.showMessages(result);
     			dialog.dismiss();
     		}
     	}
-    	
+
     }
-    
+
     public class BlockContact extends AsyncTask<String, Void, String> {
-		
+
 		MessageDetail activityRef;
 		ProgressDialog dialog;
 		private String api_key;
@@ -459,11 +459,11 @@ public class MessageDetail extends Activity {
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private ImageButton blockBtn;
 		private ImageButton unblockBtn;
-		
+
 		public BlockContact(MessageDetail activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -475,18 +475,18 @@ public class MessageDetail extends Activity {
 			blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
 			unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/blocked.json?app_key="
 					+ api_key + "&page=" + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject blocked = new JSONObject();
             JSONObject bloqueado = new JSONObject();
 
-            
+
             try {
 				blocked.put("reason", "-");
 			} catch (JSONException e2) {
@@ -499,15 +499,15 @@ public class MessageDetail extends Activity {
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(bloqueado.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
             	return EntityUtils.toString(resp.getEntity());
@@ -516,10 +516,10 @@ public class MessageDetail extends Activity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
@@ -531,20 +531,20 @@ public class MessageDetail extends Activity {
 					unblockBtn.setVisibility(View.VISIBLE);
 					Toast.makeText(MessageDetail.this, "Contacto bloqueado", Toast.LENGTH_LONG).show();
 				} else {
-					Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente", Toast.LENGTH_LONG).show();
+					Toast.makeText(MessageDetail.this, "Error, intï¿½ntalo nuevamente", Toast.LENGTH_LONG).show();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-				Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente", Toast.LENGTH_LONG).show();
+				Toast.makeText(MessageDetail.this, "Error, intï¿½ntalo nuevamente", Toast.LENGTH_LONG).show();
 			}
 			dialog.dismiss();
-			
+
 		}
-		
+
 	}
 
     public class UnBlockContact extends AsyncTask<String, Void, String> {
-	
+
 	MessageDetail activityRef;
 	ProgressDialog dialog;
 	private String api_key;
@@ -554,11 +554,11 @@ public class MessageDetail extends Activity {
 	private UtilityBelt utilityBelt = new UtilityBelt();
 	private ImageButton unblockBtn;
 	private ImageButton blockBtn;
-	
+
 	public UnBlockContact(MessageDetail activityRef) {
 		this.activityRef = activityRef;
 	}
-	
+
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -570,14 +570,14 @@ public class MessageDetail extends Activity {
 		unblockBtn = (ImageButton) findViewById(R.id.messageDetailUnBlockBtn);
 		blockBtn = (ImageButton) findViewById(R.id.messageDetailBlockBtn);
 	}
-	
+
 	@Override
 	protected String doInBackground(String... params) {
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(SERVICE_BASE_URL + "contacts/" + params[0] + "/unblocked.json?app_key="
 				+ api_key + "&page=" + "&signature=" + signature);
         post.setHeader("content-type", "application/json");
-        
+
         try {
         	HttpResponse resp = client.execute(post);
         	return EntityUtils.toString(resp.getEntity());
@@ -589,7 +589,7 @@ public class MessageDetail extends Activity {
 
 		return null;
 	}
-	
+
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
@@ -601,16 +601,16 @@ public class MessageDetail extends Activity {
 				blockBtn.setVisibility(View.VISIBLE);
 				Toast.makeText(MessageDetail.this, "Contacto desbloqueado", Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente.", Toast.LENGTH_LONG).show();
+				Toast.makeText(MessageDetail.this, "Error, intï¿½ntalo nuevamente.", Toast.LENGTH_LONG).show();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			Toast.makeText(MessageDetail.this, "Error, inténtalo nuevamente.", Toast.LENGTH_LONG).show();
+			Toast.makeText(MessageDetail.this, "Error, intï¿½ntalo nuevamente.", Toast.LENGTH_LONG).show();
 		}
 		dialog.dismiss();
-		
+
 	}
-	
+
 }
 
 }

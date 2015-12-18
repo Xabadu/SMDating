@@ -45,7 +45,7 @@ import com.supermanket.utilities.SideNavigationView.Mode;
 import com.supermanket.utilities.WatchersAdapter;
 
 public class Watchers extends SherlockActivity implements ISideNavigationCallback {
-	
+
 	SharedPreferences mSharedPreferences;
 	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
@@ -58,9 +58,9 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
     ConectivityTools ct;
     ArrayList<HashMap<String, String>> watchers = new ArrayList<HashMap<String, String>>();
     JSONArray watchersList;
-    
-    static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-	
+
+    static final String SERVICE_BASE_URL = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +71,7 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 			this.finish();
 		} else {
 			setContentView(R.layout.activity_messages_list);
-			
+
 			icon = (ImageView) findViewById(android.R.id.icon);
 	        sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
 	        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
@@ -111,10 +111,10 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 	        	GetWatchers watchers = new GetWatchers(this);
 		        watchers.execute();
 	        }
-	        
+
 		}
 	}
-	
+
 	public void loadWatchers(final String data) {
 
 		try {
@@ -124,11 +124,11 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 				for(int i = 0; i < watchersList.length(); i++) {
 					JSONObject watchersData = watchersList.getJSONObject(i);
 					HashMap<String, String> contact = new HashMap<String, String>();
-					
+
 					if(watchersData.getBoolean("is_hidde")) {
 						contact.put("name", Watchers.this.getResources().getString(R.string.unknown_user));
 						contact.put("image", "");
-						
+
 					} else {
 						contact.put("name", watchersData.getString("username"));
 						contact.put("image", watchersData.getString("avatar"));
@@ -140,8 +140,8 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 					}
 					contact.put("when", watchersData.getString("distance_of_time_in_words_to_now"));
 					contact.put("count", watchersData.getString("visits_count"));
-					
-					
+
+
 					watchers.add(contact);
 				}
 			} else {
@@ -150,16 +150,16 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		list = (ListView) findViewById(R.id.messageListList);
-		 
+
         adapter = new WatchersAdapter(this, watchers);
         list.setAdapter(adapter);
-        
+
         final JSONArray blockInfo = watchersList;
- 
+
         list.setOnItemClickListener(new OnItemClickListener() {
- 
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
@@ -176,7 +176,7 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	
+
             }
         });
 	}
@@ -193,7 +193,7 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 	            case android.R.id.home:
 	                sideNavigationView.toggleMenu();
 	                break;
-	            
+
 	            case R.id.logout:
 	            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setTitle(R.string.alert_attention_title);
@@ -216,7 +216,7 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 					});
 					AlertDialog alert = builder.create();
 					alert.show();
-	            	
+
 	            	break;
 	            default:
 	                return super.onOptionsItemSelected(item);
@@ -242,11 +242,11 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 	            case R.id.side_navigation_menu_item4:
 	                invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
 	                break;
-	            
+
 	            case R.id.side_navigation_menu_item6:
 	            	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
 	            	break;
-	            
+
 	            case R.id.side_navigation_menu_item7:
 	            	invokeActivity(getString(R.string.menu_title7), R.drawable.ic_alert_warning);
 
@@ -287,9 +287,9 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 	        	startActivity(getIntent());
 	        }
 	        if(title.equalsIgnoreCase("cerrar sesion")) {
-	        	
+
 	        }
-	        
+
 	        if(action) {
 	        	intent.putExtra(EXTRA_TITLE, title);
 	            intent.putExtra(EXTRA_RESOURCE_ID, resId);
@@ -299,12 +299,12 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 	            startActivity(intent);
 	            overridePendingTransition(0, 0);
 	        }
-	        
+
 	    }
-	    
-	    
+
+
 	    public class GetWatchers extends AsyncTask<Void, Void, String> {
-			
+
 			Watchers activityRef;
 			ProgressDialog dialog;
 			private String api_key;
@@ -313,11 +313,11 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 			private SharedPreferences mSharedPreferences;
 			private UtilityBelt utilityBelt = new UtilityBelt();
 			private AlertDialogs alert = new AlertDialogs();
-			
+
 			public GetWatchers(Watchers activityRef) {
 				this.activityRef = activityRef;
 			}
-			
+
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
@@ -327,14 +327,14 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 				api_secret = mSharedPreferences.getString("API_SECRET", "");
 				signature = utilityBelt.md5("app_key" + api_key + api_secret);
 			}
-			
-			@Override 
+
+			@Override
 			protected String doInBackground(Void... params) {
 				HttpClient client = new DefaultHttpClient();
-				HttpGet get = new HttpGet(SERVICE_BASE_URL + "visits.json?app_key=" 
+				HttpGet get = new HttpGet(SERVICE_BASE_URL + "visits.json?app_key="
 										+ api_key + "&signature=" + signature);
 	            get.setHeader("content-type", "application/json");
-	            
+
 	            try {
 	            	HttpResponse resp = client.execute(get);
 					return EntityUtils.toString(resp.getEntity());
@@ -343,15 +343,15 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-	 
+
 				return null;
 			}
-			
+
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
 				if(result == null) {
-					alert.showAlertDialog(Watchers.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+					alert.showAlertDialog(Watchers.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 					dialog.dismiss();
 				} else {
 					Log.d("Watchers", result);
@@ -359,7 +359,7 @@ public class Watchers extends SherlockActivity implements ISideNavigationCallbac
 					activityRef.loadWatchers(result);
 				}
 			}
-			
+
 		}
 
 }
