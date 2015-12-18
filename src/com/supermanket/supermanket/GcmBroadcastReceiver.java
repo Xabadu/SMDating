@@ -46,11 +46,9 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 	    				list = MessageDetail.getList();
 	    				HashMap<String, String> message = new HashMap<String, String>();
 	    				message.put("message", intent.getStringExtra("message"));
-		    			message.put("who", "other");
-		    			adapter.add(message);
-		    			list.setSelection(MessageDetail.getCurrentPosition());
-	    				
-	    				
+	    				message.put("who", "other");
+	    				adapter.add(message);
+	    				list.setSelection(MessageDetail.getCurrentPosition());
 	    			} else if(currentActivity.getClass() == MessagesList.class) {
 	    				Toast.makeText(ctx, "Has recibido un mensaje de " + intent.getStringExtra("sender_username"), Toast.LENGTH_LONG).show();
 	    			} else {

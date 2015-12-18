@@ -158,7 +158,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					Double[] coordenadas = new Double[3];
 					coordenadas[0] = mCurrentLocation.getLatitude();
 					coordenadas[1] = mCurrentLocation.getLongitude();
-					coordenadas[2] = 9.0;
+					coordenadas[2] = 0.1;
 					map.clear();
 					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
 					getNearUsers = new GetNearUsers();
@@ -171,7 +171,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					Double[] coordenadas = new Double[3];
 					coordenadas[0] = mCurrentLocation.getLatitude();
 					coordenadas[1] = mCurrentLocation.getLongitude();
-					coordenadas[2] = 9.0;
+					coordenadas[2] = 1.0;
 					map.clear();
 					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
 					getNearUsers = new GetNearUsers();
@@ -184,7 +184,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 					Double[] coordenadas = new Double[3];
 					coordenadas[0] = mCurrentLocation.getLatitude();
 					coordenadas[1] = mCurrentLocation.getLongitude();
-					coordenadas[2] = 9.0;
+					coordenadas[2] = 3.0;
 					map.clear();
 					map.addMarker(new MarkerOptions().position(CURRENT_POSITION));
 					getNearUsers = new GetNearUsers();
@@ -196,7 +196,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(UsersMap.this);
 			builder.setTitle(R.string.alert_attention_title);
-			builder.setMessage("Error ubicando. Reintenta o trata desactivando y volviendo a activar tu GPS.");
+			builder.setMessage("Error detectando ubicación. Verifica que tu dispositivo esté bien configurado.");
 			builder.setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
     			@Override
     			public void onClick(DialogInterface dialog, int id) {
@@ -550,7 +550,7 @@ public class UsersMap extends FragmentActivity implements OnInfoWindowClickListe
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(SERVICE_BASE_URL + "near_people/"
 									+ Double.toString(params[0]) + "/" + Double.toString(params[1]) + 
-									"/" + String.valueOf(radius) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
+									"/" + Integer.toString(radius) + ".json?app_key=" + api_key + "&page=1&signature=" + signature);
             get.setHeader("content-type", "application/json");
             try {
             	HttpResponse resp = client.execute(get);

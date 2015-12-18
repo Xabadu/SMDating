@@ -69,12 +69,9 @@ public class MessageAdapter extends BaseAdapter {
         message = data.get(position);
         userName.setText(message.get("name"));
         lastMessage.setText(message.get("message"));
-        if(message.containsKey("read")) {
-        	if(message.get("read").equalsIgnoreCase("false")) {
-            	lastMessage.setTypeface(null, Typeface.BOLD);
-            }
+        if(message.get("read").equalsIgnoreCase("false")) {
+        	lastMessage.setTypeface(null, Typeface.BOLD);
         }
-        
         messageDate.setText(message.get("date"));
         imageLoader.DisplayImage(message.get("image"), userImage);
         

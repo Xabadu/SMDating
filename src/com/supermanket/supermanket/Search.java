@@ -127,14 +127,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-    	if(mSharedPreferences.getBoolean("ACTIVE_SEARCH", false)) {
-    		fillGrid(mSharedPreferences.getString("ACTIVE_DATA", ""), mSharedPreferences.getString("AGE_FROM", ""), 
-    				mSharedPreferences.getString("AGE_TO", ""), mSharedPreferences.getString("FLAVORS", ""), 
-    				mSharedPreferences.getString("PACKAGES", ""), mSharedPreferences.getString("BONUS_PACKS", ""));
-    	} else {
-    		paramsScreen("create", "", "", "", "", "");
-    	}
+		paramsScreen("create");
 	}
 	
 	public static void hideSoftKeyboard(Activity activity) {
@@ -142,8 +135,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 	}
 	
-	private void paramsScreen(String from, String ageFrom, String ageTo, String flavors,
-			String packages, String bonuspacks) {
+	private void paramsScreen(String from) {
 		
 		if(from.equalsIgnoreCase("results")) {
 			setContentView(R.layout.activity_search);
@@ -162,12 +154,6 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	            sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
 	            sideNavigationView.setMode(Mode.LEFT);
 	        }
-	        searchLayout = (RelativeLayout) findViewById(R.id.searchBgLayout);
-			searchLayout.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					hideSoftKeyboard(Search.this);
-				}
-	        });
 
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
@@ -179,39 +165,6 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 		ageFromField = (EditText) findViewById(R.id.searchAgeFromText);
 		ageToField = (EditText) findViewById(R.id.searchAgeToText);
-		
-		if(!ageFrom.equals("")) {
-			ageFromField.setText(ageFrom);
-		}
-		if(!ageTo.equals("")) {
-			ageToField.setText(ageTo);
-		}
-		
-		if(!flavors.equals("")) {
-			String allTheFlavors[] = flavors.split(",");
-			for(int i = 0; i < allTheFlavors.length; i++) {
-				flavorsFlags[Integer.parseInt(allTheFlavors[i])] = true;
-			}
-    	} 
-		
-		if(!packages.equals("")) {
-			String allThePackages[] = packages.split(",");
-			for(int i = 0; i < allThePackages.length; i++) {
-				packageFlags[Integer.parseInt(allThePackages[i])] = true;
-			}
-    	} 
-		
-		if(!bonuspacks.equals("")) {
-			String allTheBonusPacks[] = bonuspacks.split(",");
-			for(int i = 0; i < allTheBonusPacks.length; i++) {
-				bonusPackFlags[Integer.parseInt(allTheBonusPacks[i])] = true;
-			}
-    	} 	
-		
-		
-		/* LOCACTION OCULTADA - ACTIVAR EN FUTURA VERSION OJO CON INTEGRACION BD */
-		
-		locationAutoCompleteField.setVisibility(View.GONE);
 		
 		if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
 			expListView.setVisibility(View.GONE);
@@ -236,16 +189,15 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 	        });
         }
 		
-        /*
+        
         dbAdapter = new AutoCompleteDbAdapter(this);
 		locationAdapter = new LocationAdapter(dbAdapter, this, "search");
 		locationAutoCompleteField.setAdapter(locationAdapter);
 		locationAutoCompleteField.setOnItemClickListener(locationAdapter);
-        */
-		
+        
 		searchBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				//hideSoftKeyboard(Search.this);
+				hideSoftKeyboard(Search.this);
 				SearchUsers search = new SearchUsers(Search.this);
 				search.execute();
 			}
@@ -257,42 +209,13 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		searchLocationId.setText(Integer.toString(id));
 	}
 	
-	public void fillGrid(String data, final String ageFrom, final String ageTo, final String flavors, 
-			final String packages, final String bonuspacks) {
+	public void fillGrid(String data) {
 		
 		setContentView(R.layout.activity_search_results);
-		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-		icon = (ImageView) findViewById(android.R.id.icon);
-        sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
-        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
-        	sideNavigationView.setMenuItems(R.menu.side_navigation_male_menu);
-        } else {
-        	sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
-        }
-        sideNavigationView.setMenuClickCallback(this);
-        if (getIntent().hasExtra(EXTRA_TITLE)) {
-            String title = getIntent().getStringExtra(EXTRA_TITLE);
-            setTitle(title);
-            sideNavigationView.setMode(getIntent().getIntExtra(EXTRA_MODE, 0) == 0 ? Mode.LEFT : Mode.RIGHT);
-            sideNavigationView.setMode(Mode.LEFT);
-        }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		searchAgainBtn = (ImageButton) findViewById(R.id.searchAgainBtn);
-		
-		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-		Editor editor = mSharedPreferences.edit();
-		editor.putBoolean("ACTIVE_SEARCH", true);
-		editor.putString("ACTIVE_DATA", data);
-		editor.putString("AGE_FROM", ageFrom);
-		editor.putString("AGE_TO", ageTo);
-		editor.putString("FLAVORS", flavors);
-		editor.putString("PACKAGES", packages);
-		editor.putString("BONUS_PACKS", bonuspacks);
-		editor.commit();
 		
 		JSONObject resultObject;
     	JSONArray usersInfo = null;
-    	usersContainer.clear();
 		try {
 			resultObject = new JSONObject(data);
 			usersInfo = resultObject.getJSONArray("users");
@@ -389,17 +312,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 		
 		searchAgainBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-				Editor editor = mSharedPreferences.edit();
-				editor.remove("ACTIVE_SEARCH");
-				editor.remove("ACTIVE_DATA");
-				editor.remove("AGE_FROM");
-				editor.remove("AGE_TO");
-				editor.remove("FLAVORS");
-				editor.remove("PACKAGES");
-				editor.remove("BONUS_PACKS");
-				editor.commit();
-				paramsScreen("results", ageFrom, ageTo, flavors, packages, bonuspacks);
+				paramsScreen("results");
 			}
 		});
 		
@@ -542,20 +455,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
     	}
     	return false;
     }
-    
-    @Override
-    protected void onRestart() {
-    	//super.onRestart();
-    	mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
-    	if(mSharedPreferences.getBoolean("ACTIVE_SEARCH", false)) {
-    		fillGrid(mSharedPreferences.getString("ACTIVE_DATA", ""), mSharedPreferences.getString("AGE_FROM", ""), 
-    				mSharedPreferences.getString("AGE_TO", ""), mSharedPreferences.getString("FLAVORS", ""), 
-    				mSharedPreferences.getString("PACKAGES", ""), mSharedPreferences.getString("BONUS_PACKS", ""));
-    	} else {
-    		paramsScreen("results", "", "", "", "", "");
-    	}
-    }
-    
+
     @Override
     public void onBackPressed() {
         if (sideNavigationView.isShown()) {
@@ -757,7 +657,7 @@ public class Search extends SherlockActivity implements ISideNavigationCallback 
 				dialog.dismiss();
 			} else {
 				Log.d("Resultado", result);
-				activityRef.fillGrid(result, ageFrom, ageTo, flavors, packages, bonuspacks);
+				activityRef.fillGrid(result);
 				dialog.dismiss();
 
 			}

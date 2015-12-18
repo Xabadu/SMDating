@@ -42,8 +42,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:text="@string/lbl_search_location"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:textStyle="bold" />
 
     <AutoCompleteTextView
         android:id="@+id/searchLocationFieldText"
