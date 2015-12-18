@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <TextView
+        android:id="@+id/generalSettingsNotificationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NOTIFICACIONES" />
+    
+    <View
+        android:id="@+id/generalSettingsNotificationsSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@+id/generalSettingsNotificationTitle"
+        android:background="#aaaaaa" />
+
+    <CheckBox
+        android:id="@+id/generalSettingsNotificationCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generalSettingsNotificationsSeparator"
+        android:text="Silenciar" />
+    
+    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/generalSettingsNotificationCheckbox"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="24dp" >
+	        
+	        <Button
+	            android:id="@+id/generalSettingsSaveBtn"
+	            style="@style/button_text"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/dark_pink_button"
+	            android:text="@string/btn_account_save" />
+		
+		    <Button
+		        android:id="@+id/generalSettingsBackBtn"
+		        style="@style/button_text"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="5dp"
+		        android:background="@drawable/gray_button"
+		        android:text="Volver" />
+	
+	    </LinearLayout>
+
+</RelativeLayout>

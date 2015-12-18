@@ -17,13 +17,13 @@ import android.util.Log;
 
 public class AutoCompleteDbAdapter {
 
-	private static String DATABASE_PATH = "/data/data/com.supermanket.supermanket/databases/";
+	private static String DATABASE_PATH = "";
 	private static final String DATABASE_NAME = "Ciudades.sqlite";
 	private static final String TABLE_NAME = "ciudad";
 	private static final int DATABASE_VERSION = 1;
 
 	private class DatabaseHelper extends SQLiteOpenHelper {
-		
+
 		private final Context context;
 		private SQLiteDatabase database;
 
@@ -36,11 +36,11 @@ public class AutoCompleteDbAdapter {
 		public void onCreate(SQLiteDatabase db) {
 
 		}
-		
+
 		public void createDatabase() throws IOException{
-			 
+
 	    	boolean dbExist = checkDatabase();
-	 
+
 	    	if(dbExist){
 	    	} else {
 	        	this.getReadableDatabase();
@@ -51,7 +51,7 @@ public class AutoCompleteDbAdapter {
 	        	}
 	    	}
 	    }
-		
+
 		private boolean checkDatabase() {
 			//SQLiteDatabase checkDb = null;
 			File checkDb = null;
@@ -64,7 +64,7 @@ public class AutoCompleteDbAdapter {
 
 			return checkDb.exists();
 		}
-		
+
 		private void copyDatabase() throws IOException {
 			InputStream input = context.getAssets().open(DATABASE_NAME);
 			String outFileName = DATABASE_PATH + DATABASE_NAME;
@@ -78,13 +78,13 @@ public class AutoCompleteDbAdapter {
 			output.close();
 			input.close();
 		}
-		
+
 		public SQLiteDatabase openDatabase() throws SQLException {
 			String path = DATABASE_PATH + DATABASE_NAME;
 			database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
 			return database;
 		}
-		
+
 		public void close() {
 			if(database != null) {
 				database.close();
@@ -101,7 +101,7 @@ public class AutoCompleteDbAdapter {
 	private DatabaseHelper mDbHelper;
 	private SQLiteDatabase mDb;
 	private final Activity mActivity;
-	
+
 	public AutoCompleteDbAdapter(Activity activity) {
 	    this.mActivity = activity;
 	    mDbHelper = this.new DatabaseHelper(activity);
@@ -113,22 +113,22 @@ public class AutoCompleteDbAdapter {
 		}
 	    mDb = mDbHelper.openDatabase();
 	}
-	
+
 	public void close() {
 	    mDbHelper.close();
 	}
 
 	public Cursor getLocations(String constraint) throws SQLException {
-	
+
 	    String queryString =
 	            "SELECT _id as _id, nombre, ciudad FROM " + TABLE_NAME;
-	
+
 	    if (constraint != null) {
 	        constraint = constraint.trim() + "%";
 	        queryString += " WHERE nombre LIKE ? LIMIT 10";
 	    }
 	    String params[] = { constraint };
-	
+
 	    if (constraint == null) {
 	        params = null;
 	    }
@@ -144,8 +144,8 @@ public class AutoCompleteDbAdapter {
 	        Log.e("AutoCompleteDbAdapter", e.toString());
 	        throw e;
 	    }
-	
+
 	    return null;
 	}
-	
+
 }

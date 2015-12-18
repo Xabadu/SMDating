@@ -26,10 +26,10 @@ import android.webkit.WebView;
 import com.supermanket.utilities.UtilityBelt;
 
 public class Devices extends Activity {
-	
+
 	SharedPreferences mSharedPreferences;
-	
-	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
+
+	static final String SERVICE_BASE_URL = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,9 @@ public class Devices extends Activity {
 			Intent intent = new Intent(this, Dashboard.class);
 			startActivity(intent);
 		}
-		
+
 	}
-	
+
 	private class RegisterDevice extends AsyncTask<String, Void, String> {
 		private ProgressDialog dialog;
 		private String api_key;
@@ -61,7 +61,7 @@ public class Devices extends Activity {
 		int height = 0;
 		int width = 0;
 		String userAgent;
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -76,22 +76,22 @@ public class Devices extends Activity {
 			width = displaymetrics.widthPixels;
 			userAgent = new WebView(Devices.this).getSettings().getUserAgentString();
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "devices.json?app_key="
 					+ api_key + "&page=" + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject device = new JSONObject();
             JSONObject dispositivo = new JSONObject();
-            
+
             String tablet = "false";
             if(width >= 640) {
             	tablet = "true";
             }
-            
+
             try {
 				device.put("active", "true");
 				device.put("os", "1");
@@ -110,15 +110,15 @@ public class Devices extends Activity {
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(dispositivo.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
             	/*if(resp != null) {
@@ -131,15 +131,15 @@ public class Devices extends Activity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 
-			
+
 			Intent intent = new Intent(Devices.this, Dashboard.class);
 			startActivity(intent);
 			dialog.dismiss();
@@ -147,7 +147,7 @@ public class Devices extends Activity {
 
 		}
 	}
-	
+
 	private class UpdateDevice extends AsyncTask<String, Void, String> {
 		private ProgressDialog dialog;
 		private String api_key;
@@ -158,7 +158,7 @@ public class Devices extends Activity {
 		int height = 0;
 		int width = 0;
 		String userAgent;
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -173,22 +173,22 @@ public class Devices extends Activity {
 			width = displaymetrics.widthPixels;
 			userAgent = new WebView(Devices.this).getSettings().getUserAgentString();
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(SERVICE_BASE_URL + "devices/" + params[0] + ".json?app_key="
 					+ api_key + "&page=" + "&signature=" + signature);
             post.setHeader("content-type", "application/json");
-            
+
             JSONObject device = new JSONObject();
             JSONObject dispositivo = new JSONObject();
-            
+
             String tablet = "false";
             if(width >= 640) {
             	tablet = "true";
             }
-            
+
             try {
 				device.put("active", "true");
 				device.put("os", "1");
@@ -207,15 +207,15 @@ public class Devices extends Activity {
             } catch (JSONException e1) {
 				e1.printStackTrace();
 			}
-            
+
             try {
 				StringEntity entity = new StringEntity(dispositivo.toString());
 				post.setEntity(entity);
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
-            
-            
+
+
             try {
             	HttpResponse resp = client.execute(post);
 				/*if(resp != null) {
@@ -230,10 +230,10 @@ public class Devices extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
- 
+
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);

@@ -48,28 +48,28 @@ import com.supermanket.utilities.UtilityBelt;
 import com.supermanket.utilities.SideNavigationView.Mode;
 
 public class MessagesList extends SherlockActivity implements ISideNavigationCallback {
-	
+
 	public static final String EXTRA_TITLE = "com.devspark.sidenavigation.sample.extra.MTGOBJECT";
     public static final String EXTRA_RESOURCE_ID = "com.devspark.sidenavigation.sample.extra.RESOURCE_ID";
     public static final String EXTRA_MODE = "com.devspark.sidenavigation.sample.extra.MODE";
 
     private ImageView icon;
     private SideNavigationView sideNavigationView;
-	
+
 	ArrayList<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 	MessageAdapter adapter;
 	ListView list;
 	JSONArray contactsList;
 	ConectivityTools ct;
-	
+
 	private Integer[] ids;
 	private static SharedPreferences mSharedPreferences;
-	
-	static final String SERVICE_BASE_URL = "http://www.supermanket.com/apim/";
-	
+
+	static final String SERVICE_BASE_URL = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		mSharedPreferences = getApplicationContext().getSharedPreferences("SupermanketPreferences", 0);
 		if(!mSharedPreferences.getBoolean("LOGGED_IN", false)) {
@@ -78,7 +78,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 			this.finish();
 		} else {
 			setContentView(R.layout.activity_messages_list);
-			
+
 			icon = (ImageView) findViewById(android.R.id.icon);
 	        sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
 	        if(mSharedPreferences.getString("USER_SEX", "female").equalsIgnoreCase("male")) {
@@ -118,14 +118,14 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	        	GetContacts contacts = new GetContacts(this);
 		        contacts.execute();
 	        }
-	        
+
 		}
-		
-      	
+
+
 	}
-	
+
 	public void loadInbox(final String data[]) {
-		
+
 		try {
 			contactsList = new JSONArray(data[0]);
 			ids = new Integer[contactsList.length()];
@@ -164,16 +164,16 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		list = (ListView) findViewById(R.id.messageListList);
-		 
+
         adapter = new MessageAdapter(this, messages, "list");
         list.setAdapter(adapter);
-        
+
         final JSONArray blockInfo = contactsList;
- 
+
         list.setOnItemClickListener(new OnItemClickListener() {
- 
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
@@ -187,12 +187,12 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	
+
             }
         });
 	}
-	
-	
+
+
 	@Override
 	protected void onResume() {
 		synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -200,7 +200,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		}
 		super.onResume();
 	}
-		
+
 	@Override
 	   protected void onPause() {
 	       synchronized (GcmBroadcastReceiver.CURRENTACTIVITYLOCK) {
@@ -208,20 +208,20 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 	       }
 	       super.onPause();
 	   }
-	
+
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-	
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 sideNavigationView.toggleMenu();
                 break;
-            
+
             case R.id.logout:
             	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(R.string.alert_attention_title);
@@ -244,7 +244,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				});
 				AlertDialog alert = builder.create();
 				alert.show();
-            	
+
             	break;
 
             default:
@@ -271,7 +271,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             case R.id.side_navigation_menu_item4:
                 invokeActivity(getString(R.string.menu_title4), R.drawable.ic_action_settings);
                 break;
-            
+
             case R.id.side_navigation_menu_item6:
             	invokeActivity(getString(R.string.menu_title6), R.drawable.ic_action_search);
             	break;
@@ -313,9 +313,9 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
         	intent = new Intent(this, Search.class);
         }
         if(title.equalsIgnoreCase("cerrar sesion")) {
-        	
+
         }
-        
+
         if(action) {
         	intent.putExtra(EXTRA_TITLE, title);
             intent.putExtra(EXTRA_RESOURCE_ID, resId);
@@ -325,11 +325,11 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
             startActivity(intent);
             overridePendingTransition(0, 0);
         }
-        
+
     }
-	
+
 	public class GetContacts extends AsyncTask<Void, Void, String[]> {
-		
+
 		MessagesList activityRef;
 		ProgressDialog dialog;
 		private String api_key;
@@ -339,11 +339,11 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 		private UtilityBelt utilityBelt = new UtilityBelt();
 		private AlertDialogs alert = new AlertDialogs();
 		private String[] responses = new String[2];
-		
+
 		public GetContacts(MessagesList activityRef) {
 			this.activityRef = activityRef;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -353,14 +353,14 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 			api_secret = mSharedPreferences.getString("API_SECRET", "");
 			signature = utilityBelt.md5("app_key" + api_key + api_secret);
 		}
-		
-		@Override 
+
+		@Override
 		protected String[] doInBackground(Void... params) {
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contacts.json?app_key=" 
+			HttpGet get = new HttpGet(SERVICE_BASE_URL + "contacts.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(get);
 				responses[0] = EntityUtils.toString(resp.getEntity());
@@ -369,11 +369,11 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-            
+
 			get = new HttpGet(SERVICE_BASE_URL + "profile.json?app_key="
 									+ api_key + "&signature=" + signature);
             get.setHeader("content-type", "application/json");
-            
+
             try {
             	HttpResponse resp = client.execute(get);
 				responses[1] = EntityUtils.toString(resp.getEntity());
@@ -382,15 +382,15 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
- 
+
 			return responses;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result[]) {
 			super.onPostExecute(result);
 			if(result == null) {
-				alert.showAlertDialog(MessagesList.this, "Oh noes!", "Ha ocurrido un error inesperado. Inténtalo nuevamente", false);
+				alert.showAlertDialog(MessagesList.this, "Oh noes!", "Ha ocurrido un error inesperado. Intï¿½ntalo nuevamente", false);
 				dialog.dismiss();
 			} else {
 				Log.d("Contacts", result[0]);
@@ -398,7 +398,7 @@ public class MessagesList extends SherlockActivity implements ISideNavigationCal
 				activityRef.loadInbox(result);
 			}
 		}
-		
+
 	}
 
 }

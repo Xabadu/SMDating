@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/dashboardFilterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" >
+
+        <Button
+            android:id="@+id/dashboardMostViewedBtn"
+            style="@style/button_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/light_blue_button"
+            android:text="@string/btn_viewed" />
+
+        <Button
+            android:id="@+id/dashboardMostRecentBtn"
+            style="@style/button_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/gray_button"
+            android:text="@string/btn_recent" />
+
+    </LinearLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dashboardRecentUsersGrid"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/dashboardFilterLayout"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:columnWidth="90dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        ptr:ptrMode="both"
+        ptr:ptrDrawable="@drawable/android" />
+
+    <RelativeLayout
+        android:id="@+id/dashboardRecentBottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:paddingLeft="@dimen/dashboard_footer_left_padding"
+        android:paddingRight="@dimen/dashboard_footer_left_padding">
+
+        <Button
+            android:id="@+id/dashboardViewedNearByUsersBtn"
+            style="@style/button_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/pink_button"
+            android:text="@string/btn_near" />
+
+    </RelativeLayout>
+ 
+	<com.supermanket.utilities.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+ 
+</RelativeLayout>
